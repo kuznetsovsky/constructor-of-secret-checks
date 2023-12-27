@@ -1,0 +1,13 @@
+{
+  "name": "constructor-of-secret-checks",
+  "version": "1.0.0",
+  "description": "Constructor of secret checks (REST API)",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Mit`ka Kuznetsov <www.kuznetsovsky@gmail.com>",
+  "license": "MIT",
+  "private": "true"
+}
