@@ -3,8 +3,8 @@
     "lib": [
       "esnext"
     ],
-    "module": "esnext",
-    "moduleResolution": "node",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "target": "esnext",
     "strict": true,
     "alwaysStrict": true,
