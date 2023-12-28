@@ -3,13 +3,16 @@ import type { NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import morgan from 'morgan'
 import swaggerUi from 'swagger-ui-express'
-import { IS_DEV } from '../config'
+import { ENV, IS_DEV } from '../config'
 import swaggerDocument from '../docs'
 
 export const app = express()
 app.use(express.json())
-app.use(morgan(IS_DEV ? 'dev' : 'combined'))
-// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+
+if (ENV !== 'test') {
+  app.use(morgan(IS_DEV ? 'dev' : 'combined'))
+}
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 app.get('/', (req: Request, res: Response): void => {
