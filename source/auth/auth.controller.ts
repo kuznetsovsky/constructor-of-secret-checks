@@ -48,3 +48,47 @@ export async function createCompany (
     next(error)
   }
 }
+
+export async function createInspector (
+  req: Request<never, never, I.CreateInspectorReqBodyInterface>,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  const {
+    email,
+    password,
+    first_name: firstName,
+    last_name: lastName
+  } = req.body
+
+  try {
+    // =-=-=-=
+
+    const isAccountExist = await authService.findAccountByEmail(email)
+
+    if (isAccountExist) {
+      res.status(StatusCodes.CONFLICT)
+        .json({ message: 'An account with this email already exists.' })
+      return
+    }
+
+    // =-=-=-=
+
+    const encryptedPassword = encryptPassword(password)
+    const accountId = await authService.createInspector(
+      email,
+      encryptedPassword,
+      firstName,
+      lastName
+    )
+
+    // =-=-=-=
+
+    res
+      .status(StatusCodes.CREATED)
+      .header('Location', `/api/v1/accounts/${accountId}`)
+      .json({ id: accountId })
+  } catch (error) {
+    next(error)
+  }
+}

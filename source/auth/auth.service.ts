@@ -56,3 +56,31 @@ export async function createCompany (name: string, email: string, password: stri
     return account[0].id
   })
 }
+
+export async function createInspector (
+  email: string,
+  password: string,
+  firstName: string,
+  lastName: string
+): Promise<number> {
+  return await knex.transaction(async (trx) => {
+    const account = await knex('accounts')
+      .insert({
+        role: 'inspector',
+        email,
+        password
+      })
+      .returning('id')
+      .transacting(trx)
+
+    await knex('inspectors')
+      .insert({
+        account_id: account[0].id,
+        first_name: firstName,
+        last_name: lastName
+      })
+      .transacting(trx)
+
+    return account[0].id
+  })
+}

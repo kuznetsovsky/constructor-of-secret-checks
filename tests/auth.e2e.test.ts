@@ -74,4 +74,71 @@ describe('Auth endpoint', () => {
       expect(response.body.message).toMatch(payload.conflict)
     })
   })
+
+  describe('POST: /auth/sign-up/inspector', () => {
+    const URL = '/api/v1/auth/sign-up/inspector'
+
+    test('should return the id of the created user', async () => {
+      const payload = {
+        first_name: 'Alex',
+        last_name: 'Fox',
+        email: 'a.fox@mail.com',
+        password: 'qwerty123'
+      }
+
+      const response = await request(app).post(URL).send(payload)
+
+      expect(response.status).toEqual(201)
+      expect(response.headers['content-type']).toMatch(/json/)
+      expect(response.headers.location).toMatch(/api\/v1\/accounts/)
+      expect(response.body.id).toStrictEqual(expect.any(Number))
+    })
+
+    test.each([
+      {
+        fisrt_name: 'Alex',
+        last_name: 'Fox',
+        email: 'www.a.fox@mail.com',
+        password: 'qwerty' // <---
+      },
+      {
+        // <---
+        email: 'www.a.fox@mail.com',
+        password: 'qwerty12345'
+      },
+      {
+        fisrt_name: 'Alex',
+        last_name: 'Fox',
+        email: 'www.a.foxmail.com', // <---
+        password: 'qwerty12345'
+      },
+      {
+        fisrt_name: 'Alex',
+        last_name: 'Fox',
+        email: 'www.example@mail.com',
+        pasword: 'qwerty12345' // <---
+      }
+    ])('should return a validation error', async (payload) => {
+      const response = await request(app).post(URL).send(payload)
+
+      expect(response.status).toEqual(422)
+      expect(response.headers['content-type']).toMatch(/json/)
+      expect(response.body.message).toMatch(/Validation failed/i)
+    })
+
+    test('should return a conflict message', async () => {
+      const payload = {
+        first_name: 'Bob',
+        last_name: 'Fox',
+        email: 'www.bob@mail.com', // <--
+        password: 'qwerty123'
+      }
+
+      const response = await request(app).post(URL).send(payload)
+
+      expect(response.status).toEqual(409)
+      expect(response.headers['content-type']).toMatch(/json/)
+      expect(response.body.message).toMatch(/email already exists./i)
+    })
+  })
 })

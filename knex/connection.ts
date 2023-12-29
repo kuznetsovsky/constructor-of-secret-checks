@@ -28,7 +28,7 @@ declare module 'knex/types/tables' {
     account_id: number
     city_id: number | null
     phone_number_id: number | null
-    fisrt_name: string | null
+    first_name: string | null
     last_name: string | null
     birthday: string | null
     vk_link: string | null
