@@ -5,6 +5,7 @@ import morgan from 'morgan'
 import swaggerUi from 'swagger-ui-express'
 import { ENV, IS_DEV } from '../config'
 import swaggerDocument from '../docs'
+import { appRoutes } from './routes'
 
 export const app = express()
 app.use(express.json())
@@ -18,6 +19,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 app.get('/', (req: Request, res: Response): void => {
   res.send({ message: 'API is working, change to version /api/v1' })
 })
+
+appRoutes(app)
 
 app.use((req: Request, res: Response, next: NextFunction): void => {
   res.status(StatusCodes.NOT_FOUND).end()
