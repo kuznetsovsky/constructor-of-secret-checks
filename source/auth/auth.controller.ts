@@ -152,3 +152,19 @@ export async function authorization (
     next(error)
   }
 }
+
+export async function logout (
+  req: Request<never, never, I.AuthorizationReqBodyInterface>,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  req.session.destroy((err) => {
+    if (err != null) {
+      next(err)
+      return
+    }
+
+    res.clearCookie('connect.sid')
+    res.status(StatusCodes.OK).end()
+  })
+}

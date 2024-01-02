@@ -27,3 +27,8 @@ router.post(
   validateRequestBody(authorizationBodyValidator),
   authController.authorization
 )
+
+router.delete(
+  '/sign-out',
+  authController.logout
+)
