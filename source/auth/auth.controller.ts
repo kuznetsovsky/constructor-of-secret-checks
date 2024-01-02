@@ -137,7 +137,13 @@ export async function authorization (
       profile = await authService.findAdministratorProfile(account.id)
     }
 
-    // TODO: 4) Создать сессию и куки
+    if (profile !== undefined) {
+      req.session.user = {
+        id: profile.id,
+        role: profile.role,
+        cid: profile.company?.id
+      }
+    }
 
     res
       .status(StatusCodes.OK)

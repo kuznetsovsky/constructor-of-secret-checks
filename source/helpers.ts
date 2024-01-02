@@ -18,3 +18,11 @@ export function validateRequestBody (validate: ValidateFunction) {
     next()
   }
 }
+
+export function isAuthorized (req: Request, res: Response, next: NextFunction): void {
+  if (req.session?.user != null) {
+    next()
+  } else {
+    res.status(StatusCodes.UNAUTHORIZED).end()
+  }
+}

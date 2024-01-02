@@ -3,12 +3,47 @@ import type { NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 import morgan from 'morgan'
 import swaggerUi from 'swagger-ui-express'
-import { ENV, IS_DEV } from '../config'
+import session from 'express-session'
+import connectSessionKnex from 'connect-session-knex'
+
+import { ENV, IS_DEV, SESSION_SECRET, SESSION_MAX_AGE } from '../config'
 import swaggerDocument from '../docs'
 import { appRoutes } from './routes'
+import { type Roles } from './consts'
+import { knex } from '../knex/connection'
+
+export interface UserSessionData {
+  id: number
+  role: Roles
+  cid?: number
+}
+
+declare module 'express-session' {
+  interface SessionData {
+    user: UserSessionData
+  }
+}
 
 export const app = express()
+
 app.use(express.json())
+
+const KnexSessionStore = connectSessionKnex(session)
+const store = new KnexSessionStore({
+  knex
+})
+
+app.use(
+  session({
+    store,
+    secret: SESSION_SECRET,
+    saveUninitialized: false,
+    resave: false,
+    cookie: {
+      maxAge: SESSION_MAX_AGE
+    }
+  })
+)
 
 if (ENV !== 'test') {
   app.use(morgan(IS_DEV ? 'dev' : 'combined'))
