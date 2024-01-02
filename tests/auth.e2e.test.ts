@@ -141,4 +141,94 @@ describe('Auth endpoint', () => {
       expect(response.body.message).toMatch(/email already exists./i)
     })
   })
+
+  describe('POST: /auth/sign-in', () => {
+    const URL = '/api/v1/auth/sign-in'
+
+    test.each([
+      {
+        case: 'wrong password',
+        email: 'www.example@mail.com',
+        password: 'qwerty'
+      },
+      {
+        case: 'no required fields',
+        email: 'www.example@mail.com'
+      },
+      {
+        case: 'invalid mail',
+        email: 'www.examplemail.com',
+        password: 'qwerty12345'
+      }
+    ])('should return a validation error ($case)', async (payload) => {
+      const response = await request(app).post(URL).send(payload)
+
+      expect(response.status).toEqual(422)
+      expect(response.headers['content-type']).toMatch(/json/)
+      expect(response.body.message).toMatch(/Validation failed/i)
+    })
+
+    test.each([
+      {
+        case: 'account not found',
+        email: 'www.example@mail.com',
+        password: 'Qwerty123'
+      },
+      {
+        case: 'account unverified',
+        email: 'www.tim@mail.com',
+        password: 'Qwerty_1234'
+      }
+    ])('should return 401 status code ($case)', async (payload) => {
+      const response = await request(app).post(URL).send({
+        email: payload.email,
+        password: payload.password
+      })
+
+      expect(response.status).toEqual(401)
+      expect(response.headers['content-type']).toMatch(/json/)
+      expect(response.body.message).toMatch(/The user was not found with these login details or the account was not verified./i)
+    })
+
+    test.each([
+      {
+        role: 'inspector',
+        email: 'www.jhon@mail.com',
+        password: 'Qwerty1234'
+      },
+      {
+        role: 'administrator',
+        email: 'www.jane@mail.com',
+        password: 'Qwerty_1234'
+      }
+      // TODO: сделать, когда будет функционал...
+      // {
+      //   role: 'manager',
+      //   email: 'www.bob@mail.com',
+      //   password: '!Qwerty1234'
+      // }
+    ])('should return account profile data ($role)', async (payload) => {
+      const response = await request(app).post(URL).send({
+        email: payload.email,
+        password: payload.password
+      })
+
+      expect(response.status).toEqual(200)
+      expect(response.headers['content-type']).toMatch(/json/)
+      expect(response.body).toMatchObject({
+        id: expect.any(Number),
+        role: payload.role,
+        email: payload.email,
+        first_name: expect.any(String),
+        last_name: expect.any(String)
+      })
+
+      if (response.body.role === 'manager' || response.body.role === 'administrator') {
+        expect(response.body.company).toEqual({
+          id: expect.any(Number),
+          name: expect.any(String)
+        })
+      }
+    })
+  })
 })

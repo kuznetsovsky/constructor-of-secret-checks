@@ -53,7 +53,7 @@ declare module 'knex/types/tables' {
     account_id: number
     company_id: number
     phone_number_id: number | null
-    fisrt_name: string | null
+    first_name: string | null
     last_name: string | null
   }
 

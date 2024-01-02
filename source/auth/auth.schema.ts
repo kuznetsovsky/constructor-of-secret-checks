@@ -2,7 +2,8 @@ import { type JSONSchemaType } from 'ajv'
 
 import type {
   CreateInspectorReqBodyInterface,
-  CreateAdministratorReqBodyInterface
+  CreateAdministratorReqBodyInterface,
+  AuthorizationReqBodyInterface
 } from './auth.interface'
 
 export const createCompanyBodySchema: JSONSchemaType<CreateAdministratorReqBodyInterface> = {
@@ -65,6 +66,28 @@ export const createInspectorBodySchema: JSONSchemaType<CreateInspectorReqBodyInt
       transform: ['trim'],
       minLength: 3,
       maxLength: 24
+    }
+  }
+}
+
+export const authorizationBodySchema: JSONSchemaType<AuthorizationReqBodyInterface> = {
+  type: 'object',
+  additionalProperties: false,
+  required: [
+    'email',
+    'password'
+  ],
+  properties: {
+    email: {
+      type: 'string',
+      format: 'email',
+      transform: ['trim', 'toLowerCase']
+    },
+    password: {
+      type: 'string',
+      transform: ['trim'],
+      minLength: 8,
+      maxLength: 255
     }
   }
 }

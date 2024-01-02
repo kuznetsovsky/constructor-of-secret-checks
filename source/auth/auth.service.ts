@@ -1,6 +1,8 @@
+import { type AccountInterface } from 'knex/types/tables'
 import { knex } from '../../knex/connection'
+import { type ProfileInterface } from './auth.interface'
 
-export async function findCompanyByName (name: string): Promise<boolean> {
+export async function checkExistenceOfCompanyByName (name: string): Promise<boolean> {
   const company = await knex('companies')
     .select('id')
     .where({ name })
@@ -9,7 +11,7 @@ export async function findCompanyByName (name: string): Promise<boolean> {
   return company !== undefined
 }
 
-export async function findAccountByEmail (email: string): Promise<boolean> {
+export async function checkAccountExistenceByEmail (email: string): Promise<boolean> {
   const account = await knex('accounts')
     .select('id')
     .where({ email })
@@ -84,3 +86,62 @@ export async function createInspector (
     return account[0].id
   })
 }
+
+export async function findVerifiedAccountByEmail (email: string): Promise<AccountInterface | undefined> {
+  const result = await knex('accounts')
+    .select('*')
+    .where({ email })
+    .whereNot('email_verified', null)
+    .first()
+
+  return result
+}
+
+export async function findUnverifiedAccountByEmail (email: string): Promise<AccountInterface | undefined> {
+  const result = await knex('accounts')
+    .select('*')
+    .where({ email })
+    .andWhere('email_verified', null)
+    .first()
+
+  return result
+}
+
+export async function findInspectorProfile (id: number): Promise<ProfileInterface | undefined> {
+  const result = await knex('accounts as a')
+    .select([
+      'a.id as id',
+      'a.role as role',
+      'a.email as email',
+      'i.first_name as first_name',
+      'i.last_name as last_name'
+    ])
+    .where('a.id', id)
+    .join('inspectors as i', 'i.account_id', 'a.id')
+    .first()
+
+  return result
+}
+
+export async function findAdministratorProfile (id: number): Promise<ProfileInterface | undefined> {
+  const result = await knex('accounts as a')
+    .where('a.id', id)
+    .join('company_contact_persons as p', 'p.account_id', 'a.id')
+    .join('companies as c', 'c.id', 'p.company_id')
+    .select([
+      'a.id as id',
+      'a.role as role',
+      'a.email as email',
+      'p.first_name as first_name',
+      'p.last_name as last_name',
+      knex.raw("json_build_object('id', c.id, 'name', c.name) AS company")
+    ])
+    .first()
+
+  return result as unknown as ProfileInterface
+}
+
+// TODO: сделать, после того как будет сделан функционал слздания менеджеров
+// export async function findManagerProfile (id: number): Promise<ProfileInterface | undefined> {
+//   return undefined
+// }

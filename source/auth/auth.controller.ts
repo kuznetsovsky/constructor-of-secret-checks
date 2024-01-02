@@ -3,7 +3,8 @@ import { StatusCodes } from 'http-status-codes'
 
 import * as authService from './auth.service'
 import type * as I from './auth.interface'
-import { encryptPassword } from './auth.helper'
+import { checkPasswordCorrect, encryptPassword } from './auth.helper'
+import { Roles } from '../consts'
 
 export async function createCompany (
   req: Request<never, never, I.CreateAdministratorReqBodyInterface>,
@@ -15,7 +16,7 @@ export async function createCompany (
   try {
     // =-=-=-=
 
-    const companyNameExist = await authService.findCompanyByName(name)
+    const companyNameExist = await authService.checkExistenceOfCompanyByName(name)
 
     if (companyNameExist) {
       res.status(StatusCodes.CONFLICT)
@@ -25,7 +26,7 @@ export async function createCompany (
 
     // =-=-=-=
 
-    const accountEmailExist = await authService.findAccountByEmail(email)
+    const accountEmailExist = await authService.checkAccountExistenceByEmail(email)
 
     if (accountEmailExist) {
       res.status(StatusCodes.CONFLICT)
@@ -64,7 +65,7 @@ export async function createInspector (
   try {
     // =-=-=-=
 
-    const isAccountExist = await authService.findAccountByEmail(email)
+    const isAccountExist = await authService.checkAccountExistenceByEmail(email)
 
     if (isAccountExist) {
       res.status(StatusCodes.CONFLICT)
@@ -88,6 +89,59 @@ export async function createInspector (
       .status(StatusCodes.CREATED)
       .header('Location', `/api/v1/accounts/${accountId}`)
       .json({ id: accountId })
+  } catch (error) {
+    next(error)
+  }
+}
+
+export async function authorization (
+  req: Request<never, never, I.AuthorizationReqBodyInterface>,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  const MSG = 'The user was not found with these login details or the account was not verified.'
+  const { email, password } = req.body
+
+  try {
+    // =-=-=-=
+
+    const account = await authService.findVerifiedAccountByEmail(email)
+
+    if (account === undefined) {
+      res.status(StatusCodes.UNAUTHORIZED)
+        .json({ message: MSG })
+
+      return
+    }
+
+    // =-=-=-=
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const passwordsMatch = checkPasswordCorrect(password, account.password)
+
+    if (!passwordsMatch) {
+      res.status(StatusCodes.UNAUTHORIZED)
+        .json({ message: MSG })
+
+      return
+    }
+
+    // =-=-=-=
+    let profile: undefined | I.ProfileInterface
+
+    if (account.role === Roles.Inspector) {
+      profile = await authService.findInspectorProfile(account.id)
+    } else if (account.role === Roles.Manager) {
+      // findManagerProfile
+    } else if (account.role === Roles.Administrator) {
+      profile = await authService.findAdministratorProfile(account.id)
+    }
+
+    // TODO: 4) Создать сессию и куки
+
+    res
+      .status(StatusCodes.OK)
+      .json(profile)
   } catch (error) {
     next(error)
   }
