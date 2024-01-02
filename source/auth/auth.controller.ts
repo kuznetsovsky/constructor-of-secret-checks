@@ -1,13 +1,19 @@
 import type { NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
+import type {
+  SignIn,
+  Profile,
+  SignUpAdministrator,
+  SignUpInspector
+} from './auth.interface'
+
 import * as authService from './auth.service'
-import type * as I from './auth.interface'
 import { checkPasswordCorrect, encryptPassword } from './auth.helper'
 import { Roles } from '../consts'
 
-export async function createCompany (
-  req: Request<never, never, I.CreateAdministratorReqBodyInterface>,
+export async function signUpCompany (
+  req: Request<never, never, SignUpAdministrator>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
@@ -50,8 +56,8 @@ export async function createCompany (
   }
 }
 
-export async function createInspector (
-  req: Request<never, never, I.CreateInspectorReqBodyInterface>,
+export async function signUpInspector (
+  req: Request<never, never, SignUpInspector>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
@@ -94,8 +100,8 @@ export async function createInspector (
   }
 }
 
-export async function authorization (
-  req: Request<never, never, I.AuthorizationReqBodyInterface>,
+export async function signIn (
+  req: Request<never, never, SignIn>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
@@ -127,7 +133,7 @@ export async function authorization (
     }
 
     // =-=-=-=
-    let profile: undefined | I.ProfileInterface
+    let profile: undefined | Profile
 
     if (account.role === Roles.Inspector) {
       profile = await authService.findInspectorProfile(account.id)
@@ -153,8 +159,8 @@ export async function authorization (
   }
 }
 
-export async function logout (
-  req: Request<never, never, I.AuthorizationReqBodyInterface>,
+export async function signOut (
+  req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {

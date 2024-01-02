@@ -1,34 +1,34 @@
 import express from 'express'
 import * as authController from './auth.controller'
-import { validateRequestBody } from '../helpers'
+import { validateBody } from '../helpers'
 
 import {
-  authorizationBodyValidator,
-  createCompanyBodyValidator,
-  createInspectorBodyValidator
+  signInValidator,
+  signUpAdministratorValidator,
+  signUpInspectorValidator
 } from './auth.validator'
 
 export const router = express.Router()
 
 router.post(
   '/sign-up/company',
-  validateRequestBody(createCompanyBodyValidator),
-  authController.createCompany
+  validateBody(signUpAdministratorValidator),
+  authController.signUpCompany
 )
 
 router.post(
   '/sign-up/inspector',
-  validateRequestBody(createInspectorBodyValidator),
-  authController.createInspector
+  validateBody(signUpInspectorValidator),
+  authController.signUpInspector
 )
 
 router.post(
   '/sign-in',
-  validateRequestBody(authorizationBodyValidator),
-  authController.authorization
+  validateBody(signInValidator),
+  authController.signIn
 )
 
 router.delete(
   '/sign-out',
-  authController.logout
+  authController.signOut
 )

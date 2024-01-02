@@ -1,6 +1,6 @@
 import { type AccountInterface } from 'knex/types/tables'
 import { knex } from '../../knex/connection'
-import { type ProfileInterface } from './auth.interface'
+import { type Profile } from './auth.interface'
 
 export async function checkExistenceOfCompanyByName (name: string): Promise<boolean> {
   const company = await knex('companies')
@@ -107,7 +107,7 @@ export async function findUnverifiedAccountByEmail (email: string): Promise<Acco
   return result
 }
 
-export async function findInspectorProfile (id: number): Promise<ProfileInterface | undefined> {
+export async function findInspectorProfile (id: number): Promise<Profile | undefined> {
   const result = await knex('accounts as a')
     .select([
       'a.id as id',
@@ -123,7 +123,7 @@ export async function findInspectorProfile (id: number): Promise<ProfileInterfac
   return result
 }
 
-export async function findAdministratorProfile (id: number): Promise<ProfileInterface | undefined> {
+export async function findAdministratorProfile (id: number): Promise<Profile | undefined> {
   const result = await knex('accounts as a')
     .where('a.id', id)
     .join('company_contact_persons as p', 'p.account_id', 'a.id')
@@ -138,7 +138,7 @@ export async function findAdministratorProfile (id: number): Promise<ProfileInte
     ])
     .first()
 
-  return result as unknown as ProfileInterface
+  return result as unknown as Profile
 }
 
 // TODO: сделать, после того как будет сделан функционал слздания менеджеров

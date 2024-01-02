@@ -1,11 +1,11 @@
 import { ajv } from '../../libs/ajv.lib'
 
 import {
-  authorizationBodySchema,
-  createCompanyBodySchema,
-  createInspectorBodySchema
+  signInSchema,
+  signUpAdministratorSchema,
+  signUpInspectorSchema
 } from './auth.schema'
 
-export const createCompanyBodyValidator = ajv.compile(createCompanyBodySchema)
-export const createInspectorBodyValidator = ajv.compile(createInspectorBodySchema)
-export const authorizationBodyValidator = ajv.compile(authorizationBodySchema)
+export const signUpAdministratorValidator = ajv.compile(signUpAdministratorSchema)
+export const signUpInspectorValidator = ajv.compile(signUpInspectorSchema)
+export const signInValidator = ajv.compile(signInSchema)

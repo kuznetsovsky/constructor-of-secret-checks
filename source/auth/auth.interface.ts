@@ -1,19 +1,19 @@
 import { type Roles } from '../consts'
 
-export interface CreateAdministratorReqBodyInterface {
+export interface SignUpAdministrator {
   name: string
   email: string
   password: string
 }
 
-export interface CreateInspectorReqBodyInterface {
+export interface SignUpInspector {
   first_name: string
   last_name: string
   email: string
   password: string
 }
 
-export interface AuthorizationReqBodyInterface {
+export interface SignIn {
   email: string
   password: string
 }
@@ -23,7 +23,7 @@ interface CompanyDetails {
   name: string
 }
 
-export interface ProfileInterface {
+export interface Profile {
   id: number
   role: Roles
   email: string

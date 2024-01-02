@@ -1,12 +1,12 @@
 import { type JSONSchemaType } from 'ajv'
 
 import type {
-  CreateInspectorReqBodyInterface,
-  CreateAdministratorReqBodyInterface,
-  AuthorizationReqBodyInterface
+  SignUpInspector,
+  SignUpAdministrator,
+  SignIn
 } from './auth.interface'
 
-export const createCompanyBodySchema: JSONSchemaType<CreateAdministratorReqBodyInterface> = {
+export const signUpAdministratorSchema: JSONSchemaType<SignUpAdministrator> = {
   type: 'object',
   additionalProperties: false,
   required: [
@@ -34,7 +34,7 @@ export const createCompanyBodySchema: JSONSchemaType<CreateAdministratorReqBodyI
   }
 }
 
-export const createInspectorBodySchema: JSONSchemaType<CreateInspectorReqBodyInterface> = {
+export const signUpInspectorSchema: JSONSchemaType<SignUpInspector> = {
   type: 'object',
   additionalProperties: false,
   required: [
@@ -70,7 +70,7 @@ export const createInspectorBodySchema: JSONSchemaType<CreateInspectorReqBodyInt
   }
 }
 
-export const authorizationBodySchema: JSONSchemaType<AuthorizationReqBodyInterface> = {
+export const signInSchema: JSONSchemaType<SignIn> = {
   type: 'object',
   additionalProperties: false,
   required: [
