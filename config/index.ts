@@ -26,3 +26,8 @@ export const DATABASE_CONNECTION_TEST = process.env.DB_CONNECTION_TEST
 // Session
 export const SESSION_SECRET = process.env.SESSION_SECRET ?? 'SECRET_KEY'
 export const SESSION_MAX_AGE = 6.048e+8 // 7 days
+
+// Pagination
+export const MAX_PER_PAGE = 100
+export const DEFAULT_PER_PAGE = 30
+export const DEFAULT_PAGE = 1
