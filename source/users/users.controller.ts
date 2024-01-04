@@ -1,14 +1,9 @@
 import type { NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
+import { findProfileByID } from '../helpers'
 import * as usersService from './users.service'
-import { Roles } from '../consts'
-
-import type {
-  AdministratorProfile,
-  InspectorProfile,
-  GetAccountsQuery
-} from './users.interface'
+import type { GetAccountsQuery } from './users.interface'
 
 export async function getAccounts (
   req: Request<never, never, never, GetAccountsQuery>,
@@ -58,9 +53,9 @@ export async function getAccountByID (
   }
 
   try {
-    const account = await usersService.findAccountByID(id, ['role'])
+    const profile = await findProfileByID(id)
 
-    if (account == null) {
+    if (profile == null) {
       res
         .status(StatusCodes.NOT_FOUND)
         .json({
@@ -68,17 +63,6 @@ export async function getAccountByID (
         })
 
       return
-    }
-
-    let profile: undefined | AdministratorProfile | InspectorProfile
-
-    if (account.role === Roles.Inspector) {
-      profile = await usersService.findInspectorProfileByID(id)
-    } else if (account.role === Roles.Administrator) {
-      profile = await usersService.findAdministratorProfileByID(id)
-    } else if (account.role === Roles.Manager) {
-      // TODO: сделать, когда будут менеджеры
-      // findManagerProfileByID
     }
 
     res

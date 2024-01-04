@@ -20,7 +20,7 @@ declare module 'knex/types/tables' {
 
   interface PhoneInterface {
     id: number
-    number: string
+    phone_number: string
   }
 
   interface InspectorInterface {
