@@ -1,6 +1,6 @@
 import express from 'express'
 import * as authController from './auth.controller'
-import { validateBody } from '../helpers'
+import { validateBody } from '../common/helpers/validate-body.helper'
 
 import {
   signInValidator,

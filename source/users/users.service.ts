@@ -1,7 +1,6 @@
 import { knex } from '../../knex/connection'
 import { type Roles } from '../consts'
-import { paginate } from '../helpers'
-
+import { paginate } from '../common/helpers/paginate.helper'
 import type { GetAccounts } from './users.interface'
 
 export async function findAccounts (

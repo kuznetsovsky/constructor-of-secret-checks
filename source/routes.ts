@@ -3,7 +3,7 @@ import { VERSION } from '../config'
 import { router as authRouter } from './auth/auth.router'
 import { router as userRouter } from './user/user.router'
 import { router as usersRouter } from './users/users.router'
-import { isAuthorized } from './helpers'
+import { isAuthorized } from './common/helpers/is-authorized.helper'
 
 export function appRoutes (app: Application): void {
   app.use(`${VERSION}/auth`, authRouter)

@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from 'express'
 import { StatusCodes } from 'http-status-codes'
-import { findProfileByID } from '../helpers'
+import { findProfileByID } from '../common/helpers/find-profile-by-id.helper'
 import { Roles } from '../consts'
 import type { Profile } from './user.interface'
 import * as userService from './user.service'
