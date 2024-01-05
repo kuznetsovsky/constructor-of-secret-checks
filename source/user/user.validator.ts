@@ -1,4 +1,4 @@
-import { ajv } from '../../libs/ajv.lib'
+import { ajv } from '../common/libs/ajv.lib'
 
 import {
   adminProfileSchema,
