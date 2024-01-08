@@ -1,22 +1,35 @@
-import { type AccountInterface } from 'knex/types/tables'
-import * as accountService from '../services/account.service'
 import { Roles } from '../../consts'
+import { knex } from '../../../knex/connection'
 
-import type {
-  AdminProfile,
-  InspectorProfile
-} from '../interfaces/profile.interface'
+import {
+  type AccountRole,
+  AccountRepository,
+  type Account
+} from '../repositories/account.repository'
 
-type Profile = AdminProfile | InspectorProfile
-type UserRoles = 'inspector' | 'manager' | 'administrator' | 'sysadmin'
+import {
+  type InspectorProfile,
+  InspectorRepository
+} from '../repositories/inspector.repository'
 
-export async function findProfileByID (id: number, userRole?: UserRoles): Promise<undefined | Profile> {
+import {
+  type AdministratorProfile,
+  AdminsitratorRepository
+} from '../repositories/administrator.repository'
+
+type Profile = InspectorProfile | AdministratorProfile
+
+export async function findProfileByID (id: number, userRole?: AccountRole): Promise<undefined | Profile> {
+  const accountRepository = new AccountRepository(knex, 'accounts')
+  const inspectorRepository = new InspectorRepository(knex, 'inspectors')
+  const administratorRepository = new AdminsitratorRepository(knex, 'company_contact_persons')
+
   let role = userRole
 
-  let account: AccountInterface | undefined
+  let account: Account | undefined
 
   if (role == null) {
-    account = await accountService.findAccountByID(id, ['role'])
+    account = await accountRepository.findOne(id, ['role'])
 
     if (account == null) {
       return undefined
@@ -28,12 +41,12 @@ export async function findProfileByID (id: number, userRole?: UserRoles): Promis
   let profile: undefined | Profile
 
   if (role === Roles.Inspector) {
-    profile = await accountService.findInspectorProfileByID(id)
+    profile = await inspectorRepository.findProfileByID(id)
   } else if (role === Roles.Administrator) {
-    profile = await accountService.findAdministratorProfileByID(id)
+    profile = await administratorRepository.findProfileByID(id)
   } else if (role === Roles.Manager) {
     // TODO: сделать, когда будут менеджеры
-    // findManagerProfileByID
+    // profile = await managerRepository.findProfileByID(id)
   }
 
   return profile

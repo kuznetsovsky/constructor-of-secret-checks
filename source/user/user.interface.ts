@@ -11,4 +11,4 @@ export interface InspectorProfile extends AdminProfile {
   city_id: number
 }
 
-export type Profile = InspectorProfile | AdminProfile
+export type Profile = AdminProfile | InspectorProfile

@@ -11,20 +11,27 @@ import type {
 import * as authService from './auth.service'
 import { checkPasswordCorrect, encryptPassword } from './auth.helper'
 import { Roles } from '../consts'
+import { CompanyRepository } from '../common/repositories/company.repository'
+import { knex } from '../../knex/connection'
+import { AccountRepository } from '../common/repositories/account.repository'
+import { InspectorRepository } from '../common/repositories/inspector.repository'
 
 export async function signUpCompany (
   req: Request<never, never, SignUpAdministrator>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
+  const companyRepository = new CompanyRepository(knex, 'companies')
+  const accountRepository = new AccountRepository(knex, 'accounts')
+
   const { name, email, password } = req.body
 
   try {
     // =-=-=-=
 
-    const companyNameExist = await authService.checkExistenceOfCompanyByName(name)
+    const company = await companyRepository.findOne({ name })
 
-    if (companyNameExist) {
+    if (company != null) {
       res.status(StatusCodes.CONFLICT)
         .json({ message: 'A company with the same name is already registered.' })
       return
@@ -32,9 +39,9 @@ export async function signUpCompany (
 
     // =-=-=-=
 
-    const accountEmailExist = await authService.checkAccountExistenceByEmail(email)
+    const account = await accountRepository.findOne({ email })
 
-    if (accountEmailExist) {
+    if (account != null) {
       res.status(StatusCodes.CONFLICT)
         .json({ message: 'An account with this email already exists.' })
       return
@@ -43,7 +50,7 @@ export async function signUpCompany (
     // =-=-=-=
 
     const encryptedPassword = encryptPassword(password)
-    const accountId = await authService.createCompany(name, email, encryptedPassword)
+    const accountId = await companyRepository.createAdministrator(name, email, encryptedPassword)
 
     // =-=-=-=
 
@@ -61,6 +68,9 @@ export async function signUpInspector (
   res: Response,
   next: NextFunction
 ): Promise<void> {
+  const accountRepository = new AccountRepository(knex, 'accounts')
+  const inspectorRepository = new InspectorRepository(knex, 'inspectors')
+
   const {
     email,
     password,
@@ -71,9 +81,9 @@ export async function signUpInspector (
   try {
     // =-=-=-=
 
-    const isAccountExist = await authService.checkAccountExistenceByEmail(email)
+    const account = await accountRepository.findOne({ email })
 
-    if (isAccountExist) {
+    if (account != null) {
       res.status(StatusCodes.CONFLICT)
         .json({ message: 'An account with this email already exists.' })
       return
@@ -82,7 +92,7 @@ export async function signUpInspector (
     // =-=-=-=
 
     const encryptedPassword = encryptPassword(password)
-    const accountId = await authService.createInspector(
+    const accountId = await inspectorRepository.createInspector(
       email,
       encryptedPassword,
       firstName,
@@ -105,13 +115,13 @@ export async function signIn (
   res: Response,
   next: NextFunction
 ): Promise<void> {
+  const accountRepository = new AccountRepository(knex, 'accounts')
+
   const MSG = 'The user was not found with these login details or the account was not verified.'
   const { email, password } = req.body
 
   try {
-    // =-=-=-=
-
-    const account = await authService.findVerifiedAccountByEmail(email)
+    const account = await accountRepository.findVerifiedAccountByEmail(email)
 
     if (account === undefined) {
       res.status(StatusCodes.UNAUTHORIZED)
@@ -133,6 +143,7 @@ export async function signIn (
     }
 
     // =-=-=-=
+
     let profile: undefined | Profile
 
     if (account.role === Roles.Inspector) {

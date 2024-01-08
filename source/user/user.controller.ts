@@ -1,9 +1,13 @@
 import type { Request, Response, NextFunction } from 'express'
 import { StatusCodes } from 'http-status-codes'
-import { findProfileByID } from '../common/helpers/find-profile-by-id.helper'
+
 import { Roles } from '../consts'
+import { knex } from '../../knex/connection'
+import { findProfileByID } from '../common/helpers/find-profile-by-id.helper'
+import { CityRepository } from '../common/repositories/city.repository'
+import { InspectorRepository } from '../common/repositories/inspector.repository'
+import { AdminsitratorRepository } from '../common/repositories/administrator.repository'
 import type { Profile } from './user.interface'
-import * as userService from './user.service'
 
 import {
   adminProfileValidator,
@@ -43,6 +47,10 @@ export async function updateProfile (
   res: Response,
   next: NextFunction
 ): Promise<void> {
+  const cityRepository = new CityRepository(knex, 'cities')
+  const inspectorRepository = new InspectorRepository(knex, 'inspectors')
+  const administratorRepository = new AdminsitratorRepository(knex, 'company_contact_persons')
+
   const id = req.session.user?.id
   const role = req.session.user?.role
 
@@ -69,7 +77,7 @@ export async function updateProfile (
         return
       }
 
-      await userService.updateAdminProfile(id, req.body)
+      await administratorRepository.updateProfileByID(id, req.body)
       const profile = await findProfileByID(id, 'administrator')
 
       res
@@ -89,7 +97,7 @@ export async function updateProfile (
         return
       }
 
-      const city = await userService.findCityByID(req.body.city_id)
+      const city = await cityRepository.findOne(req.body.city_id)
 
       if (city == null) {
         res
@@ -99,7 +107,7 @@ export async function updateProfile (
         return
       }
 
-      await userService.updateInspectorProfile(id, req.body)
+      await inspectorRepository.updateProfileByID(id, req.body)
       const profile = await findProfileByID(id, 'inspector')
 
       res

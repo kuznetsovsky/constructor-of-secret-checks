@@ -2,14 +2,17 @@ import type { NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
 import { findProfileByID } from '../common/helpers/find-profile-by-id.helper'
-import * as usersService from './users.service'
 import type { GetAccountsQuery } from './users.interface'
+import { AccountRepository } from '../common/repositories/account.repository'
+import { knex } from '../../knex/connection'
 
 export async function getAccounts (
   req: Request<never, never, never, GetAccountsQuery>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
+  const accountRepository = new AccountRepository(knex, 'accounts')
+
   let page: number | undefined = parseInt(req.query.page)
   let perPage: number | undefined = parseInt(req.query.per_page)
   const role = req.query.role
@@ -23,7 +26,7 @@ export async function getAccounts (
   }
 
   try {
-    const accounts = await usersService.findAccounts(page, perPage, role)
+    const accounts = await accountRepository.findByPage(page, perPage, role, req.query.sort)
 
     res
       .status(StatusCodes.OK)
