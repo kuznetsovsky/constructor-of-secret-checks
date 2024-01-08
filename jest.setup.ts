@@ -1,4 +1,5 @@
 import { knex } from './knex/connection'
+import { redis } from './source/session'
 
 beforeEach(async () => {
   await knex.migrate.rollback()
@@ -8,4 +9,5 @@ beforeEach(async () => {
 
 afterAll(async () => {
   await knex.destroy()
+  redis.disconnect()
 })

@@ -3,6 +3,7 @@ import 'dotenv/config'
 // ENV
 export const ENV = process.env.NODE_ENV ?? 'production'
 export const IS_DEV = ENV === 'development'
+export const IS_TEST = ENV === 'test'
 
 if (process.env.DB_CONNECTION === undefined && (ENV === 'production' || ENV === 'development')) {
   throw new Error('DB_CONNECTION environment variable is missing')
@@ -31,3 +32,6 @@ export const SESSION_MAX_AGE = 6.048e+8 // 7 days
 export const MAX_PER_PAGE = 100
 export const DEFAULT_PER_PAGE = 30
 export const DEFAULT_PAGE = 1
+
+// Redis
+export const REDIS_URL = process.env.REDIS_URL ?? ''
