@@ -2,12 +2,12 @@ import type { NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
 import { findProfileByID } from '../common/helpers/find-profile-by-id.helper'
-import type { GetAccountsQuery } from './users.interface'
+import type { GetAccountsQueryString } from './users.interface'
 import { AccountRepository } from '../common/repositories/account.repository'
 import { knex } from '../../knex/connection'
 
 export async function getAccounts (
-  req: Request<never, never, never, GetAccountsQuery>,
+  req: Request<never, never, never, GetAccountsQueryString>,
   res: Response,
   next: NextFunction
 ): Promise<void> {

@@ -1,8 +1,6 @@
+import { type BaseQueryString } from '../common/interfaces/query-string.interface'
 import { type Roles } from '../consts'
 
-export interface GetAccountsQuery {
-  page: string
-  per_page: string
+export interface GetAccountsQueryString extends BaseQueryString {
   role: 'all' | Roles
-  sort: 'asc' | 'desc'
 }
