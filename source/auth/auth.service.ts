@@ -1,4 +1,4 @@
-import { knex } from '../../knex/connection'
+import { knex } from '../connection'
 import { type Profile } from './auth.interface'
 
 export async function findInspectorProfile (id: number): Promise<Profile | undefined> {

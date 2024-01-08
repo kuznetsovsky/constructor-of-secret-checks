@@ -4,7 +4,7 @@ import { StatusCodes } from 'http-status-codes'
 import { findProfileByID } from '../common/helpers/find-profile-by-id.helper'
 import type { GetAccountsQueryString } from './users.interface'
 import { AccountRepository } from '../common/repositories/account.repository'
-import { knex } from '../../knex/connection'
+import { knex } from '../connection'
 
 export async function getAccounts (
   req: Request<never, never, never, GetAccountsQueryString>,

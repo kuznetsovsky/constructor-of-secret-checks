@@ -12,7 +12,7 @@ import * as authService from './auth.service'
 import { checkPasswordCorrect, encryptPassword } from './auth.helper'
 import { Roles } from '../consts'
 import { CompanyRepository } from '../common/repositories/company.repository'
-import { knex } from '../../knex/connection'
+import { knex } from '../connection'
 import { AccountRepository } from '../common/repositories/account.repository'
 import { InspectorRepository } from '../common/repositories/inspector.repository'
 

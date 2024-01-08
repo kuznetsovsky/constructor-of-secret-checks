@@ -2,7 +2,7 @@ import type { Request, Response, NextFunction } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
 import { Roles } from '../consts'
-import { knex } from '../../knex/connection'
+import { knex } from '../connection'
 import { findProfileByID } from '../common/helpers/find-profile-by-id.helper'
 import { CityRepository } from '../common/repositories/city.repository'
 import { InspectorRepository } from '../common/repositories/inspector.repository'

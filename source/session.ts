@@ -1,18 +1,17 @@
-import Redis from 'ioredis'
 import RedisStore from 'connect-redis'
 import session, { MemoryStore } from 'express-session'
 import { type Application } from 'express'
 
+import { redis } from './connection'
+
 import {
   IS_TEST,
-  REDIS_URL,
   SESSION_MAX_AGE,
   SESSION_SECRET
 } from '../config'
 
 const memoryStore = new MemoryStore()
 
-export const redis = new Redis(REDIS_URL)
 const redisStore = new RedisStore({
   client: redis,
   prefix: 'session'

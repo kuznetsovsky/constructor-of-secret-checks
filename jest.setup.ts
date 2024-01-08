@@ -1,5 +1,4 @@
-import { knex } from './knex/connection'
-import { redis } from './source/session'
+import { knex, redis } from './source/connection'
 
 beforeEach(async () => {
   await knex.migrate.rollback()

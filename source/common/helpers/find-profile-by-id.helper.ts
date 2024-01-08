@@ -1,5 +1,5 @@
 import { Roles } from '../../consts'
-import { knex } from '../../../knex/connection'
+import { knex } from '../../connection'
 
 import {
   type AccountRole,
