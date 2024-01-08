@@ -35,3 +35,14 @@ export const DEFAULT_PAGE = 1
 
 // Redis
 export const REDIS_URL = process.env.REDIS_URL ?? ''
+
+// Mailer (for production)
+export const MAILER_HOST = process.env.MAILER_HOST
+export const MAILER_PORT = parseInt(process.env.MAILER_PORT as unknown as string)
+export const MAILER_SECURE = Boolean(process.env.MAILER_SECURE)
+export const MAILER_USER = process.env.MAILER_USER
+export const MAILER_PASS = process.env.MAILER_PASS
+
+// Feedback
+export const NO_REPLAY_EMAIL = 'no-replay@mail.com'
+export const FEEDBACK_EMAIL = process.env.FEEDBACK_EMAIL ?? ''
