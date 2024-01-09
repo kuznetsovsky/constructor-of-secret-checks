@@ -1,5 +1,6 @@
 import request from 'supertest'
 import { app } from '../source/app'
+import { redis } from '../source/connection'
 
 describe('Auth endpoint', () => {
   describe('POST: /auth/sign-up/company', () => {
@@ -227,6 +228,47 @@ describe('Auth endpoint', () => {
         expect(response.body.company).toEqual({
           id: expect.any(Number),
           name: expect.any(String)
+        })
+      }
+    })
+
+    test('should limit authorization attempts after 3 attempts', async () => {
+      const USER_LOGIN_DATA = {
+        email: 'www.jhon@mail.com',
+        password: '!Qwerty1234'
+      }
+
+      for (let i = 0; i < 3; i++) {
+        const loginResponse = await request(app)
+          .post(URL)
+          .send(USER_LOGIN_DATA)
+
+        expect(loginResponse.statusCode).toBe(401)
+        expect(loginResponse.body).toMatchObject({
+          message: /The user was not found with these login details or the account was not verified./i
+        })
+      }
+
+      {
+        const loginResponse = await request(app)
+          .post(URL)
+          .send(USER_LOGIN_DATA)
+
+        expect(loginResponse.statusCode).toBe(401)
+        expect(loginResponse.body).toMatchObject({
+          error: /Authorization attempts exceeded. Repeat after 15 minutes./i
+        })
+      }
+
+      {
+        await redis.flushall()
+        const loginResponse = await request(app)
+          .post(URL)
+          .send(USER_LOGIN_DATA)
+
+        expect(loginResponse.statusCode).toBe(401)
+        expect(loginResponse.body).toMatchObject({
+          message: /The user was not found with these login details or the account was not verified./i
         })
       }
     })

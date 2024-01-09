@@ -13,7 +13,7 @@ import * as authService from './auth.service'
 import { checkPasswordCorrect, encryptPassword } from './auth.helper'
 import { Roles } from '../consts'
 import { CompanyRepository } from '../common/repositories/company.repository'
-import { knex } from '../connection'
+import { knex, redis } from '../connection'
 import { AccountRepository } from '../common/repositories/account.repository'
 import { InspectorRepository } from '../common/repositories/inspector.repository'
 import { sendMail } from '../common/libs/nodemailer.lib'
@@ -173,6 +173,26 @@ export async function signIn (
   const { email, password } = req.body
 
   try {
+    const ip = req.ip
+    const key = `login_attempts:${ip}`
+    const loginAttempts = await redis.get(key)
+
+    if (loginAttempts != null && parseInt(loginAttempts) >= 3) {
+      await redis.expire(key, 60 * 15) // 15 minute
+
+      res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json({
+          error: 'Authorization attempts exceeded. Repeat after 15 minutes.'
+        })
+
+      return
+    }
+
+    await redis.incr(key)
+
+    // =-=-=-=
+
     const account = await accountRepository.findVerifiedAccountByEmail(email)
 
     if (account === undefined) {
@@ -184,7 +204,6 @@ export async function signIn (
 
     // =-=-=-=
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const passwordsMatch = checkPasswordCorrect(password, account.password)
 
     if (!passwordsMatch) {
@@ -213,6 +232,8 @@ export async function signIn (
         cid: profile.company?.id
       }
     }
+
+    await redis.del(key)
 
     res
       .status(StatusCodes.OK)
