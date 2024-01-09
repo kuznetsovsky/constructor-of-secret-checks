@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes'
 import sanitizer from 'sanitize-html'
 
-import { knex } from '../connection'
+import { knex, redis } from '../connection'
 import { FEEDBACK_EMAIL } from '../../config'
 import { type Feedback } from './feedback.interface'
 import { sendMail } from '../common/libs/nodemailer.lib'
@@ -30,7 +30,7 @@ export async function sendFeedback (
   }
 
   try {
-    const account = await accountRepository.findOne(ID, ['email'])
+    const account = await accountRepository.findOne(ID, ['id', 'email'])
 
     if (account == null) {
       const error = new Error('account is missing.')
@@ -38,8 +38,25 @@ export async function sendFeedback (
       return
     }
 
-    // TODO:
-    // 2. make restrictions on sending spam messages
+    // =-=-=-=-=-=-=
+
+    const key = `feedback_restriction:${account.id}`
+
+    const numberOfFeedback = await redis.get(key)
+    if (numberOfFeedback != null) {
+      res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({
+          error: 'You have already sent your message. You will be able to send a new message only after an hour.'
+        })
+
+      return
+    }
+
+    await redis.incr(key)
+    await redis.expire(key, 60 * 60) // 1 hour
+
+    // =-=-=-=-=-=-=
 
     const sanitizeMessage = sanitizer(message)
     const sendingMailStatus = await sendMail(account.email, FEEDBACK_EMAIL, 'User feedback', sanitizeMessage)
