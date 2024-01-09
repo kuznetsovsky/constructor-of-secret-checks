@@ -16,6 +16,7 @@ import { router as authRouter } from './auth/auth.router'
 import { router as userRouter } from './user/user.router'
 import { router as usersRouter } from './users/users.router'
 import { router as feedbackRouter } from './feedback/feedback.router'
+import { router as emailVerificationRouter } from './email-verification/email-verification.router'
 
 export function appRoutes (app: Application): void {
   // Before
@@ -27,6 +28,7 @@ export function appRoutes (app: Application): void {
 
   // Routes
   app.use(`${VERSION}/auth`, authRouter)
+  app.use(`${VERSION}/email-verification`, emailVerificationRouter)
   app.use(`${VERSION}/user`, isAuthorized, userRouter)
   app.use(`${VERSION}/users`, isAuthorized, usersRouter)
   app.use(`${VERSION}/feedback`, isAuthorized, feedbackRouter)

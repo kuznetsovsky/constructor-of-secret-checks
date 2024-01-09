@@ -64,6 +64,8 @@ export async function signUpCompany (
     const BASE_URL = `${req.protocol}://${req.hostname}`
     const link = `${BASE_URL}/email-verification?email=${emailInBase64}&verification_code=${code}`
 
+    await redis.set(`email_verification:${email}`, code, 'EX', 60 * 60) // 1 hour
+
     const templateString = await renderEjsTemplate('email-confirmation', {
       url: link,
       title
@@ -134,6 +136,8 @@ export async function signUpInspector (
     const title = 'Email confirmation'
     const BASE_URL = `${req.protocol}://${req.hostname}`
     const link = `${BASE_URL}/email-verification?email=${emailInBase64}&verification_code=${code}`
+
+    await redis.set(`email_verification:${email}`, code, 'EX', 60 * 60) // 1 hour
 
     const templateString = await renderEjsTemplate('email-confirmation', {
       url: link,
