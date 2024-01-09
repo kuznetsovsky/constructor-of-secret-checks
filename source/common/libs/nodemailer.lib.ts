@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer'
+import type Mail from 'nodemailer/lib/mailer'
 import type SMTPTransport from 'nodemailer/lib/smtp-transport'
 
 import {
@@ -37,7 +38,25 @@ async function getTransport (): Promise<SMTPTransport.Options> {
   }
 }
 
-export async function sendMail (from: string, to: string, subject: string, templateString: string): Promise<void> {
+async function transporterSendMail (transporter: nodemailer.Transporter<SMTPTransport.SentMessageInfo>, message: Mail.Options): Promise<void> {
+  await new Promise((resolve, reject) => {
+    transporter.sendMail(message, (error, info) => {
+      if (error instanceof Error) {
+        console.log(`Error occurred. ${error.message}`)
+        reject(error)
+      }
+
+      if (!IS_TEST) {
+        console.log('Message sent: %s', info.messageId)
+        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info))
+      }
+
+      resolve(info)
+    })
+  })
+}
+
+export async function sendMail (from: string, to: string, subject: string, templateString: string): Promise<boolean> {
   try {
     const options = await getTransport()
     const transporter = nodemailer.createTransport(options)
@@ -49,16 +68,11 @@ export async function sendMail (from: string, to: string, subject: string, templ
       html: templateString
     }
 
-    transporter.sendMail(message, (error, info) => {
-      if (error instanceof Error) {
-        console.log(`Error occurred. ${error.message}`)
-        return
-      }
+    await transporterSendMail(transporter, message)
 
-      console.log('Message sent: %s', info.messageId)
-      console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info))
-    })
+    return true
   } catch (error) {
     console.error(error)
+    return false
   }
 }

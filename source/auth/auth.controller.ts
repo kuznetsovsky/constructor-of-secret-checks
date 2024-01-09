@@ -1,3 +1,4 @@
+import { randomBytes } from 'node:crypto'
 import type { NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
@@ -15,6 +16,9 @@ import { CompanyRepository } from '../common/repositories/company.repository'
 import { knex } from '../connection'
 import { AccountRepository } from '../common/repositories/account.repository'
 import { InspectorRepository } from '../common/repositories/inspector.repository'
+import { sendMail } from '../common/libs/nodemailer.lib'
+import { NO_REPLAY_EMAIL } from '../../config'
+import { renderEjsTemplate } from '../common/libs/ejs.lib'
 
 export async function signUpCompany (
   req: Request<never, never, SignUpAdministrator>,
@@ -54,10 +58,34 @@ export async function signUpCompany (
 
     // =-=-=-=
 
-    res
-      .status(StatusCodes.CREATED)
-      .header('Location', `/api/v1/accounts/${accountId}`)
-      .json({ id: accountId })
+    const code = randomBytes(24).toString('base64')
+    const emailInBase64 = btoa(email)
+    const title = 'Email confirmation'
+    const BASE_URL = `${req.protocol}://${req.hostname}`
+    const link = `${BASE_URL}/email-verification?email=${emailInBase64}&verification_code=${code}`
+
+    const templateString = await renderEjsTemplate('email-confirmation', {
+      url: link,
+      title
+    })
+
+    if (templateString == null) {
+      const error = new Error('Failed to create ejs template')
+      next(error)
+      return
+    }
+
+    const isSuccessSendingMail = await sendMail(NO_REPLAY_EMAIL, email, title, templateString)
+
+    if (isSuccessSendingMail) {
+      res
+        .status(StatusCodes.CREATED)
+        .header('Location', `/api/v1/accounts/${accountId}`)
+        .json({ id: accountId })
+    } else {
+      const error = new Error('Failed to send email')
+      next(error)
+    }
   } catch (error) {
     next(error)
   }
@@ -101,10 +129,34 @@ export async function signUpInspector (
 
     // =-=-=-=
 
-    res
-      .status(StatusCodes.CREATED)
-      .header('Location', `/api/v1/accounts/${accountId}`)
-      .json({ id: accountId })
+    const code = randomBytes(24).toString('base64')
+    const emailInBase64 = btoa(email)
+    const title = 'Email confirmation'
+    const BASE_URL = `${req.protocol}://${req.hostname}`
+    const link = `${BASE_URL}/email-verification?email=${emailInBase64}&verification_code=${code}`
+
+    const templateString = await renderEjsTemplate('email-confirmation', {
+      url: link,
+      title
+    })
+
+    if (templateString == null) {
+      const error = new Error('Failed to create ejs template')
+      next(error)
+      return
+    }
+
+    const isSuccessSendingMail = await sendMail(NO_REPLAY_EMAIL, email, title, templateString)
+
+    if (isSuccessSendingMail) {
+      res
+        .status(StatusCodes.CREATED)
+        .header('Location', `/api/v1/accounts/${accountId}`)
+        .json({ id: accountId })
+    } else {
+      const error = new Error('Failed to send email')
+      next(error)
+    }
   } catch (error) {
     next(error)
   }
