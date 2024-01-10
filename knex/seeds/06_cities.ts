@@ -7,6 +7,34 @@ export async function seed (knex: Knex): Promise<void> {
       {
         id: 1,
         name: 'Moscow'
+      },
+      {
+        id: 2,
+        name: 'Saint Petersburg'
+      },
+      {
+        id: 3,
+        name: 'Novosibirsk'
+      },
+      {
+        id: 4,
+        name: 'Yekaterinburg'
+      },
+      {
+        id: 5,
+        name: 'Nizhny Novgorod'
+      },
+      {
+        id: 6,
+        name: 'Kazan'
+      },
+      {
+        id: 7,
+        name: 'Rostov-on-Don'
+      },
+      {
+        id: 8,
+        name: 'Sochi'
       }
     ])
 };
