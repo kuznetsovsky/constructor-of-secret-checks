@@ -15,12 +15,27 @@ export async function verify (
   res: Response,
   next: NextFunction
 ): Promise<void> {
+  const { ip } = req
   const accountRepository = new AccountRepository(knex, 'accounts')
   const { verification_code: verificationCode } = req.body
   const email = atob(req.body.email)
 
   try {
-    // TODO: create restrict activation attempts
+    {
+      const key = `email_verification_attempts:${ip}`
+      const activationAttempts = await redis.get(key)
+
+      if (activationAttempts != null && parseInt(activationAttempts) >= 3) {
+        res
+          .status(StatusCodes.BAD_REQUEST)
+          .json({ error: 'Account activation attempts exceeded. Please try again in 15 minutes.' })
+
+        return
+      }
+
+      await redis.incr(key)
+      await redis.expire(key, 60 * 15) // 15 minute
+    }
 
     const code = await redis.get(`email_verification:${email}`)
 

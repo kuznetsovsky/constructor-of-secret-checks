@@ -63,4 +63,32 @@ describe('Email verification endpoints:', () => {
     expect(response.statusCode).toBe(400)
     expect(response.body.error).toMatch(/Invalid activation code or activation time has expired/i)
   })
+
+  it('email activation should be limited after 3 failed attempts', async () => {
+    // const code = randomBytes(24).toString('base64')
+    // const key = 'email_verification:www.tim@mail.com'
+    // await redis.set(key, code)
+    // await redis.del(key)
+    for (let i = 0; i < 3; i++) {
+      const response = await request(app)
+        .put('/api/v1/email-verification')
+        .send({
+          email: 'd3d3LnRpbUBtYWlsLmNvbQ==',
+          verification_code: ''
+        })
+
+      expect(response.statusCode).toBe(400)
+      expect(response.body.error).toMatch(/Invalid activation code or activation time has expired/i)
+    }
+
+    const response = await request(app)
+      .put('/api/v1/email-verification')
+      .send({
+        email: 'd3d3LnRpbUBtYWlsLmNvbQ==',
+        verification_code: ''
+      })
+
+    expect(response.statusCode).toBe(400)
+    expect(response.body.error).toMatch(/Account activation attempts exceeded. Please try again in 15 minutes/i)
+  })
 })
