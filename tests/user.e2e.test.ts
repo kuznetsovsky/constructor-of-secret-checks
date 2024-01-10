@@ -402,4 +402,142 @@ describe('User endpoints', () => {
       })
     })
   })
+
+  describe('PUT: /user/change-password', () => {
+    it.each([
+      {
+        case: 'must NOT have fewer than 8 characters',
+        old_password: '!Qwerty',
+        new_password: '!Qwerty',
+        confirmation_new_password: '!Qwerty'
+      },
+      {
+        case: 'must NOT have more than 255 characters',
+        old_password: '5bc33b60bfcd1bec5e085d4a29c17eda345c26d98ba30dde8652fb135dd92e0862dc5b99849870ec2695c265c26d98ba30d5bc33b60bfcd1bec5e085d4a29c17eda348be4ea3f7abde8652fb135dd92e0862dc5b99849870ec268652fb135dd92e0862dc5b99849asd878661fnbfa52fb135dd92e0862dc5bgdsfgdfg9984987',
+        new_password: '5bc33b60bfcd1bec5e085d4a29c17eda345c26d98ba30dde8652fb135dd92e0862dc5b99849870ec2695c265c26d98ba30d5bc33b60bfcd1bec5e085d4a29c17eda348be4ea3f7abde8652fb135dd92e0862dc5b99849870ec268652fb135dd92e0862dc5b99849asd878661fnbfa52fb135dd92e0862dc5bgdsfgdfg9984987',
+        confirmation_new_password: '5bc33b60bfcd1bec5e085d4a29c17eda345c26d98ba30dde8652fb135dd92e0862dc5b99849870ec2695c265c26d98ba30d5bc33b60bfcd1bec5e085d4a29c17eda348be4ea3f7abde8652fb135dd92e0862dc5b99849870ec268652fb135dd92e0862dc5b99849asd878661fnbfa52fb135dd92e0862dc5bgdsfgdfg9984987'
+      }
+    ])('should return a validation error ($case)', async (payload) => {
+      // LOGIN USER
+      // =-=-=-=-=-=-=-=-=-=
+
+      const loginResponse = await request(app)
+        .post(SIGN_IN_URL)
+        .send({
+          email: 'www.jane@mail.com',
+          password: 'Qwerty_1234'
+        })
+
+      expect(loginResponse.status).toEqual(200)
+      const cookies = loginResponse.headers['set-cookie']
+
+      // VALIDATION CHANGE PASSWORD PAYLOAD
+      // =-=-=-=-=-=-=-=-=-=
+
+      const response = await request(app)
+        .put('/api/v1/user/change-password')
+        .set('Cookie', cookies)
+        .send(payload)
+
+      expect(response.status).toEqual(422)
+      expect(response.headers['content-type']).toMatch(/json/)
+      expect(response.body.message).toMatch(/Validation failed/i)
+      expect(response.body.errors[0].message).toEqual(payload.case)
+      expect(response.body.errors[1].message).toEqual(payload.case)
+      expect(response.body.errors[2].message).toEqual(payload.case)
+    })
+
+    it('should return the message passwords do not match', async () => {
+      // LOGIN USER
+      // =-=-=-=-=-=-=-=-=-=
+
+      const loginResponse = await request(app)
+        .post(SIGN_IN_URL)
+        .send({
+          email: 'www.jane@mail.com',
+          password: 'Qwerty_1234'
+        })
+
+      expect(loginResponse.status).toEqual(200)
+      const cookies = loginResponse.headers['set-cookie']
+
+      // VALIDATION CHANGE PASSWORD PAYLOAD
+      // =-=-=-=-=-=-=-=-=-=
+
+      const response = await request(app)
+        .put('/api/v1/user/change-password')
+        .set('Cookie', cookies)
+        .send({
+          old_password: '!Qwerty123',
+          new_password: '!Qwerty123',
+          confirmation_new_password: '!Qwerty132'
+        })
+
+      expect(response.status).toEqual(400)
+      expect(response.headers['content-type']).toMatch(/json/)
+      expect(response.body.error).toMatch(/The new password and the confirmation password do not match/i)
+    })
+
+    it('should return the message old password does not match the current one', async () => {
+      // LOGIN USER
+      // =-=-=-=-=-=-=-=-=-=
+
+      const loginResponse = await request(app)
+        .post(SIGN_IN_URL)
+        .send({
+          email: 'www.jane@mail.com',
+          password: 'Qwerty_1234'
+        })
+
+      expect(loginResponse.status).toEqual(200)
+      const cookies = loginResponse.headers['set-cookie']
+
+      // CHANGE PASSWORD PAYLOAD
+      // =-=-=-=-=-=-=-=-=-=
+
+      const response = await request(app)
+        .put('/api/v1/user/change-password')
+        .set('Cookie', cookies)
+        .send({
+          old_password: 'Qwerty1234',
+          new_password: '!Qwerty123',
+          confirmation_new_password: '!Qwerty123'
+        })
+
+      expect(response.status).toEqual(400)
+      expect(response.headers['content-type']).toMatch(/json/)
+      expect(response.body.error).toMatch(/The old password does not match the current one/i)
+    })
+
+    it('should successfully update the password to a new one', async () => {
+      // LOGIN USER
+      // =-=-=-=-=-=-=-=-=-=
+
+      const loginResponse = await request(app)
+        .post(SIGN_IN_URL)
+        .send({
+          email: 'www.jane@mail.com',
+          password: 'Qwerty_1234'
+        })
+
+      expect(loginResponse.status).toEqual(200)
+      const cookies = loginResponse.headers['set-cookie']
+
+      // CHANGE PASSWORD PAYLOAD
+      // =-=-=-=-=-=-=-=-=-=
+
+      const response = await request(app)
+        .put('/api/v1/user/change-password')
+        .set('Cookie', cookies)
+        .send({
+          old_password: 'Qwerty_1234',
+          new_password: '!Qwerty_1234',
+          confirmation_new_password: '!Qwerty_1234'
+        })
+
+      expect(response.status).toEqual(200)
+      expect(response.headers['content-type']).toMatch(/json/)
+      expect(response.body.message).toMatch(/Password updated successfully/i)
+    })
+  })
 })

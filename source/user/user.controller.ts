@@ -3,11 +3,13 @@ import { StatusCodes } from 'http-status-codes'
 
 import { Roles } from '../consts'
 import { knex } from '../connection'
+import { encryptPassword, checkPasswordCorrect } from '../auth/auth.helper'
+import type { ChangePassword, Profile } from './user.interface'
 import { findProfileByID } from '../common/helpers/find-profile-by-id.helper'
 import { CityRepository } from '../common/repositories/city.repository'
 import { InspectorRepository } from '../common/repositories/inspector.repository'
 import { AdminsitratorRepository } from '../common/repositories/administrator.repository'
-import type { Profile } from './user.interface'
+import { AccountRepository } from '../common/repositories/account.repository'
 
 import {
   adminProfileValidator,
@@ -114,6 +116,65 @@ export async function updateProfile (
         .status(StatusCodes.OK)
         .json(profile)
     }
+  } catch (error) {
+    next(error)
+  }
+}
+
+export async function changePassword (
+  req: Request<never, never, ChangePassword>,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  const ID = req.session.user?.id
+
+  if (ID == null) {
+    const error = new Error('ID not defined')
+    next(error)
+    return
+  }
+
+  const {
+    old_password: oldPassword,
+    new_password: newPassword,
+    confirmation_new_password: confirmationNewPassword
+  } = req.body
+
+  if (newPassword !== confirmationNewPassword) {
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ error: 'The new password and the confirmation password do not match.' })
+
+    return
+  }
+
+  const accountRepository = new AccountRepository(knex, 'accounts')
+  const account = await accountRepository.findOne(ID)
+
+  if (account == null) {
+    const error = new Error('Account not defined')
+    next(error)
+    return
+  }
+
+  const passwordsMatch = checkPasswordCorrect(oldPassword, account.password)
+
+  if (!passwordsMatch) {
+    res.status(StatusCodes.BAD_REQUEST)
+      .json({ error: 'The old password does not match the current one.' })
+
+    return
+  }
+
+  const encryptedPassword = encryptPassword(newPassword)
+  await accountRepository.update(ID, {
+    password: encryptedPassword
+  })
+
+  try {
+    res
+      .status(StatusCodes.OK)
+      .json({ message: 'Password updated successfully.' })
   } catch (error) {
     next(error)
   }

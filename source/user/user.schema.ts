@@ -1,5 +1,5 @@
 import { type JSONSchemaType } from 'ajv'
-import type { AdminProfile, InspectorProfile } from './user.interface'
+import type { AdminProfile, ChangePassword, InspectorProfile } from './user.interface'
 
 export const adminProfileSchema: JSONSchemaType<AdminProfile> = {
   type: 'object',
@@ -80,6 +80,36 @@ export const inspectorProfileSchema: JSONSchemaType<InspectorProfile> = {
       type: 'string',
       transform: ['trim'],
       maxLength: 48
+    }
+  }
+}
+
+export const changePasswordSchema: JSONSchemaType<ChangePassword> = {
+  type: 'object',
+  additionalProperties: false,
+  required: [
+    'old_password',
+    'new_password',
+    'confirmation_new_password'
+  ],
+  properties: {
+    new_password: {
+      type: 'string',
+      transform: ['trim'],
+      minLength: 8,
+      maxLength: 255
+    },
+    old_password: {
+      type: 'string',
+      transform: ['trim'],
+      minLength: 8,
+      maxLength: 255
+    },
+    confirmation_new_password: {
+      type: 'string',
+      transform: ['trim'],
+      minLength: 8,
+      maxLength: 255
     }
   }
 }

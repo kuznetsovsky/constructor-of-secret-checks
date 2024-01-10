@@ -12,3 +12,9 @@ export interface InspectorProfile extends AdminProfile {
 }
 
 export type Profile = AdminProfile | InspectorProfile
+
+export interface ChangePassword {
+  old_password: string
+  new_password: string
+  confirmation_new_password: string
+}
