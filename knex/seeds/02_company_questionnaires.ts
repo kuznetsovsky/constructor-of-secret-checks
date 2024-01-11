@@ -7,6 +7,14 @@ export async function seed (knex: Knex): Promise<void> {
       {
         link: '/companies-questionnaires/1',
         description: 'Описание акеты'
+      },
+      {
+        link: '/companies-questionnaires/2',
+        description: 'Описание акеты'
+      },
+      {
+        link: '/companies-questionnaires/3',
+        description: 'Описание акеты'
       }
     ])
 };

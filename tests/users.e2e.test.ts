@@ -29,7 +29,7 @@ describe('Users endpoints', () => {
         .set('Cookie', cookies)
 
       expect(userResponse.statusCode).toBe(200)
-      expect(userResponse.body.data.length).toBe(4)
+      expect(userResponse.body.data.length).toBe(6)
       expect(userResponse.body.data).toMatchObject([
         {
           id: 1,
@@ -60,6 +60,22 @@ describe('Users endpoints', () => {
           role: 'inspector',
           email: 'www.tim@mail.com',
           email_verified: null,
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
+        },
+        {
+          id: 5,
+          role: 'administrator',
+          email: 'www.alex@mail.com',
+          email_verified: expect.any(String),
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
+        },
+        {
+          id: 6,
+          role: 'administrator',
+          email: 'www.alice@mail.com',
+          email_verified: expect.any(String),
           created_at: expect.any(String),
           last_visit: expect.any(String)
         }
@@ -111,12 +127,28 @@ describe('Users endpoints', () => {
         .set('Cookie', cookies)
 
       expect(response.statusCode).toBe(200)
-      expect(response.body.data.length).toBe(1)
+      expect(response.body.data.length).toBe(3)
       expect(response.body.data).toMatchObject([
         {
           id: 2,
           role: 'administrator',
           email: 'www.jane@mail.com',
+          email_verified: expect.any(String),
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
+        },
+        {
+          id: 5,
+          role: 'administrator',
+          email: 'www.alex@mail.com',
+          email_verified: expect.any(String),
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
+        },
+        {
+          id: 6,
+          role: 'administrator',
+          email: 'www.alice@mail.com',
           email_verified: expect.any(String),
           created_at: expect.any(String),
           last_visit: expect.any(String)

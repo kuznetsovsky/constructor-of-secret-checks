@@ -1,4 +1,5 @@
 import { BaseRepository } from './base.repository'
+import { paginate } from '../helpers/paginate.helper'
 
 export interface Company {
   id: number
@@ -13,7 +14,48 @@ export interface Company {
   updated_at: string
 }
 
+interface CompanyListProfile {
+  id: number
+  name: string
+  description: string | null
+  website_link: string | null
+  vk_link: string | null
+}
+
+interface Administrator {
+  id: number
+  first_name: string | null
+  last_name: string | null
+  phone_number: string | null
+}
+
+interface CompanyProfile extends CompanyListProfile {
+  administrator: Administrator
+}
+
 export class CompanyRepository extends BaseRepository<Company> {
+  async findByPage (
+    page: number | undefined,
+    perPage: number | undefined,
+    sort: 'asc' | 'desc' = 'asc'
+  ): Promise<CompanyListProfile[] | []> {
+    const { limit, offset } = paginate(page, perPage)
+
+    const companies = await this.qb
+      .select([
+        'id',
+        'name',
+        'description',
+        'website_link',
+        'vk_link'
+      ])
+      .offset(offset)
+      .limit(limit)
+      .orderBy('id', sort)
+
+    return companies
+  }
+
   async createAdministrator (name: string, email: string, password: string): Promise<number> {
     return await this.knex.transaction(async (trx) => {
       const account = await this.knex('accounts')
@@ -51,5 +93,23 @@ export class CompanyRepository extends BaseRepository<Company> {
 
       return account[0].id
     })
+  }
+
+  async findProfileByID (id: number): Promise<CompanyProfile | undefined> {
+    const company = await this.knex('companies as c')
+      .leftJoin('company_contact_persons as p', 'p.company_id', 'c.id')
+      .leftJoin('phone_numbers as t', 't.id', 'p.phone_number_id')
+      .where('c.id', id)
+      .select([
+        'c.id',
+        'c.name',
+        'c.description',
+        'c.website_link',
+        'c.vk_link',
+        this.knex.raw("json_build_object('id', p.id, 'first_name', p.first_name, 'last_name', p.last_name, 'phone_number', t.phone_number) AS administrator")
+      ])
+      .first()
+
+    return company as unknown as CompanyProfile | undefined
   }
 }
