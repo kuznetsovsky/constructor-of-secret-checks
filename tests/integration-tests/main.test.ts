@@ -1,7 +1,7 @@
 import request from 'supertest'
-import { app } from '../source/app'
+import { app } from '../../source/app'
 
-describe('Root endpoint', () => {
+describe('Main endpoints:', () => {
   test('should return status code 200 and a message to go to the API', async () => {
     const response = await request(app).get('/')
 

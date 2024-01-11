@@ -1,5 +1,5 @@
 import request from 'supertest'
-import { app } from '../source/app'
+import { app } from '../../source/app'
 
 describe('Cities endpoints:', () => {
   let cookie = ''

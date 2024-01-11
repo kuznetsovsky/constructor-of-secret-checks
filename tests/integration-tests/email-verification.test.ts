@@ -1,8 +1,8 @@
 import { randomBytes } from 'node:crypto'
 import request from 'supertest'
 
-import { app } from '../source/app'
-import { redis } from '../source/connection'
+import { app } from '../../source/app'
+import { redis } from '../../source/connection'
 
 describe('Email verification endpoints:', () => {
   it.each([

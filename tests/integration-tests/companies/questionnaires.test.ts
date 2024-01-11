@@ -1,7 +1,7 @@
 import request from 'supertest'
-import { app } from '../../source/app'
+import { app } from '../../../source/app'
 
-describe('Company questionnaires endpoints:', () => {
+describe('Company questionnaire endpoints:', () => {
   let cookie = ''
 
   beforeAll(async () => {

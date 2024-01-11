@@ -1,8 +1,8 @@
 import request from 'supertest'
-import { app } from '../source/app'
-import { redis } from '../source/connection'
+import { app } from '../../source/app'
+import { redis } from '../../source/connection'
 
-describe('Auth endpoint', () => {
+describe('Auth endpoints:', () => {
   describe('POST: /auth/sign-up/company', () => {
     test('should return the id of the created user', async () => {
       const payload = {

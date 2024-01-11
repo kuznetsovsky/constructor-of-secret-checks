@@ -1,8 +1,8 @@
 import request from 'supertest'
-import { app } from '../source/app'
-import { redis } from '../source/connection'
+import { app } from '../../source/app'
+import { redis } from '../../source/connection'
 
-describe('Feedback endpoint:', () => {
+describe('Feedback endpoints:', () => {
   const SIGN_IN_URL = '/api/v1/auth/sign-in'
 
   it('should return a validation error', async () => {

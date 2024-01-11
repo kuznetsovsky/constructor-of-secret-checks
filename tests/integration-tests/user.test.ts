@@ -1,7 +1,7 @@
 import request from 'supertest'
-import { app } from '../source/app'
+import { app } from '../../source/app'
 
-describe('User endpoints', () => {
+describe('User endpoints:', () => {
   const SIGN_IN_URL = '/api/v1/auth/sign-in'
   const USER_URL = '/api/v1/user'
 
