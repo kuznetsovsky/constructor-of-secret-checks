@@ -8,15 +8,14 @@ import { router as questionnaireRouter } from './questionnaire/questionnaire.rou
 export const router = express.Router()
 
 router.get('/', companiesController.getCompanies)
-router.get('/:id', companiesController.getCompanyByID)
+router.get('/:companyId', companiesController.getCompanyByID)
 
 router.put(
-  '/:id',
+  '/:companyId',
   isCompanyAdmin,
   validateBody(updateCompanyValidator),
   companiesController.updateCompanyByID
 )
 
 // Questionnaire
-
-router.use('/:id', questionnaireRouter)
+router.use('/:companyId', questionnaireRouter)

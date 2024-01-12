@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes'
 import { Roles } from '../../consts'
 
 export function isCompanyAdminOrManager (req: Request, res: Response, next: NextFunction): void {
-  let ID = parseInt(req.params.id)
+  let ID = parseInt(req.params.companyId)
 
   if (Number.isNaN(ID)) {
     ID = -1

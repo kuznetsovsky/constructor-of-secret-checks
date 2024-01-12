@@ -4,4 +4,4 @@ import * as usersController from './users.controller'
 export const router = express.Router()
 
 router.get('/', usersController.getAccounts)
-router.get('/:id', usersController.getAccountByID)
+router.get('/:userId', usersController.getAccountByID)

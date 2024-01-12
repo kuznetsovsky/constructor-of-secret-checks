@@ -36,13 +36,13 @@ export async function getCompanies (
 }
 
 export async function getCompanyByID (
-  req: Request,
+  req: Request<{ companyId: string }>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   const companyRepository = new CompanyRepository(knex, 'companies')
 
-  let ID = parseInt(req.params.id)
+  let ID = parseInt(req.params.companyId)
 
   if (Number.isNaN(ID)) {
     ID = 0
@@ -68,13 +68,13 @@ export async function getCompanyByID (
 }
 
 export async function updateCompanyByID (
-  req: Request<{ id: string }, never, UpdateCompany>,
+  req: Request<{ companyId: string }, never, UpdateCompany>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   const companyRepository = new CompanyRepository(knex, 'companies')
 
-  let ID = parseInt(req.params.id)
+  let ID = parseInt(req.params.companyId)
 
   if (Number.isNaN(ID)) {
     ID = 0

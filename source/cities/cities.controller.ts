@@ -34,13 +34,13 @@ export async function getCities (
 }
 
 export async function getCityByID (
-  req: Request,
+  req: Request<{ cityId: string }>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   const cityRepository = new CityRepository(knex, 'cities')
 
-  let ID = parseInt(req.params.id)
+  let ID = parseInt(req.params.cityId)
 
   if (Number.isNaN(ID)) {
     ID = 0

@@ -39,11 +39,11 @@ export async function getAccounts (
 }
 
 export async function getAccountByID (
-  req: Request,
+  req: Request<{ userId: string }>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const id = parseInt(req.params.id)
+  const id = parseInt(req.params.userId)
 
   if (Number.isNaN(id) || id < 1) {
     res

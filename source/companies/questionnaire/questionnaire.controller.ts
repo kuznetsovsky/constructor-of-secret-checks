@@ -7,14 +7,14 @@ import { QuestionnaireRepository } from '../../common/repositories/questionnaire
 import { CompanyRepository } from '../../common/repositories/company.repository'
 
 export async function getQuestionnaire (
-  req: Request,
+  req: Request<{ companyId: string }>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   const questionnaireRepository = new QuestionnaireRepository(knex, 'company_questionnaires')
   const companyRepository = new CompanyRepository(knex, 'companies')
 
-  let ID = parseInt(req.params.id)
+  let ID = parseInt(req.params.companyId)
 
   if (Number.isNaN(ID)) {
     ID = 0
@@ -51,14 +51,14 @@ export async function getQuestionnaire (
 }
 
 export async function updateQuestionnaire (
-  req: Request<{ id: string }, never, UpdateQuestionnaire>,
+  req: Request<{ companyId: string }, never, UpdateQuestionnaire>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   const questionnaireRepository = new QuestionnaireRepository(knex, 'company_questionnaires')
   const companyRepository = new CompanyRepository(knex, 'companies')
 
-  let ID = parseInt(req.params.id)
+  let ID = parseInt(req.params.companyId)
 
   if (Number.isNaN(ID)) {
     ID = 0
