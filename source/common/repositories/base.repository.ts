@@ -8,6 +8,7 @@ type Table =
   | 'companies'
   | 'company_contact_persons'
   | 'company_questionnaires'
+  | 'company_objects'
 
 interface Command<T> {
   create: (data: Partial<T>) => Promise<T>
@@ -99,6 +100,8 @@ export abstract class BaseRepository<T> implements Repository<T> {
     }
 
     const exist = await query.first()
-    return exist.count !== 0
+
+    // eslint-disable-next-line eqeqeq
+    return exist.count != 0
   }
 }

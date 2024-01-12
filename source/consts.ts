@@ -3,3 +3,8 @@ export const enum Roles {
   Manager = 'manager',
   Administrator = 'administrator'
 }
+
+export const enum EntryTypes {
+  Manual = 'manual',
+  Public = 'public'
+}

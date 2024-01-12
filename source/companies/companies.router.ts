@@ -4,6 +4,7 @@ import { isCompanyAdmin } from '../common/helpers/is-company-admin.helper'
 import { updateCompanyValidator } from './companies.validator'
 import { validateBody } from '../common/helpers/validate-body.helper'
 import { router as questionnaireRouter } from './questionnaire/questionnaire.router'
+import { router as objectsRouter } from './objects/objects.router'
 
 export const router = express.Router()
 
@@ -19,3 +20,6 @@ router.put(
 
 // Questionnaire
 router.use('/:companyId', questionnaireRouter)
+
+// Objects
+router.use('/:companyId', objectsRouter)
