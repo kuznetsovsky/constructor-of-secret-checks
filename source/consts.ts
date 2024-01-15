@@ -8,3 +8,9 @@ export const enum EntryTypes {
   Manual = 'manual',
   Public = 'public'
 }
+
+export const enum InspectorStatus {
+  Verification = 'verification',
+  Approved = 'approved',
+  Deviation = 'deviation'
+}

@@ -29,7 +29,7 @@ describe('Users endpoints:', () => {
         .set('Cookie', cookies)
 
       expect(userResponse.statusCode).toBe(200)
-      expect(userResponse.body.data.length).toBe(6)
+      expect(userResponse.body.data.length).toBe(13)
       expect(userResponse.body.data).toMatchObject([
         {
           id: 1,
@@ -78,6 +78,62 @@ describe('Users endpoints:', () => {
           email_verified: expect.any(String),
           created_at: expect.any(String),
           last_visit: expect.any(String)
+        },
+        {
+          id: 7,
+          role: 'inspector',
+          email: 'www.lana@mail.com',
+          email_verified: expect.any(String),
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
+        },
+        {
+          id: 8,
+          role: 'inspector',
+          email: 'www.ketty@mail.com',
+          email_verified: expect.any(String),
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
+        },
+        {
+          id: 9,
+          role: 'inspector',
+          email: 'www.barbara@mail.com',
+          email_verified: expect.any(String),
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
+        },
+        {
+          id: 10,
+          role: 'inspector',
+          email: 'www.britney@mail.com',
+          email_verified: expect.any(String),
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
+        },
+        {
+          id: 11,
+          role: 'inspector',
+          email: 'www.betty@mail.com',
+          email_verified: expect.any(String),
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
+        },
+        {
+          id: 12,
+          role: 'inspector',
+          email: 'www.boris@mail.com',
+          email_verified: expect.any(String),
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
+        },
+        {
+          id: 13,
+          role: 'inspector',
+          email: 'www.michael@mail.com',
+          email_verified: expect.any(String),
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
         }
       ])
     })
@@ -94,7 +150,7 @@ describe('Users endpoints:', () => {
         .set('Cookie', cookies)
 
       expect(response.statusCode).toBe(200)
-      expect(response.body.data.length).toBe(2)
+      expect(response.body.data.length).toBe(9)
       expect(response.body.data).toMatchObject([
         {
           id: 1,
@@ -109,6 +165,62 @@ describe('Users endpoints:', () => {
           role: 'inspector',
           email: 'www.tim@mail.com',
           email_verified: null,
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
+        },
+        {
+          id: 7,
+          role: 'inspector',
+          email: 'www.lana@mail.com',
+          email_verified: expect.any(String),
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
+        },
+        {
+          id: 8,
+          role: 'inspector',
+          email: 'www.ketty@mail.com',
+          email_verified: expect.any(String),
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
+        },
+        {
+          id: 9,
+          role: 'inspector',
+          email: 'www.barbara@mail.com',
+          email_verified: expect.any(String),
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
+        },
+        {
+          id: 10,
+          role: 'inspector',
+          email: 'www.britney@mail.com',
+          email_verified: expect.any(String),
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
+        },
+        {
+          id: 11,
+          role: 'inspector',
+          email: 'www.betty@mail.com',
+          email_verified: expect.any(String),
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
+        },
+        {
+          id: 12,
+          role: 'inspector',
+          email: 'www.boris@mail.com',
+          email_verified: expect.any(String),
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
+        },
+        {
+          id: 13,
+          role: 'inspector',
+          email: 'www.michael@mail.com',
+          email_verified: '2024-01-01T00:00:00.000Z',
           created_at: expect.any(String),
           last_visit: expect.any(String)
         }
@@ -223,12 +335,12 @@ describe('Users endpoints:', () => {
       expect(authResponse.status).toEqual(200)
       const cookies = authResponse.headers['set-cookie']
 
-      const response = await request(app).get('/api/v1/users/10')
+      const response = await request(app).get('/api/v1/users/100')
         .set('Cookie', cookies)
 
       expect(response.statusCode).toBe(404)
       expect(response.body).toMatchObject({
-        error: 'Account with ID 10 not found'
+        error: 'Account with ID 100 not found'
       })
     })
 

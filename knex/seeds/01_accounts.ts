@@ -38,6 +38,49 @@ export async function seed (knex: Knex): Promise<void> {
         email: 'www.alice@mail.com',
         email_verified: '2024-01-01T00:00:00.000Z',
         password: '1qJfUmC4cZimiM6djJ3Bpw==$TrLeF5pFo0xwf2lNxBVCdilIBUc25oiaaOXuPOWru/i9zCApGnFm9fMhBxFtvMtiCqhLMJuuY8Sjjqx4wdgdDA=='
+      },
+      //
+      { // 7
+        role: 'inspector',
+        email: 'www.lana@mail.com',
+        email_verified: '2024-01-01T00:00:00.000Z',
+        password: '1qJfUmC4cZimiM6djJ3Bpw==$TrLeF5pFo0xwf2lNxBVCdilIBUc25oiaaOXuPOWru/i9zCApGnFm9fMhBxFtvMtiCqhLMJuuY8Sjjqx4wdgdDA=='
+      },
+      { // 8
+        role: 'inspector',
+        email: 'www.ketty@mail.com',
+        email_verified: '2024-01-01T00:00:00.000Z',
+        password: '1qJfUmC4cZimiM6djJ3Bpw==$TrLeF5pFo0xwf2lNxBVCdilIBUc25oiaaOXuPOWru/i9zCApGnFm9fMhBxFtvMtiCqhLMJuuY8Sjjqx4wdgdDA=='
+      },
+      { // 9
+        role: 'inspector',
+        email: 'www.barbara@mail.com',
+        email_verified: '2024-01-01T00:00:00.000Z',
+        password: '1qJfUmC4cZimiM6djJ3Bpw==$TrLeF5pFo0xwf2lNxBVCdilIBUc25oiaaOXuPOWru/i9zCApGnFm9fMhBxFtvMtiCqhLMJuuY8Sjjqx4wdgdDA=='
+      },
+      { // 10
+        role: 'inspector',
+        email: 'www.britney@mail.com',
+        email_verified: '2024-01-01T00:00:00.000Z',
+        password: '1qJfUmC4cZimiM6djJ3Bpw==$TrLeF5pFo0xwf2lNxBVCdilIBUc25oiaaOXuPOWru/i9zCApGnFm9fMhBxFtvMtiCqhLMJuuY8Sjjqx4wdgdDA=='
+      },
+      { // 11
+        role: 'inspector',
+        email: 'www.betty@mail.com',
+        email_verified: '2024-01-01T00:00:00.000Z',
+        password: '1qJfUmC4cZimiM6djJ3Bpw==$TrLeF5pFo0xwf2lNxBVCdilIBUc25oiaaOXuPOWru/i9zCApGnFm9fMhBxFtvMtiCqhLMJuuY8Sjjqx4wdgdDA=='
+      },
+      { // 12
+        role: 'inspector',
+        email: 'www.boris@mail.com',
+        email_verified: '2024-01-01T00:00:00.000Z',
+        password: '1qJfUmC4cZimiM6djJ3Bpw==$TrLeF5pFo0xwf2lNxBVCdilIBUc25oiaaOXuPOWru/i9zCApGnFm9fMhBxFtvMtiCqhLMJuuY8Sjjqx4wdgdDA=='
+      },
+      { // 13
+        role: 'inspector',
+        email: 'www.michael@mail.com',
+        email_verified: '2024-01-01T00:00:00.000Z',
+        password: '1qJfUmC4cZimiM6djJ3Bpw==$TrLeF5pFo0xwf2lNxBVCdilIBUc25oiaaOXuPOWru/i9zCApGnFm9fMhBxFtvMtiCqhLMJuuY8Sjjqx4wdgdDA=='
       }
     ])
 }
