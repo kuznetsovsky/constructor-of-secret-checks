@@ -29,7 +29,7 @@ describe('Users endpoints:', () => {
         .set('Cookie', cookies)
 
       expect(userResponse.statusCode).toBe(200)
-      expect(userResponse.body.data.length).toBe(13)
+      expect(userResponse.body.data.length).toBe(17)
       expect(userResponse.body.data).toMatchObject([
         {
           id: 1,
@@ -131,6 +131,38 @@ describe('Users endpoints:', () => {
           id: 13,
           role: 'inspector',
           email: 'www.michael@mail.com',
+          email_verified: expect.any(String),
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
+        },
+        {
+          id: 14,
+          role: 'manager',
+          email: 'www.miller@mail.com',
+          email_verified: expect.any(String),
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
+        },
+        {
+          id: 15,
+          role: 'manager',
+          email: 'www.morello@mail.com',
+          email_verified: expect.any(String),
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
+        },
+        {
+          id: 16,
+          role: 'manager',
+          email: 'www.thomson@mail.com',
+          email_verified: expect.any(String),
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
+        },
+        {
+          id: 17,
+          role: 'manager',
+          email: 'www.sanchez@mail.com',
           email_verified: expect.any(String),
           created_at: expect.any(String),
           last_visit: expect.any(String)
@@ -280,12 +312,44 @@ describe('Users endpoints:', () => {
         .set('Cookie', cookies)
 
       expect(response.statusCode).toBe(200)
-      expect(response.body.data.length).toBe(1)
+      expect(response.body.data.length).toBe(5)
       expect(response.body.data).toMatchObject([
         {
           id: 3,
           role: 'manager',
           email: 'www.bob@mail.com',
+          email_verified: expect.any(String),
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
+        },
+        {
+          id: 14,
+          role: 'manager',
+          email: 'www.miller@mail.com',
+          email_verified: expect.any(String),
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
+        },
+        {
+          id: 15,
+          role: 'manager',
+          email: 'www.morello@mail.com',
+          email_verified: expect.any(String),
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
+        },
+        {
+          id: 16,
+          role: 'manager',
+          email: 'www.thomson@mail.com',
+          email_verified: expect.any(String),
+          created_at: expect.any(String),
+          last_visit: expect.any(String)
+        },
+        {
+          id: 17,
+          role: 'manager',
+          email: 'www.sanchez@mail.com',
           email_verified: expect.any(String),
           created_at: expect.any(String),
           last_visit: expect.any(String)

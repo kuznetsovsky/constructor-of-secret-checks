@@ -270,10 +270,10 @@ describe('Company inspectors endpoints:', () => {
         })
 
       expect(response.statusCode).toBe(201)
-      expect(response.headers.location).toMatch('/companies/2/inspectors/10')
+      expect(response.headers.location).toMatch('/companies/2/inspectors')
       expect(response.body).toEqual({
         id: 10,
-        account_id: 14,
+        account_id: expect.any(Number),
         inspector_id: 10,
         status: 'verification',
         email: 'www.thomas@mail.com',

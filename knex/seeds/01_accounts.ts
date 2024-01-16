@@ -81,6 +81,30 @@ export async function seed (knex: Knex): Promise<void> {
         email: 'www.michael@mail.com',
         email_verified: '2024-01-01T00:00:00.000Z',
         password: '1qJfUmC4cZimiM6djJ3Bpw==$TrLeF5pFo0xwf2lNxBVCdilIBUc25oiaaOXuPOWru/i9zCApGnFm9fMhBxFtvMtiCqhLMJuuY8Sjjqx4wdgdDA=='
+      },
+      { // 14
+        role: 'manager',
+        email: 'www.miller@mail.com',
+        email_verified: '2024-01-01T00:00:00.000Z',
+        password: '1qJfUmC4cZimiM6djJ3Bpw==$TrLeF5pFo0xwf2lNxBVCdilIBUc25oiaaOXuPOWru/i9zCApGnFm9fMhBxFtvMtiCqhLMJuuY8Sjjqx4wdgdDA=='
+      },
+      { // 15
+        role: 'manager',
+        email: 'www.morello@mail.com',
+        email_verified: '2024-01-01T00:00:00.000Z',
+        password: '1qJfUmC4cZimiM6djJ3Bpw==$TrLeF5pFo0xwf2lNxBVCdilIBUc25oiaaOXuPOWru/i9zCApGnFm9fMhBxFtvMtiCqhLMJuuY8Sjjqx4wdgdDA=='
+      },
+      { // 16
+        role: 'manager',
+        email: 'www.thomson@mail.com',
+        email_verified: '2024-01-01T00:00:00.000Z',
+        password: '1qJfUmC4cZimiM6djJ3Bpw==$TrLeF5pFo0xwf2lNxBVCdilIBUc25oiaaOXuPOWru/i9zCApGnFm9fMhBxFtvMtiCqhLMJuuY8Sjjqx4wdgdDA=='
+      },
+      { // 17
+        role: 'manager',
+        email: 'www.sanchez@mail.com',
+        email_verified: '2024-01-01T00:00:00.000Z',
+        password: '1qJfUmC4cZimiM6djJ3Bpw==$TrLeF5pFo0xwf2lNxBVCdilIBUc25oiaaOXuPOWru/i9zCApGnFm9fMhBxFtvMtiCqhLMJuuY8Sjjqx4wdgdDA=='
       }
     ])
 }
