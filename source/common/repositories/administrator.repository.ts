@@ -49,7 +49,7 @@ export class AdminsitratorRepository extends BaseRepository<Administrator> {
 
   async updateProfileByID (id: number, data: UpdateAdministratorProfile): Promise<void> {
     await this.knex.transaction(async (trx) => {
-      const admin = await this.knex('company_contact_persons')
+      const admin = await this.knex<Administrator>('company_contact_persons')
         .update({
           first_name: data.first_name,
           last_name: data.last_name

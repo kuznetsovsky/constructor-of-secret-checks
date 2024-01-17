@@ -62,7 +62,7 @@ export class InspectorRepository extends BaseRepository<Inspector> {
 
   async updateProfileByID (id: number, data: UpdateInspectorProfile): Promise<void> {
     await this.knex.transaction(async (trx) => {
-      const inspector = await this.knex('inspectors')
+      const inspector = await this.knex<Inspector>('inspectors')
         .where('account_id', id)
         .update({
           address: data.address,
