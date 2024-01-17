@@ -201,13 +201,12 @@ describe('Auth endpoints:', () => {
         role: 'administrator',
         email: 'www.jane@mail.com',
         password: 'Qwerty_1234'
+      },
+      {
+        role: 'manager',
+        email: 'www.bob@mail.com',
+        password: '!Qwerty1234'
       }
-      // TODO: сделать, когда будет функционал...
-      // {
-      //   role: 'manager',
-      //   email: 'www.bob@mail.com',
-      //   password: '!Qwerty1234'
-      // }
     ])('should return account profile data ($role)', async (payload) => {
       const response = await request(app).post(URL).send({
         email: payload.email,

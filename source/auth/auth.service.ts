@@ -34,3 +34,21 @@ export async function findAdministratorProfile (id: number): Promise<Profile | u
 
   return result as unknown as Profile
 }
+
+export async function findManagerProfile (id: number): Promise<Profile | undefined> {
+  const result = await knex('accounts as a')
+    .where('a.id', id)
+    .join('company_employees as e', 'a.id', 'e.account_id')
+    .join('companies as c', 'e.company_id', 'c.id')
+    .select([
+      'a.id',
+      'a.role',
+      'a.email',
+      'e.first_name',
+      'e.last_name',
+      knex.raw("json_build_object('id', c.id, 'name', c.name) AS company")
+    ])
+    .first()
+
+  return result as unknown as Profile
+}

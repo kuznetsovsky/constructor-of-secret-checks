@@ -224,7 +224,7 @@ export async function signIn (
     if (account.role === Roles.Inspector) {
       profile = await authService.findInspectorProfile(account.id)
     } else if (account.role === Roles.Manager) {
-      // findManagerProfile
+      profile = await authService.findManagerProfile(account.id)
     } else if (account.role === Roles.Administrator) {
       profile = await authService.findAdministratorProfile(account.id)
     }
