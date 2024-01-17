@@ -17,12 +17,18 @@ import {
   AdminsitratorRepository
 } from '../repositories/administrator.repository'
 
-type Profile = InspectorProfile | AdministratorProfile
+import {
+  type ManagerProfile,
+  ManagerRepository
+} from '../repositories/manager.repository'
+
+type Profile = InspectorProfile | AdministratorProfile | ManagerProfile
 
 export async function findProfileByID (id: number, userRole?: AccountRole): Promise<undefined | Profile> {
   const accountRepository = new AccountRepository(knex, 'accounts')
   const inspectorRepository = new InspectorRepository(knex, 'inspectors')
   const administratorRepository = new AdminsitratorRepository(knex, 'company_contact_persons')
+  const managerRepository = new ManagerRepository(knex, 'company_employees')
 
   let role = userRole
 
@@ -45,8 +51,7 @@ export async function findProfileByID (id: number, userRole?: AccountRole): Prom
   } else if (role === Roles.Administrator) {
     profile = await administratorRepository.findProfileByID(id)
   } else if (role === Roles.Manager) {
-    // TODO: сделать, когда будут менеджеры
-    // profile = await managerRepository.findProfileByID(id)
+    profile = await managerRepository.findProfileByID(id)
   }
 
   return profile

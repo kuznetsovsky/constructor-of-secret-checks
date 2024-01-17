@@ -83,8 +83,41 @@ describe('User endpoints:', () => {
       })
     })
 
-    // TODO: Написать, когда будет функционал
-    it.todo('should return manager profile data')
+    it('should return manager profile data', async () => {
+      // LOGIN USER
+      // =-=-=-=-=-=-=-=-=-=
+
+      const authResponse = await request(app)
+        .post(SIGN_IN_URL)
+        .send({
+          email: 'www.bob@mail.com',
+          password: '!Qwerty1234'
+        })
+
+      expect(authResponse.status).toEqual(200)
+      const cookies = authResponse.headers['set-cookie']
+
+      // GET USER PROFILE
+      // =-=-=-=-=-=-=-=-=-=
+
+      const profileResponse = await request(app)
+        .get(USER_URL)
+        .set('Cookie', cookies)
+
+      expect(profileResponse.statusCode).toBe(200)
+      expect(profileResponse.body).toMatchObject({
+        id: expect.any(Number),
+        role: 'manager',
+        email: 'www.bob@mail.com',
+        first_name: 'Bob',
+        last_name: 'Fox',
+        company: {
+          id: 2,
+          name: 'Res-O-Run'
+        },
+        phone_number: '+17775555521'
+      })
+    })
   })
 
   describe('PUT: /user', () => {

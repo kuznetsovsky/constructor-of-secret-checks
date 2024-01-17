@@ -458,7 +458,31 @@ describe('Users endpoints:', () => {
       })
     })
 
-    // TODO: Написать, когда будет функционал
-    it.todo('should return manager profile data')
+    it('should return manager profile data', async () => {
+      const authResponse = await request(app)
+        .post(SIGN_IN_URL)
+        .send(USER_LOGIN_PAYLOAD)
+
+      expect(authResponse.status).toEqual(200)
+      const cookies = authResponse.headers['set-cookie']
+
+      const response = await request(app).get('/api/v1/users/3')
+        .set('Cookie', cookies)
+
+      expect(response.statusCode).toBe(200)
+      expect(response.body).toMatchObject({
+        id: expect.any(Number),
+        role: 'manager',
+        email: 'www.bob@mail.com',
+        first_name: 'Bob',
+        last_name: 'Fox',
+        company: {
+          id: 2,
+          name: 'Res-O-Run'
+        },
+        phone_number: '+17775555521'
+
+      })
+    })
   })
 })
