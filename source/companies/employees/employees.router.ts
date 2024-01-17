@@ -21,20 +21,20 @@ router.get(
 )
 
 router.get(
-  '/employees/:employeeId',
+  '/employees/:employee_id',
   isCompanyAdminOrManager,
   employeesController.getCompanyEmployee
 )
 
 router.put(
-  '/employees/:employeeId',
+  '/employees/:employee_id',
   isCompanyAdminOrManager,
   validateBody(updateCompanyEmployeeValidator),
   employeesController.updateCompanyEmployee
 )
 
 router.delete(
-  '/employees/:employeeId',
+  '/employees/:employee_id',
   isCompanyAdminOrManager,
   employeesController.deleteCompanyEmployee
 )

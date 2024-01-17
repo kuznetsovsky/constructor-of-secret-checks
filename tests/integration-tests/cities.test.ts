@@ -45,7 +45,7 @@ describe('Cities endpoints:', () => {
     })
   })
 
-  describe('GET: /cities/id', () => {
+  describe('GET: /cities/{city_id}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app).get('/api/v1/cities/1')
       expect(response.statusCode).toBe(401)

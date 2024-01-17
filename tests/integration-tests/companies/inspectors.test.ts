@@ -20,7 +20,7 @@ describe('Company inspectors endpoints:', () => {
     cookie = ''
   })
 
-  describe('POST: /companies/{companyId}/inspectors', () => {
+  describe('POST: /companies/{company_id}/inspectors', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
         .post('/api/v1/companies/1/inspectors')
@@ -293,7 +293,7 @@ describe('Company inspectors endpoints:', () => {
     })
   })
 
-  describe('POST: /companies/{companyId}/inspectors/{email}', () => {
+  describe('POST: /companies/{company_id}/inspectors/{email}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
         .post('/api/v1/companies/1/inspectors/www.ex@mple.com')
@@ -334,7 +334,7 @@ describe('Company inspectors endpoints:', () => {
     })
   })
 
-  describe('GET: /companies/{companyId}/inspectors', () => {
+  describe('GET: /companies/{company_id}/inspectors', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
         .get('/api/v1/companies/1/inspectors')
@@ -490,7 +490,7 @@ describe('Company inspectors endpoints:', () => {
     })
   })
 
-  describe('GET: /companies/{companyId}/inspectors/{inspectorId}', () => {
+  describe('GET: /companies/{company_id}/inspectors/{inspector_id}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
         .get('/api/v1/companies/1/inspectors/1')
@@ -543,7 +543,7 @@ describe('Company inspectors endpoints:', () => {
     })
   })
 
-  describe('GET: /companies/{companyId}/inspectors/{email}', () => {
+  describe('GET: /companies/{company_id}/inspectors/{email}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
         .get('/api/v1/companies/1/inspectors/www.ex@mple.com')
@@ -576,7 +576,7 @@ describe('Company inspectors endpoints:', () => {
     })
   })
 
-  describe('PUT: /companies/{companyId}/inspectors/{inspectorId}', () => {
+  describe('PUT: /companies/{company_id}/inspectors/{inspector_id}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
         .put('/api/v1/companies/1/inspectors/1')
@@ -863,7 +863,7 @@ describe('Company inspectors endpoints:', () => {
     })
   })
 
-  describe('PATCH: /companies/{companyId}/inspectors/{inspectorId}', () => {
+  describe('PATCH: /companies/{company_id}/inspectors/{inspector_id}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
         .patch('/api/v1/companies/2/inspectors/1')
@@ -922,7 +922,7 @@ describe('Company inspectors endpoints:', () => {
     })
   })
 
-  describe('DELETE: /companies/{companyId}/inspectors/{inspectorId}', () => {
+  describe('DELETE: /companies/{company_id}/inspectors/{inspector_id}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
         .delete('/api/v1/companies/1/inspectors/1')

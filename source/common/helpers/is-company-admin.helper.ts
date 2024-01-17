@@ -1,15 +1,20 @@
 import type { Request, Response, NextFunction } from 'express'
 import { StatusCodes } from 'http-status-codes'
+
 import { Roles } from '../../consts'
 
-export function isCompanyAdmin (req: Request, res: Response, next: NextFunction): void {
-  let ID = parseInt(req.params.companyId)
+export function isCompanyAdmin (req: Request<{ company_id: string }>, res: Response, next: NextFunction): void {
+  const COMPANY_ID = parseInt(req.params.company_id)
 
-  if (Number.isNaN(ID)) {
-    ID = -1
+  if (Number.isNaN(COMPANY_ID) || COMPANY_ID < 1) {
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ error: 'Invalid request parameter.' })
+
+    return
   }
 
-  if (req.session.user?.role === Roles.Administrator && req.session.user.cid === ID) {
+  if (req.session.user?.role === Roles.Administrator && req.session.user.cid === COMPANY_ID) {
     next()
   } else {
     res

@@ -34,20 +34,24 @@ export async function getCities (
 }
 
 export async function getCityByID (
-  req: Request<{ cityId: string }>,
+  req: Request<{ city_id: string }>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const cityRepository = new CityRepository(knex, 'cities')
+  const CITY_ID = parseInt(req.params.city_id)
 
-  let ID = parseInt(req.params.cityId)
+  if (Number.isNaN(CITY_ID) || CITY_ID < 1) {
+    res
+      .status(StatusCodes.NOT_FOUND)
+      .json({ error: 'City is not found.' })
 
-  if (Number.isNaN(ID)) {
-    ID = 0
+    return
   }
 
+  const cityRepository = new CityRepository(knex, 'cities')
+
   try {
-    const city = await cityRepository.findOne(ID)
+    const city = await cityRepository.findOne(CITY_ID)
 
     if (city == null) {
       res

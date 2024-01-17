@@ -358,7 +358,7 @@ describe('Users endpoints:', () => {
     })
   })
 
-  describe('GET: /users/:id', () => {
+  describe('GET: /users/{user_id}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
         .get('/api/v1/users/1')

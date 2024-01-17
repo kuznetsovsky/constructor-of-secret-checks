@@ -4,4 +4,4 @@ import * as citiesController from './cities.controller'
 export const router = express.Router()
 
 router.get('/', citiesController.getCities)
-router.get('/:cityId', citiesController.getCityByID)
+router.get('/:city_id', citiesController.getCityByID)

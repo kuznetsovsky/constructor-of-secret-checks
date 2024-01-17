@@ -39,13 +39,13 @@ export async function getAccounts (
 }
 
 export async function getAccountByID (
-  req: Request<{ userId: string }>,
+  req: Request<{ user_id: string }>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const id = parseInt(req.params.userId)
+  const USER_ID = parseInt(req.params.user_id)
 
-  if (Number.isNaN(id) || id < 1) {
+  if (Number.isNaN(USER_ID) || USER_ID < 1) {
     res
       .status(StatusCodes.BAD_REQUEST)
       .json({
@@ -56,13 +56,13 @@ export async function getAccountByID (
   }
 
   try {
-    const profile = await findProfileByID(id)
+    const profile = await findProfileByID(USER_ID)
 
     if (profile == null) {
       res
         .status(StatusCodes.NOT_FOUND)
         .json({
-          error: `Account with ID ${id} not found`
+          error: `Account with ID ${USER_ID} not found`
         })
 
       return

@@ -8,22 +8,22 @@ import { type BaseQueryString } from '../../common/interfaces/query-string.inter
 import { CityRepository } from '../../common/repositories/city.repository'
 
 export async function createObject (
-  req: Request<{ companyId: string }, never, CompanyObject>,
+  req: Request<{ company_id: string }, never, CompanyObject>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const cityRepository = new CityRepository(knex, 'cities')
-  const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
+  const COMPANY_ID = parseInt(req.params.company_id)
 
-  const companyId = parseInt(req.params.companyId)
-
-  if (Number.isNaN(companyId)) {
+  if (Number.isNaN(COMPANY_ID) || COMPANY_ID < 1) {
     res
       .status(StatusCodes.BAD_REQUEST)
-      .json({ error: 'Invalid request parameter.' })
+      .json({ error: 'Invalid request id parameter.' })
 
     return
   }
+
+  const cityRepository = new CityRepository(knex, 'cities')
+  const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
 
   try {
     {
@@ -48,8 +48,8 @@ export async function createObject (
       return
     }
 
-    const createdObject = await companyObjectsRepository.create({ ...req.body, company_id: companyId })
-    const object = await companyObjectsRepository.findByID(companyId, createdObject.id)
+    const createdObject = await companyObjectsRepository.create({ ...req.body, company_id: COMPANY_ID })
+    const object = await companyObjectsRepository.findByID(COMPANY_ID, createdObject.id)
 
     res
       .status(StatusCodes.OK)
@@ -60,12 +60,10 @@ export async function createObject (
 }
 
 export async function getObjects (
-  req: Request<{ companyId: string }, never, never, BaseQueryString>,
+  req: Request<{ company_id: string }, never, never, BaseQueryString>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
-
   let page: number | undefined = parseInt(req.query.page)
   let perPage: number | undefined = parseInt(req.query.per_page)
 
@@ -77,14 +75,20 @@ export async function getObjects (
     perPage = undefined
   }
 
-  let companyId = parseInt(req.params.companyId)
+  const COMPANY_ID = parseInt(req.params.company_id)
 
-  if (Number.isNaN(companyId)) {
-    companyId = 0
+  if (Number.isNaN(COMPANY_ID) || COMPANY_ID < 1) {
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ error: 'Invalid request id parameter.' })
+
+    return
   }
 
+  const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
+
   try {
-    const objects = await companyObjectsRepository.findByPage(companyId, page, perPage, req.query.sort)
+    const objects = await companyObjectsRepository.findByPage(COMPANY_ID, page, perPage, req.query.sort)
 
     res
       .status(StatusCodes.OK)
@@ -95,16 +99,14 @@ export async function getObjects (
 }
 
 export async function getObject (
-  req: Request<{ companyId: string, objectId: string }>,
+  req: Request<{ company_id: string, object_id: string }>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
+  const COMPANY_ID = parseInt(req.params.company_id)
+  const OBJECT_ID = parseInt(req.params.object_id)
 
-  const companyId = parseInt(req.params.companyId)
-  const objectId = parseInt(req.params.objectId)
-
-  if (Number.isNaN(companyId) || Number.isNaN(objectId)) {
+  if (Number.isNaN(COMPANY_ID) || Number.isNaN(OBJECT_ID) || COMPANY_ID < 1 || OBJECT_ID < 1) {
     res
       .status(StatusCodes.BAD_REQUEST)
       .json({ error: 'Invalid request parameters.' })
@@ -112,8 +114,10 @@ export async function getObject (
     return
   }
 
+  const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
+
   try {
-    const object = await companyObjectsRepository.findByID(companyId, objectId)
+    const object = await companyObjectsRepository.findByID(COMPANY_ID, OBJECT_ID)
 
     if (object == null) {
       res
@@ -132,17 +136,14 @@ export async function getObject (
 }
 
 export async function updateObject (
-  req: Request<{ companyId: string, objectId: string }, never, CompanyObject>,
+  req: Request<{ company_id: string, object_id: string }, never, CompanyObject>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const cityRepository = new CityRepository(knex, 'cities')
-  const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
+  const COMPANY_ID = parseInt(req.params.company_id)
+  const OBJECT_ID = parseInt(req.params.object_id)
 
-  const companyId = parseInt(req.params.companyId)
-  const objectId = parseInt(req.params.objectId)
-
-  if (Number.isNaN(companyId) || Number.isNaN(objectId)) {
+  if (Number.isNaN(COMPANY_ID) || Number.isNaN(OBJECT_ID) || COMPANY_ID < 1 || OBJECT_ID < 1) {
     res
       .status(StatusCodes.BAD_REQUEST)
       .json({ error: 'Invalid request parameters.' })
@@ -150,11 +151,14 @@ export async function updateObject (
     return
   }
 
+  const cityRepository = new CityRepository(knex, 'cities')
+  const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
+
   try {
     {
       const object = await companyObjectsRepository.findOne({
-        company_id: companyId,
-        id: objectId
+        company_id: COMPANY_ID,
+        id: OBJECT_ID
       })
 
       if (object == null) {
@@ -188,8 +192,8 @@ export async function updateObject (
       return
     }
 
-    await companyObjectsRepository.update(objectId, req.body)
-    const object = await companyObjectsRepository.findByID(companyId, objectId)
+    await companyObjectsRepository.update(OBJECT_ID, req.body)
+    const object = await companyObjectsRepository.findByID(COMPANY_ID, OBJECT_ID)
 
     res
       .status(StatusCodes.OK)
@@ -200,16 +204,14 @@ export async function updateObject (
 }
 
 export async function deleteObject (
-  req: Request,
+  req: Request<{ company_id: string, object_id: string }>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
+  const COMPANY_ID = parseInt(req.params.company_id)
+  const OBJECT_ID = parseInt(req.params.object_id)
 
-  const companyId = parseInt(req.params.companyId)
-  const objectId = parseInt(req.params.objectId)
-
-  if (Number.isNaN(companyId) || Number.isNaN(objectId)) {
+  if (Number.isNaN(COMPANY_ID) || Number.isNaN(OBJECT_ID) || COMPANY_ID < 1 || OBJECT_ID < 1) {
     res
       .status(StatusCodes.BAD_REQUEST)
       .json({ error: 'Invalid request parameters.' })
@@ -217,10 +219,12 @@ export async function deleteObject (
     return
   }
 
+  const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
+
   try {
     const object = await companyObjectsRepository.findOne({
-      company_id: companyId,
-      id: objectId
+      company_id: COMPANY_ID,
+      id: OBJECT_ID
     })
 
     if (object == null) {

@@ -11,23 +11,23 @@ import { router as employeesRouter } from './employees/employees.router'
 export const router = express.Router()
 
 router.get('/', companiesController.getCompanies)
-router.get('/:companyId', companiesController.getCompanyByID)
+router.get('/:company_id', companiesController.getCompanyByID)
 
 router.put(
-  '/:companyId',
+  '/:company_id',
   isCompanyAdmin,
   validateBody(updateCompanyValidator),
   companiesController.updateCompanyByID
 )
 
 // Questionnaire
-router.use('/:companyId', questionnaireRouter)
+router.use('/:company_id', questionnaireRouter)
 
 // Objects
-router.use('/:companyId', objectsRouter)
+router.use('/:company_id', objectsRouter)
 
 // Inspectors
-router.use('/:companyId', inspectorsRouter)
+router.use('/:company_id', inspectorsRouter)
 
 // Employees
-router.use('/:companyId', employeesRouter)
+router.use('/:company_id', employeesRouter)

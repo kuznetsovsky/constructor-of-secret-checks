@@ -20,7 +20,7 @@ describe('Company employees endpoints:', () => {
     cookie = ''
   })
 
-  describe('POST: /companies/{companyId}/employees', () => {
+  describe('POST: /companies/{company_id}/employees', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
         .post('/api/v1/companies/1/employees')
@@ -213,7 +213,7 @@ describe('Company employees endpoints:', () => {
     })
   })
 
-  describe('GET: /companies/{companyId}/employees', () => {
+  describe('GET: /companies/{company_id}/employees', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
         .get('/api/v1/companies/1/employees')
@@ -276,7 +276,7 @@ describe('Company employees endpoints:', () => {
     })
   })
 
-  describe('GET: /companies/{companyId}/employees/{employeeId}', () => {
+  describe('GET: /companies/{company_id}/employees/{employee_id}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
         .get('/api/v1/companies/1/employees/1')
@@ -321,7 +321,7 @@ describe('Company employees endpoints:', () => {
     })
   })
 
-  describe('PUT: /companies/{companyId}/employees/{employeeId}', () => {
+  describe('PUT: /companies/{company_id}/employees/{employee_id}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
         .put('/api/v1/companies/1/employees/1')
@@ -491,7 +491,7 @@ describe('Company employees endpoints:', () => {
     })
   })
 
-  describe('DELETE: /companies/{companyId}/employees/{employeeId}', () => {
+  describe('DELETE: /companies/{company_id}/employees/{employee_id}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
         .delete('/api/v1/companies/1/employees/1')

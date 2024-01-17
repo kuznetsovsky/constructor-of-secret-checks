@@ -7,21 +7,27 @@ import { QuestionnaireRepository } from '../../common/repositories/questionnaire
 import { CompanyRepository } from '../../common/repositories/company.repository'
 
 export async function getQuestionnaire (
-  req: Request<{ companyId: string }>,
+  req: Request<{ company_id: string }>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
+  const COMPANY_ID = parseInt(req.params.company_id)
+
+  if (Number.isNaN(COMPANY_ID) || COMPANY_ID < 1) {
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({
+        error: 'Invalid request id parameter'
+      })
+
+    return
+  }
+
   const questionnaireRepository = new QuestionnaireRepository(knex, 'company_questionnaires')
   const companyRepository = new CompanyRepository(knex, 'companies')
 
-  let ID = parseInt(req.params.companyId)
-
-  if (Number.isNaN(ID)) {
-    ID = 0
-  }
-
   try {
-    const company = await companyRepository.findOne(ID, ['questionnaire_id'])
+    const company = await companyRepository.findOne(COMPANY_ID, ['questionnaire_id'])
 
     if (company == null) {
       res
@@ -51,21 +57,25 @@ export async function getQuestionnaire (
 }
 
 export async function updateQuestionnaire (
-  req: Request<{ companyId: string }, never, UpdateQuestionnaire>,
+  req: Request<{ company_id: string }, never, UpdateQuestionnaire>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   const questionnaireRepository = new QuestionnaireRepository(knex, 'company_questionnaires')
   const companyRepository = new CompanyRepository(knex, 'companies')
 
-  let ID = parseInt(req.params.companyId)
+  const COMPANY_ID = parseInt(req.params.company_id)
 
-  if (Number.isNaN(ID)) {
-    ID = 0
+  if (Number.isNaN(COMPANY_ID) || COMPANY_ID < 1) {
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ error: 'Invalid request id parameter.' })
+
+    return
   }
 
   try {
-    const company = await companyRepository.findOne(ID, ['questionnaire_id'])
+    const company = await companyRepository.findOne(COMPANY_ID, ['questionnaire_id'])
 
     if (company == null) {
       res

@@ -32,7 +32,7 @@ router.get(
 )
 
 router.get(
-  '/inspectors/:inspectorId(\\d+)',
+  '/inspectors/:inspector_id(\\d+)',
   isCompanyAdminOrManager,
   inspectorsController.getCompanyInspector
 )
@@ -44,21 +44,21 @@ router.get(
 )
 
 router.put(
-  '/inspectors/:inspectorId',
+  '/inspectors/:inspector_id',
   isCompanyAdminOrManager,
   validateBody(updateCompanyInspectorValidator),
   inspectorsController.updateCompanyInspector
 )
 
 router.patch(
-  '/inspectors/:inspectorId',
+  '/inspectors/:inspector_id',
   isCompanyAdminOrManager,
   validateBody(updateCompanyInspectorStatusValidator),
   inspectorsController.updateCompanyInspectorStatus
 )
 
 router.delete(
-  '/inspectors/:inspectorId',
+  '/inspectors/:inspector_id',
   isCompanyAdminOrManager,
   inspectorsController.deleteCompanyInspector
 )

@@ -36,20 +36,26 @@ export async function getCompanies (
 }
 
 export async function getCompanyByID (
-  req: Request<{ companyId: string }>,
+  req: Request<{ company_id: string }>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const companyRepository = new CompanyRepository(knex, 'companies')
+  const COMPANY_ID = parseInt(req.params.company_id)
 
-  let ID = parseInt(req.params.companyId)
+  if (Number.isNaN(COMPANY_ID) || COMPANY_ID < 1) {
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({
+        error: 'Invalid request id parameter'
+      })
 
-  if (Number.isNaN(ID)) {
-    ID = 0
+    return
   }
 
+  const companyRepository = new CompanyRepository(knex, 'companies')
+
   try {
-    const company = await companyRepository.findProfileByID(ID)
+    const company = await companyRepository.findProfileByID(COMPANY_ID)
 
     if (company == null) {
       res
@@ -68,25 +74,31 @@ export async function getCompanyByID (
 }
 
 export async function updateCompanyByID (
-  req: Request<{ companyId: string }, never, UpdateCompany>,
+  req: Request<{ company_id: string }, never, UpdateCompany>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const companyRepository = new CompanyRepository(knex, 'companies')
+  const COMPANY_ID = parseInt(req.params.company_id)
 
-  let ID = parseInt(req.params.companyId)
+  if (Number.isNaN(COMPANY_ID) || COMPANY_ID < 1) {
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({
+        error: 'Invalid request id parameter'
+      })
 
-  if (Number.isNaN(ID)) {
-    ID = 0
+    return
   }
+
+  const companyRepository = new CompanyRepository(knex, 'companies')
 
   try {
     {
-      const company = await companyRepository.exist(ID)
+      const company = await companyRepository.exist(COMPANY_ID)
       if (!company) return
     }
 
-    await companyRepository.update(ID, {
+    await companyRepository.update(COMPANY_ID, {
       ...req.body,
       number_of_checks:
         req.body.number_of_checks === 0
@@ -94,7 +106,7 @@ export async function updateCompanyByID (
           : req.body.number_of_checks
     })
 
-    const company = await companyRepository.findOne(ID, [
+    const company = await companyRepository.findOne(COMPANY_ID, [
       'id',
       'name',
       'description',

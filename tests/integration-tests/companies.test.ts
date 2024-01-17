@@ -57,7 +57,7 @@ describe('Companies endpoints:', () => {
     })
   })
 
-  describe('GET: /companies/{companyId}', () => {
+  describe('GET: /companies/{company_id}', () => {
     let cookie = ''
 
     beforeAll(async () => {
@@ -111,7 +111,7 @@ describe('Companies endpoints:', () => {
     })
   })
 
-  describe('PUT: /companies/{companyId}', () => {
+  describe('PUT: /companies/{company_id}', () => {
     let cookie = ''
 
     beforeAll(async () => {

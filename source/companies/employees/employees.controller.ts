@@ -14,23 +14,23 @@ import { NO_REPLAY_EMAIL } from '../../../config'
 import { type BaseQueryString } from '../../common/interfaces/query-string.interface'
 
 export async function createCompanyEmployee (
-  req: Request<{ companyId: string }, never, CreateEmployee>,
+  req: Request<{ company_id: string }, never, CreateEmployee>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const cityRepository = new CityRepository(knex, 'cities')
-  const accountRepository = new AccountRepository(knex, 'accounts')
-  const companyEmployeeRepository = new CompanyEmployeesRepository(knex, 'company_employees')
+  const COMPANY_ID = parseInt(req.params.company_id)
 
-  const companyId = parseInt(req.params.companyId)
-
-  if (Number.isNaN(companyId)) {
+  if (Number.isNaN(COMPANY_ID) || COMPANY_ID < 1) {
     res
       .status(StatusCodes.BAD_REQUEST)
       .json({ error: 'Invalid request parameter.' })
 
     return
   }
+
+  const cityRepository = new CityRepository(knex, 'cities')
+  const accountRepository = new AccountRepository(knex, 'accounts')
+  const companyEmployeeRepository = new CompanyEmployeesRepository(knex, 'company_employees')
 
   try {
     const city = await cityRepository.exist(req.body.city_id)
@@ -83,7 +83,7 @@ export async function createCompanyEmployee (
     const createdEmployeeId = await companyEmployeeRepository.createEmployee({
       ...req.body,
       password: encryptedPassword,
-      companyId
+      companyId: COMPANY_ID
     })
 
     const employee = await companyEmployeeRepository.findProfile(createdEmployeeId)
@@ -97,12 +97,10 @@ export async function createCompanyEmployee (
 }
 
 export async function getCompanyEmployees (
-  req: Request<{ companyId: string }, never, never, BaseQueryString>,
+  req: Request<{ company_id: string }, never, never, BaseQueryString>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const companyEmployeeRepository = new CompanyEmployeesRepository(knex, 'company_employees')
-
   let page: number | undefined = parseInt(req.query.page)
   let perPage: number | undefined = parseInt(req.query.per_page)
 
@@ -114,18 +112,20 @@ export async function getCompanyEmployees (
     perPage = undefined
   }
 
-  const companyId = parseInt(req.params.companyId)
+  const COMPANY_ID = parseInt(req.params.company_id)
 
-  if (Number.isNaN(companyId)) {
+  if (Number.isNaN(COMPANY_ID) || COMPANY_ID < 1) {
     res
       .status(StatusCodes.BAD_REQUEST)
-      .json({ error: 'Invalid request parameters.' })
+      .json({ error: 'Invalid request parameter.' })
 
     return
   }
 
+  const companyEmployeeRepository = new CompanyEmployeesRepository(knex, 'company_employees')
+
   try {
-    const employees = await companyEmployeeRepository.findByPage(companyId, page, perPage, req.query.sort)
+    const employees = await companyEmployeeRepository.findByPage(COMPANY_ID, page, perPage, req.query.sort)
 
     res
       .status(StatusCodes.OK)
@@ -136,16 +136,14 @@ export async function getCompanyEmployees (
 }
 
 export async function getCompanyEmployee (
-  req: Request<{ companyId: string, employeeId: string }>,
+  req: Request<{ company_id: string, employee_id: string }>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const companyEmployeeRepository = new CompanyEmployeesRepository(knex, 'company_employees')
+  const COMPANY_ID = parseInt(req.params.company_id)
+  const EMPLOYEE_ID = parseInt(req.params.employee_id)
 
-  const companyId = parseInt(req.params.companyId)
-  const employeeId = parseInt(req.params.employeeId)
-
-  if (Number.isNaN(companyId) || Number.isNaN(employeeId)) {
+  if (Number.isNaN(COMPANY_ID) || Number.isNaN(EMPLOYEE_ID) || EMPLOYEE_ID < 1 || COMPANY_ID < 1) {
     res
       .status(StatusCodes.BAD_REQUEST)
       .json({ error: 'Invalid request parameters.' })
@@ -153,8 +151,10 @@ export async function getCompanyEmployee (
     return
   }
 
+  const companyEmployeeRepository = new CompanyEmployeesRepository(knex, 'company_employees')
+
   try {
-    const employee = await companyEmployeeRepository.findProfile(employeeId, companyId)
+    const employee = await companyEmployeeRepository.findProfile(EMPLOYEE_ID, COMPANY_ID)
 
     if (employee == null) {
       res
@@ -173,29 +173,29 @@ export async function getCompanyEmployee (
 }
 
 export async function updateCompanyEmployee (
-  req: Request<{ companyId: string, employeeId: string }, never, UpdateEmployee>,
+  req: Request<{ company_id: string, employee_id: string }, never, UpdateEmployee>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const cityRepository = new CityRepository(knex, 'cities')
-  const companyEmployeeRepository = new CompanyEmployeesRepository(knex, 'company_employees')
+  const COMPANY_ID = parseInt(req.params.company_id)
+  const EMPLOYEE_ID = parseInt(req.params.employee_id)
 
-  const companyId = parseInt(req.params.companyId)
-  const employeeId = parseInt(req.params.employeeId)
-
-  if (Number.isNaN(companyId) || Number.isNaN(employeeId)) {
+  if (Number.isNaN(COMPANY_ID) || Number.isNaN(EMPLOYEE_ID) || EMPLOYEE_ID < 1 || COMPANY_ID < 1) {
     res
       .status(StatusCodes.BAD_REQUEST)
-      .json({ error: 'Invalid request parameter.' })
+      .json({ error: 'Invalid request parameters.' })
 
     return
   }
 
+  const cityRepository = new CityRepository(knex, 'cities')
+  const companyEmployeeRepository = new CompanyEmployeesRepository(knex, 'company_employees')
+
   try {
     {
       const employee = await companyEmployeeRepository.exist({
-        id: employeeId,
-        company_id: companyId
+        id: EMPLOYEE_ID,
+        company_id: COMPANY_ID
       })
 
       if (!employee) {
@@ -217,8 +217,8 @@ export async function updateCompanyEmployee (
       return
     }
 
-    await companyEmployeeRepository.updateEmployee(employeeId, companyId, req.body)
-    const employee = await companyEmployeeRepository.findProfile(employeeId, companyId)
+    await companyEmployeeRepository.updateEmployee(EMPLOYEE_ID, COMPANY_ID, req.body)
+    const employee = await companyEmployeeRepository.findProfile(EMPLOYEE_ID, COMPANY_ID)
 
     res
       .status(StatusCodes.OK)
@@ -229,27 +229,27 @@ export async function updateCompanyEmployee (
 }
 
 export async function deleteCompanyEmployee (
-  req: Request,
+  req: Request<{ company_id: string, employee_id: string }>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const companyEmployeeRepository = new CompanyEmployeesRepository(knex, 'company_employees')
+  const COMPANY_ID = parseInt(req.params.company_id)
+  const EMPLOYEE_ID = parseInt(req.params.employee_id)
 
-  const companyId = parseInt(req.params.companyId)
-  const employeeId = parseInt(req.params.employeeId)
-
-  if (Number.isNaN(companyId) || Number.isNaN(employeeId)) {
+  if (Number.isNaN(COMPANY_ID) || Number.isNaN(EMPLOYEE_ID) || EMPLOYEE_ID < 1 || COMPANY_ID < 1) {
     res
       .status(StatusCodes.BAD_REQUEST)
-      .json({ error: 'Invalid request parameter.' })
+      .json({ error: 'Invalid request parameters.' })
 
     return
   }
 
+  const companyEmployeeRepository = new CompanyEmployeesRepository(knex, 'company_employees')
+
   try {
     const employee = await companyEmployeeRepository.exist({
-      id: employeeId,
-      company_id: companyId
+      id: EMPLOYEE_ID,
+      company_id: COMPANY_ID
     })
 
     if (!employee) {
@@ -260,7 +260,7 @@ export async function deleteCompanyEmployee (
       return
     }
 
-    const deletedCount = await companyEmployeeRepository.delete(employeeId)
+    const deletedCount = await companyEmployeeRepository.delete(EMPLOYEE_ID)
 
     if (deletedCount !== 0) {
       res

@@ -20,7 +20,7 @@ describe('Company objects endpoints:', () => {
     cookie = ''
   })
 
-  describe('POST: /companies/{companyId}/objects', () => {
+  describe('POST: /companies/{company_id}/objects', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
         .post('/api/v1/companies/1/objects')
@@ -198,7 +198,7 @@ describe('Company objects endpoints:', () => {
     })
   })
 
-  describe('GET: /companies/{companyId}/objects', () => {
+  describe('GET: /companies/{company_id}/objects', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
         .get('/api/v1/companies/1/objects')
@@ -247,7 +247,7 @@ describe('Company objects endpoints:', () => {
     })
   })
 
-  describe('GET: /companies/{companyId}/objects/{objectId}', () => {
+  describe('GET: /companies/{company_id}/objects/{object_id}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
         .get('/api/v1/companies/1/objects/1')
@@ -291,7 +291,7 @@ describe('Company objects endpoints:', () => {
     })
   })
 
-  describe('PUT: /companies/{companyId}/objects/{objectId}', () => {
+  describe('PUT: /companies/{company_id}/objects/{object_id}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
         .put('/api/v1/companies/1/objects/1')
@@ -484,7 +484,7 @@ describe('Company objects endpoints:', () => {
     })
   })
 
-  describe('DELETE: /companies/{companyId}/objects/{objectId}', () => {
+  describe('DELETE: /companies/{company_id}/objects/{object_id}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
         .delete('/api/v1/companies/1/objects/1')
