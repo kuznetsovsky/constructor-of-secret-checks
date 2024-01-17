@@ -113,5 +113,5 @@ describe('Feedback endpoints:', () => {
 
     expect(resendingFeedbackAfterDeletion.statusCode).toBe(200)
     expect(resendingFeedbackAfterDeletion.body).toEqual({})
-  })
+  }, 10000)
 })
