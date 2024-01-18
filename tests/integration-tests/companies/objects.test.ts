@@ -220,30 +220,33 @@ describe('Company objects endpoints:', () => {
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(200)
-      expect(response.body.objects).toEqual([
-        {
-          id: 1,
-          entry_type: 'public',
-          name: 'Bosco Cafe',
-          street: 'Red square',
-          house_number: '3A',
-          city: {
+      expect(response.body.objects.length).toBe(2)
+      expect(response.body.objects).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
             id: 1,
-            name: 'Moscow'
-          }
-        },
-        {
-          id: 3,
-          entry_type: 'manual',
-          name: 'Bosco Bar',
-          street: 'Okhotny Ryad',
-          house_number: '23',
-          city: {
-            id: 1,
-            name: 'Moscow'
-          }
-        }
-      ])
+            entry_type: 'public',
+            name: 'Bosco Cafe',
+            street: 'Red square',
+            house_number: '3A',
+            city: {
+              id: 1,
+              name: 'Moscow'
+            }
+          }),
+          expect.objectContaining({
+            id: 3,
+            entry_type: 'manual',
+            name: 'Bosco Bar',
+            street: 'Okhotny Ryad',
+            house_number: '23',
+            city: {
+              id: 1,
+              name: 'Moscow'
+            }
+          })
+        ])
+      )
     })
   })
 

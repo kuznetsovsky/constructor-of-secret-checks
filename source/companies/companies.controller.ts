@@ -4,28 +4,16 @@ import { StatusCodes } from 'http-status-codes'
 import { knex } from '../connection'
 import { type UpdateCompany } from './companies.interface'
 import { CompanyRepository } from '../common/repositories/company.repository'
-import { type BaseQueryString } from '../common/interfaces/query-string.interface'
+import { type BaseQueryString } from '../common/helpers/validate-queries/validate-queries.helper'
 
 export async function getCompanies (
   req: Request<never, never, never, BaseQueryString>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const companyRepository = new CompanyRepository(knex, 'companies')
-
-  let page: number | undefined = parseInt(req.query.page)
-  let perPage: number | undefined = parseInt(req.query.per_page)
-
-  if (Number.isNaN(page)) {
-    page = undefined
-  }
-
-  if (Number.isNaN(perPage)) {
-    perPage = undefined
-  }
-
   try {
-    const companies = await companyRepository.findByPage(page, perPage, req.query.sort)
+    const companyRepository = new CompanyRepository(knex, 'companies')
+    const companies = await companyRepository.findByPage(req.query)
 
     res
       .status(StatusCodes.OK)

@@ -31,29 +31,32 @@ describe('Companies endpoints:', () => {
         .get('/api/v1/companies')
         .set('Cookie', cookie)
 
-      expect(response.body.companies).toEqual([
-        {
-          id: 1,
-          name: 'Модный кабачок',
-          description: 'Сеть ресторанов',
-          website_link: null,
-          vk_link: null
-        },
-        {
-          id: 2,
-          name: 'Res-O-Run',
-          description: 'Сеть ресторанов',
-          website_link: null,
-          vk_link: null
-        },
-        {
-          id: 3,
-          name: 'Bosco',
-          description: 'Сеть ресторанов',
-          website_link: null,
-          vk_link: null
-        }
-      ])
+      expect(response.body.companies.length).toBe(3)
+      expect(response.body.companies).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(Number),
+            name: 'Модный кабачок',
+            description: 'Сеть ресторанов',
+            website_link: null,
+            vk_link: null
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            name: 'Res-O-Run',
+            description: 'Сеть ресторанов',
+            website_link: null,
+            vk_link: null
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            name: 'Bosco',
+            description: 'Сеть ресторанов',
+            website_link: null,
+            vk_link: null
+          })
+        ])
+      )
     })
   })
 

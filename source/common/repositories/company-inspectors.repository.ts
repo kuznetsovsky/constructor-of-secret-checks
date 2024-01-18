@@ -1,6 +1,7 @@
 import { type CreateCompanyInspector } from '../../companies/inspectors/inspectors.interface'
 import { Roles, InspectorStatus } from '../../consts'
 import { paginate } from '../helpers/paginate.helper'
+import { type BaseQueryString } from '../helpers/validate-queries/validate-queries.helper'
 import { BaseRepository } from './base.repository'
 import { type City } from './city.repository'
 
@@ -54,19 +55,17 @@ interface CompanyInspectorProfile {
 }
 
 interface QueryData {
-  city?: number | null
-  surname?: string
+  city: number | undefined
+  surname: string | undefined
 }
 
 export class CompanyInspectorRepository extends BaseRepository<CompanyInspector> {
   async findByPage (
     companyId: number,
-    page: number | undefined,
-    perPage: number | undefined,
-    sort: 'asc' | 'desc' = 'asc',
+    queries: BaseQueryString,
     queryData: QueryData
   ): Promise<CompanyInspectorList[] | []> {
-    const { limit, offset } = paginate(page, perPage)
+    const { limit, offset } = paginate(parseInt(queries.page), parseInt(queries.per_page))
 
     const query = this.knex('company_inspectors as i')
       .leftJoin('cities as c', 'i.city_id', 'c.id')
@@ -95,7 +94,7 @@ export class CompanyInspectorRepository extends BaseRepository<CompanyInspector>
     const inspectors = await query
       .offset(offset)
       .limit(limit)
-      .orderBy('id', sort)
+      .orderBy(queries.sort, queries.direction)
 
     return inspectors
   }

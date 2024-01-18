@@ -11,7 +11,7 @@ import { renderEjsTemplate } from '../../common/libs/ejs.lib'
 import { encryptPassword } from '../../auth/auth.helper'
 import { sendMail } from '../../common/libs/nodemailer.lib'
 import { NO_REPLAY_EMAIL } from '../../../config'
-import { type BaseQueryString } from '../../common/interfaces/query-string.interface'
+import { type BaseQueryString } from '../../common/helpers/validate-queries/validate-queries.helper'
 
 export async function createCompanyEmployee (
   req: Request<{ company_id: string }, never, CreateEmployee>,
@@ -97,21 +97,10 @@ export async function createCompanyEmployee (
 }
 
 export async function getCompanyEmployees (
-  req: Request<{ company_id: string }, never, never, BaseQueryString>,
+  req: Request<{ company_id: string }, any, any, BaseQueryString>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  let page: number | undefined = parseInt(req.query.page)
-  let perPage: number | undefined = parseInt(req.query.per_page)
-
-  if (Number.isNaN(page)) {
-    page = undefined
-  }
-
-  if (Number.isNaN(perPage)) {
-    perPage = undefined
-  }
-
   const COMPANY_ID = parseInt(req.params.company_id)
 
   if (Number.isNaN(COMPANY_ID) || COMPANY_ID < 1) {
@@ -122,10 +111,9 @@ export async function getCompanyEmployees (
     return
   }
 
-  const companyEmployeeRepository = new CompanyEmployeesRepository(knex, 'company_employees')
-
   try {
-    const employees = await companyEmployeeRepository.findByPage(COMPANY_ID, page, perPage, req.query.sort)
+    const companyEmployeeRepository = new CompanyEmployeesRepository(knex, 'company_employees')
+    const employees = await companyEmployeeRepository.findByPage(COMPANY_ID, req.query)
 
     res
       .status(StatusCodes.OK)

@@ -7,10 +7,11 @@ import { router as questionnaireRouter } from './questionnaire/questionnaire.rou
 import { router as objectsRouter } from './objects/objects.router'
 import { router as inspectorsRouter } from './inspectors/inspectors.router'
 import { router as employeesRouter } from './employees/employees.router'
+import { validateQueries } from '../common/helpers/validate-queries/validate-queries.helper'
 
 export const router = express.Router()
 
-router.get('/', companiesController.getCompanies)
+router.get('/', validateQueries(), companiesController.getCompanies)
 router.get('/:company_id', companiesController.getCompanyByID)
 
 router.put(

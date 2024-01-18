@@ -13,9 +13,9 @@ import { CityRepository } from '../../common/repositories/city.repository'
 import { AccountRepository } from '../../common/repositories/account.repository'
 import { CompanyInspectorRepository } from '../../common/repositories/company-inspectors.repository'
 import { InspectorRepository } from '../../common/repositories/inspector.repository'
+import { type BaseQueryString } from '../../common/helpers/validate-queries/validate-queries.helper'
 
 import type {
-  QueryString,
   CreateCompanyInspector,
   UpdateCompanyInspector,
   ChangeCompanyInspectorStatus
@@ -113,21 +113,10 @@ export async function createNewCompanyInspector (
 }
 
 export async function getCompanyInspectors (
-  req: Request<{ company_id: string }, never, never, QueryString>,
+  req: Request<{ company_id: string }, never, never, BaseQueryString>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  let page: number | undefined = parseInt(req.query.page)
-  let perPage: number | undefined = parseInt(req.query.per_page)
-
-  if (Number.isNaN(page)) {
-    page = undefined
-  }
-
-  if (Number.isNaN(perPage)) {
-    perPage = undefined
-  }
-
   const COMPANY_ID = parseInt(req.params.company_id)
 
   if (Number.isNaN(COMPANY_ID) || COMPANY_ID < 1) {
@@ -142,9 +131,9 @@ export async function getCompanyInspectors (
   const companyInspectorRepository = new CompanyInspectorRepository(knex, 'company_inspectors')
 
   try {
-    let cityId: number | null = null
+    let cityId: number | undefined
 
-    if (req.query.city !== undefined) {
+    if (req.query.city != null) {
       const city = await cityRepository.findOne({ name: req.query.city })
 
       if (city == null) {
@@ -158,10 +147,12 @@ export async function getCompanyInspectors (
       cityId = city.id
     }
 
-    const inspectors = await companyInspectorRepository.findByPage(COMPANY_ID, page, perPage, req.query.sort, {
-      ...req.query,
-      city: cityId
-    })
+    // IMPROVEMENT: сделать единным с quries
+    const inspectors = await companyInspectorRepository.findByPage(
+      COMPANY_ID,
+      req.query,
+      { city: cityId, surname: req.query.surname }
+    )
 
     res
       .status(StatusCodes.OK)

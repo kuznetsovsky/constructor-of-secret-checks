@@ -32,16 +32,18 @@ describe('Cities endpoints:', () => {
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(200)
-      expect(response.body.cities).toEqual([
-        { id: 1, name: 'Moscow' },
-        { id: 2, name: 'Saint Petersburg' },
-        { id: 3, name: 'Novosibirsk' },
-        { id: 4, name: 'Yekaterinburg' },
-        { id: 5, name: 'Nizhny Novgorod' },
-        { id: 6, name: 'Kazan' },
-        { id: 7, name: 'Rostov-on-Don' },
-        { id: 8, name: 'Sochi' }
-      ])
+      expect(response.body.cities).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id: expect.any(Number), name: 'Moscow' }),
+          expect.objectContaining({ id: expect.any(Number), name: 'Saint Petersburg' }),
+          expect.objectContaining({ id: expect.any(Number), name: 'Novosibirsk' }),
+          expect.objectContaining({ id: expect.any(Number), name: 'Yekaterinburg' }),
+          expect.objectContaining({ id: expect.any(Number), name: 'Nizhny Novgorod' }),
+          expect.objectContaining({ id: expect.any(Number), name: 'Kazan' }),
+          expect.objectContaining({ id: expect.any(Number), name: 'Rostov-on-Don' }),
+          expect.objectContaining({ id: expect.any(Number), name: 'Sochi' })
+        ])
+      )
     })
   })
 

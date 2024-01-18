@@ -2,6 +2,7 @@ import { BaseRepository } from './base.repository'
 import { paginate } from '../helpers/paginate.helper'
 import { type EntryTypes } from '../../consts'
 import { type City } from './city.repository'
+import { type BaseQueryString } from '../helpers/validate-queries/validate-queries.helper'
 
 export interface CompanyObjects {
   id: number
@@ -25,11 +26,9 @@ interface CompanyObjectsData {
 export class CompanyObjectsRepository extends BaseRepository<CompanyObjects> {
   async findByPage (
     companyId: number,
-    page: number | undefined,
-    perPage: number | undefined,
-    sort: 'asc' | 'desc' = 'asc'
+    queries: BaseQueryString
   ): Promise<CompanyObjectsData[] | []> {
-    const { limit, offset } = paginate(page, perPage)
+    const { limit, offset } = paginate(parseInt(queries.page), parseInt(queries.per_page))
 
     const objects = await this.knex('company_objects as o')
       .leftJoin('cities as c', 'c.id', 'o.city_id')
@@ -44,7 +43,7 @@ export class CompanyObjectsRepository extends BaseRepository<CompanyObjects> {
       ])
       .offset(offset)
       .limit(limit)
-      .orderBy('o.id', sort)
+      .orderBy(`o.${queries.sort}`, queries.direction)
 
     return objects
   }

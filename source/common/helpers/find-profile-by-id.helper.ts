@@ -2,7 +2,6 @@ import { Roles } from '../../consts'
 import { knex } from '../../connection'
 
 import {
-  type AccountRole,
   AccountRepository,
   type Account
 } from '../repositories/account.repository'
@@ -21,6 +20,11 @@ import {
   type ManagerProfile,
   ManagerRepository
 } from '../repositories/manager.repository'
+
+type AccountRole =
+  | 'inspector'
+  | 'manager'
+  | 'administrator'
 
 type Profile = InspectorProfile | AdministratorProfile | ManagerProfile
 

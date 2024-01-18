@@ -1,6 +1,7 @@
 import { Roles } from '../../consts'
-import { paginate } from '../helpers/paginate.helper'
 import { BaseRepository } from './base.repository'
+import { paginate } from '../helpers/paginate.helper'
+import { type BaseQueryString } from '../helpers/validate-queries/validate-queries.helper'
 
 interface CompanyEmployee {
   id: number
@@ -43,13 +44,8 @@ interface EmployeeProfile {
 }
 
 export class CompanyEmployeesRepository extends BaseRepository<CompanyEmployee> {
-  async findByPage (
-    companyId: number,
-    page: number | undefined,
-    perPage: number | undefined,
-    sort: 'asc' | 'desc' = 'desc'
-  ): Promise<EmployeeProfile[] | []> {
-    const { limit, offset } = paginate(page, perPage)
+  async findByPage (companyId: number, queries: BaseQueryString): Promise<EmployeeProfile[] | []> {
+    const { limit, offset } = paginate(parseInt(queries.page), parseInt(queries.per_page))
 
     const employees = await this.knex('company_employees as e')
       .leftJoin('accounts as a', 'e.account_id', 'a.id')
@@ -70,7 +66,7 @@ export class CompanyEmployeesRepository extends BaseRepository<CompanyEmployee> 
       ])
       .offset(offset)
       .limit(limit)
-      .orderBy('e.id', sort)
+      .orderBy(`e.${queries.sort}`, queries.direction)
 
     return employees
   }

@@ -1,38 +1,38 @@
 import type { NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
-import { findProfileByID } from '../common/helpers/find-profile-by-id.helper'
-import type { GetAccountsQueryString } from './users.interface'
-import { AccountRepository } from '../common/repositories/account.repository'
 import { knex } from '../connection'
+import { UserRoles, type UsersQueryString } from './users.interface'
+import { findProfileByID } from '../common/helpers/find-profile-by-id.helper'
+import { AccountRepository } from '../common/repositories/account.repository'
 
 export async function getAccounts (
-  req: Request<never, never, never, GetAccountsQueryString>,
+  req: Request<never, never, never, UsersQueryString>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const accountRepository = new AccountRepository(knex, 'accounts')
-
-  let page: number | undefined = parseInt(req.query.page)
-  let perPage: number | undefined = parseInt(req.query.per_page)
-  const role = req.query.role
-
-  if (Number.isNaN(page)) {
-    page = undefined
-  }
-
-  if (Number.isNaN(perPage)) {
-    perPage = undefined
-  }
-
   try {
-    const accounts = await accountRepository.findByPage(page, perPage, role, req.query.sort)
+    const role = req.query.role ?? 'all'
+    if (!UserRoles.includes(role)) {
+      res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({
+          message: 'Wrong account role.',
+          available_values: UserRoles
+        })
+
+      return
+    }
+
+    const accountRepository = new AccountRepository(knex, 'accounts')
+    const users = await accountRepository.findByPage({
+      ...req.query,
+      role
+    })
 
     res
       .status(StatusCodes.OK)
-      .json({
-        data: accounts
-      })
+      .json({ users })
   } catch (error) {
     next(error)
   }

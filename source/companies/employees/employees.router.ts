@@ -4,6 +4,7 @@ import * as employeesController from './employees.controller'
 import { isCompanyAdminOrManager } from '../../common/helpers/is-company-admin-or-manager.helper'
 import { validateBody } from '../../common/helpers/validate-body.helper'
 import { createCompanyEmployeeValidator, updateCompanyEmployeeValidator } from './employees.validator'
+import { validateQueries } from '../../common/helpers/validate-queries/validate-queries.helper'
 
 export const router = express.Router({ mergeParams: true })
 
@@ -17,6 +18,7 @@ router.post(
 router.get(
   '/employees',
   isCompanyAdminOrManager,
+  validateQueries(),
   employeesController.getCompanyEmployees
 )
 

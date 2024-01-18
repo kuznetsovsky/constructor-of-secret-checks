@@ -1,6 +1,4 @@
 import {
-  DEFAULT_PAGE,
-  DEFAULT_PER_PAGE,
   MAX_PER_PAGE
 } from '../../../config'
 
@@ -9,16 +7,17 @@ interface Paginate {
   offset: number
 }
 
-export function paginate (
-  page: number = DEFAULT_PAGE,
-  perPage: number = DEFAULT_PER_PAGE
-): Paginate {
+export function paginate (page: number, perPage: number): Paginate {
   if (perPage > MAX_PER_PAGE) {
     perPage = MAX_PER_PAGE
   }
 
   if (page < 1) {
     page = 1
+  }
+
+  if (perPage < 1) {
+    perPage = 1
   }
 
   const limit = perPage

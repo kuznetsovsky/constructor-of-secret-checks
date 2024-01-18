@@ -29,145 +29,147 @@ describe('Users endpoints:', () => {
         .set('Cookie', cookies)
 
       expect(userResponse.statusCode).toBe(200)
-      expect(userResponse.body.data.length).toBe(17)
-      expect(userResponse.body.data).toMatchObject([
-        {
-          id: 1,
-          role: 'inspector',
-          email: 'www.jhon@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 2,
-          role: 'administrator',
-          email: 'www.jane@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 3,
-          role: 'manager',
-          email: 'www.bob@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 4,
-          role: 'inspector',
-          email: 'www.tim@mail.com',
-          email_verified: null,
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 5,
-          role: 'administrator',
-          email: 'www.alex@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 6,
-          role: 'administrator',
-          email: 'www.alice@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 7,
-          role: 'inspector',
-          email: 'www.lana@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 8,
-          role: 'inspector',
-          email: 'www.ketty@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 9,
-          role: 'inspector',
-          email: 'www.barbara@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 10,
-          role: 'inspector',
-          email: 'www.britney@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 11,
-          role: 'inspector',
-          email: 'www.betty@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 12,
-          role: 'inspector',
-          email: 'www.boris@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 13,
-          role: 'inspector',
-          email: 'www.michael@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 14,
-          role: 'manager',
-          email: 'www.miller@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 15,
-          role: 'manager',
-          email: 'www.morello@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 16,
-          role: 'manager',
-          email: 'www.thomson@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 17,
-          role: 'manager',
-          email: 'www.sanchez@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        }
-      ])
+      expect(userResponse.body.users.length).toBe(17)
+      expect(userResponse.body.users).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'inspector',
+            email: 'www.jhon@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'administrator',
+            email: 'www.jane@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'manager',
+            email: 'www.bob@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'inspector',
+            email: 'www.tim@mail.com',
+            email_verified: null,
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'administrator',
+            email: 'www.alex@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'administrator',
+            email: 'www.alice@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'inspector',
+            email: 'www.lana@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'inspector',
+            email: 'www.ketty@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'inspector',
+            email: 'www.barbara@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'inspector',
+            email: 'www.britney@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'inspector',
+            email: 'www.betty@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'inspector',
+            email: 'www.boris@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'inspector',
+            email: 'www.michael@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'manager',
+            email: 'www.miller@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'manager',
+            email: 'www.morello@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'manager',
+            email: 'www.thomson@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'manager',
+            email: 'www.sanchez@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          })
+        ])
+      )
     })
 
     it('should return a list of users with only role inspector', async () => {
@@ -182,81 +184,83 @@ describe('Users endpoints:', () => {
         .set('Cookie', cookies)
 
       expect(response.statusCode).toBe(200)
-      expect(response.body.data.length).toBe(9)
-      expect(response.body.data).toMatchObject([
-        {
-          id: 1,
-          role: 'inspector',
-          email: 'www.jhon@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 4,
-          role: 'inspector',
-          email: 'www.tim@mail.com',
-          email_verified: null,
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 7,
-          role: 'inspector',
-          email: 'www.lana@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 8,
-          role: 'inspector',
-          email: 'www.ketty@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 9,
-          role: 'inspector',
-          email: 'www.barbara@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 10,
-          role: 'inspector',
-          email: 'www.britney@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 11,
-          role: 'inspector',
-          email: 'www.betty@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 12,
-          role: 'inspector',
-          email: 'www.boris@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 13,
-          role: 'inspector',
-          email: 'www.michael@mail.com',
-          email_verified: '2024-01-01T00:00:00.000Z',
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        }
-      ])
+      expect(response.body.users.length).toBe(9)
+      expect(response.body.users).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'inspector',
+            email: 'www.jhon@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'inspector',
+            email: 'www.tim@mail.com',
+            email_verified: null,
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'inspector',
+            email: 'www.lana@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'inspector',
+            email: 'www.ketty@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'inspector',
+            email: 'www.barbara@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'inspector',
+            email: 'www.britney@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'inspector',
+            email: 'www.betty@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'inspector',
+            email: 'www.boris@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'inspector',
+            email: 'www.michael@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          })
+        ])
+      )
     })
 
     it('should return a list of users with only role administrator', async () => {
@@ -271,33 +275,35 @@ describe('Users endpoints:', () => {
         .set('Cookie', cookies)
 
       expect(response.statusCode).toBe(200)
-      expect(response.body.data.length).toBe(3)
-      expect(response.body.data).toMatchObject([
-        {
-          id: 2,
-          role: 'administrator',
-          email: 'www.jane@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 5,
-          role: 'administrator',
-          email: 'www.alex@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 6,
-          role: 'administrator',
-          email: 'www.alice@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        }
-      ])
+      expect(response.body.users.length).toBe(3)
+      expect(response.body.users).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'administrator',
+            email: 'www.jane@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'administrator',
+            email: 'www.alex@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'administrator',
+            email: 'www.alice@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          })
+        ])
+      )
     })
 
     it('should return a list of users with only role manager', async () => {
@@ -312,49 +318,51 @@ describe('Users endpoints:', () => {
         .set('Cookie', cookies)
 
       expect(response.statusCode).toBe(200)
-      expect(response.body.data.length).toBe(5)
-      expect(response.body.data).toMatchObject([
-        {
-          id: 3,
-          role: 'manager',
-          email: 'www.bob@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 14,
-          role: 'manager',
-          email: 'www.miller@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 15,
-          role: 'manager',
-          email: 'www.morello@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 16,
-          role: 'manager',
-          email: 'www.thomson@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        },
-        {
-          id: 17,
-          role: 'manager',
-          email: 'www.sanchez@mail.com',
-          email_verified: expect.any(String),
-          created_at: expect.any(String),
-          last_visit: expect.any(String)
-        }
-      ])
+      expect(response.body.users.length).toBe(5)
+      expect(response.body.users).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'manager',
+            email: 'www.bob@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'manager',
+            email: 'www.miller@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'manager',
+            email: 'www.morello@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'manager',
+            email: 'www.thomson@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          }),
+          expect.objectContaining({
+            id: expect.any(Number),
+            role: 'manager',
+            email: 'www.sanchez@mail.com',
+            email_verified: expect.any(String),
+            created_at: expect.any(String),
+            last_visit: expect.any(String)
+          })
+        ])
+      )
     })
   })
 

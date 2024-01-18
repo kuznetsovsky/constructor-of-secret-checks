@@ -1,14 +1,11 @@
 import { BaseRepository } from './base.repository'
 import { paginate } from '../helpers/paginate.helper'
-
-export type AccountRole =
-  | 'inspector'
-  | 'manager'
-  | 'administrator'
+import { type UsersQueryString } from '../../users/users.interface'
+import { type Roles } from '../../consts'
 
 export interface Account {
   id: number
-  role: AccountRole
+  role: Roles
   email: string
   password: string
   email_verified: string | null
@@ -17,13 +14,8 @@ export interface Account {
 }
 
 export class AccountRepository extends BaseRepository<Account> {
-  async findByPage (
-    page: number | undefined,
-    perPage: number | undefined,
-    role: AccountRole | 'all' = 'all',
-    sort: 'asc' | 'desc' = 'asc'
-  ): Promise<Omit<Account, 'password'> | undefined> {
-    const { limit, offset } = paginate(page, perPage)
+  async findByPage (queries: UsersQueryString): Promise<Omit<Account, 'password'> | undefined> {
+    const { limit, offset } = paginate(parseInt(queries.page), parseInt(queries.per_page))
 
     const query = this.qb
       .select(
@@ -35,14 +27,14 @@ export class AccountRepository extends BaseRepository<Account> {
         'last_visit'
       )
 
-    if (role !== 'all') {
-      void query.where('role', role)
+    if (queries.role !== 'all') {
+      void query.where('role', queries.role)
     }
 
     const accounts = await query
       .offset(offset)
       .limit(limit)
-      .orderBy('id', sort)
+      .orderBy(queries.sort, queries.direction)
 
     return accounts
   }

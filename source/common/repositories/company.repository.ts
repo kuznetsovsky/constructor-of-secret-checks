@@ -1,5 +1,6 @@
 import { BaseRepository } from './base.repository'
 import { paginate } from '../helpers/paginate.helper'
+import { type BaseQueryString } from '../helpers/validate-queries/validate-queries.helper'
 
 export interface Company {
   id: number
@@ -34,12 +35,8 @@ interface CompanyProfile extends CompanyListProfile {
 }
 
 export class CompanyRepository extends BaseRepository<Company> {
-  async findByPage (
-    page: number | undefined,
-    perPage: number | undefined,
-    sort: 'asc' | 'desc' = 'asc'
-  ): Promise<CompanyListProfile[] | []> {
-    const { limit, offset } = paginate(page, perPage)
+  async findByPage (queries: BaseQueryString): Promise<CompanyListProfile[] | []> {
+    const { limit, offset } = paginate(parseInt(queries.page), parseInt(queries.per_page))
 
     const companies = await this.qb
       .select([
@@ -51,7 +48,7 @@ export class CompanyRepository extends BaseRepository<Company> {
       ])
       .offset(offset)
       .limit(limit)
-      .orderBy('id', sort)
+      .orderBy(queries.sort, queries.direction)
 
     return companies
   }

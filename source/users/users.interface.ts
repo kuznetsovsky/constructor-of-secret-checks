@@ -1,6 +1,13 @@
-import { type BaseQueryString } from '../common/interfaces/query-string.interface'
-import { type Roles } from '../consts'
+import { type BaseQueryString } from '../common/helpers/validate-queries/validate-queries.helper'
+import { Roles } from '../consts'
 
-export interface GetAccountsQueryString extends BaseQueryString {
+export const UserRoles = [
+  Roles.Administrator,
+  Roles.Inspector,
+  Roles.Manager,
+  'all'
+]
+
+export interface UsersQueryString extends BaseQueryString {
   role: 'all' | Roles
 }

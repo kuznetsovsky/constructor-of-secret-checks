@@ -9,6 +9,7 @@ import {
   updateCompanyInspectorStatusValidator,
   updateCompanyInspectorValidator
 } from './inspectors.validator'
+import { validateQueries } from '../../common/helpers/validate-queries/validate-queries.helper'
 
 export const router = express.Router({ mergeParams: true })
 
@@ -28,6 +29,7 @@ router.post(
 router.get(
   '/inspectors',
   isCompanyAdminOrManager,
+  validateQueries(),
   inspectorsController.getCompanyInspectors
 )
 

@@ -4,8 +4,8 @@ import { StatusCodes } from 'http-status-codes'
 import { knex } from '../../connection'
 import { type CompanyObject } from './objects.interface'
 import { CompanyObjectsRepository } from '../../common/repositories/company-objects.repository'
-import { type BaseQueryString } from '../../common/interfaces/query-string.interface'
 import { CityRepository } from '../../common/repositories/city.repository'
+import { type BaseQueryString } from '../../common/helpers/validate-queries/validate-queries.helper'
 
 export async function createObject (
   req: Request<{ company_id: string }, never, CompanyObject>,
@@ -64,17 +64,6 @@ export async function getObjects (
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  let page: number | undefined = parseInt(req.query.page)
-  let perPage: number | undefined = parseInt(req.query.per_page)
-
-  if (Number.isNaN(page)) {
-    page = undefined
-  }
-
-  if (Number.isNaN(perPage)) {
-    perPage = undefined
-  }
-
   const COMPANY_ID = parseInt(req.params.company_id)
 
   if (Number.isNaN(COMPANY_ID) || COMPANY_ID < 1) {
@@ -85,10 +74,9 @@ export async function getObjects (
     return
   }
 
-  const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
-
   try {
-    const objects = await companyObjectsRepository.findByPage(COMPANY_ID, page, perPage, req.query.sort)
+    const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
+    const objects = await companyObjectsRepository.findByPage(COMPANY_ID, req.query)
 
     res
       .status(StatusCodes.OK)
