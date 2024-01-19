@@ -11,22 +11,10 @@ export async function getQuestionnaire (
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const COMPANY_ID = parseInt(req.params.company_id)
-
-  if (Number.isNaN(COMPANY_ID) || COMPANY_ID < 1) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({
-        error: 'Invalid request id parameter'
-      })
-
-    return
-  }
-
-  const questionnaireRepository = new QuestionnaireRepository(knex, 'company_questionnaires')
-  const companyRepository = new CompanyRepository(knex, 'companies')
-
   try {
+    const COMPANY_ID = parseInt(req.params.company_id)
+    const questionnaireRepository = new QuestionnaireRepository(knex, 'company_questionnaires')
+    const companyRepository = new CompanyRepository(knex, 'companies')
     const company = await companyRepository.findOne(COMPANY_ID, ['questionnaire_id'])
 
     if (company == null) {
@@ -61,20 +49,10 @@ export async function updateQuestionnaire (
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const questionnaireRepository = new QuestionnaireRepository(knex, 'company_questionnaires')
-  const companyRepository = new CompanyRepository(knex, 'companies')
-
-  const COMPANY_ID = parseInt(req.params.company_id)
-
-  if (Number.isNaN(COMPANY_ID) || COMPANY_ID < 1) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ error: 'Invalid request id parameter.' })
-
-    return
-  }
-
   try {
+    const questionnaireRepository = new QuestionnaireRepository(knex, 'company_questionnaires')
+    const companyRepository = new CompanyRepository(knex, 'companies')
+    const COMPANY_ID = parseInt(req.params.company_id)
     const company = await companyRepository.findOne(COMPANY_ID, ['questionnaire_id'])
 
     if (company == null) {

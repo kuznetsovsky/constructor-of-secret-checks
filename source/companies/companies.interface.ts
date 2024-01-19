@@ -5,3 +5,7 @@ export interface UpdateCompany {
   vk_link: string
   number_of_checks: number | null
 }
+
+export interface CompaniesParams {
+  company_id: string
+}

@@ -43,19 +43,8 @@ export async function getAccountByID (
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const USER_ID = parseInt(req.params.user_id)
-
-  if (Number.isNaN(USER_ID) || USER_ID < 1) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({
-        error: 'Invalid request id parameter'
-      })
-
-    return
-  }
-
   try {
+    const USER_ID = parseInt(req.params.user_id)
     const profile = await findProfileByID(USER_ID)
 
     if (profile == null) {

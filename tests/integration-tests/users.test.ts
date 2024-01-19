@@ -382,21 +382,21 @@ describe('Users endpoints:', () => {
       expect(authResponse.status).toEqual(200)
       const cookies = authResponse.headers['set-cookie']
 
-      const responseNaN = await request(app).get('/api/v1/users/NaN')
-        .set('Cookie', cookies)
+      {
+        const response = await request(app)
+          .get('/api/v1/users/NaN')
+          .set('Cookie', cookies)
 
-      expect(responseNaN.statusCode).toBe(400)
-      expect(responseNaN.body).toMatchObject({
-        error: 'Invalid request id parameter'
-      })
+        expect(response.statusCode).toBe(400)
+      }
 
-      const responseMinus = await request(app).get('/api/v1/users/-1')
-        .set('Cookie', cookies)
+      {
+        const response = await request(app)
+          .get('/api/v1/users/-1')
+          .set('Cookie', cookies)
 
-      expect(responseMinus.statusCode).toBe(400)
-      expect(responseMinus.body).toMatchObject({
-        error: 'Invalid request id parameter'
-      })
+        expect(response.statusCode).toBe(400)
+      }
     })
 
     it('should return status not found', async () => {

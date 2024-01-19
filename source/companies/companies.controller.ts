@@ -28,21 +28,9 @@ export async function getCompanyByID (
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const COMPANY_ID = parseInt(req.params.company_id)
-
-  if (Number.isNaN(COMPANY_ID) || COMPANY_ID < 1) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({
-        error: 'Invalid request id parameter'
-      })
-
-    return
-  }
-
-  const companyRepository = new CompanyRepository(knex, 'companies')
-
   try {
+    const COMPANY_ID = parseInt(req.params.company_id)
+    const companyRepository = new CompanyRepository(knex, 'companies')
     const company = await companyRepository.findProfileByID(COMPANY_ID)
 
     if (company == null) {
@@ -66,21 +54,10 @@ export async function updateCompanyByID (
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const COMPANY_ID = parseInt(req.params.company_id)
-
-  if (Number.isNaN(COMPANY_ID) || COMPANY_ID < 1) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({
-        error: 'Invalid request id parameter'
-      })
-
-    return
-  }
-
-  const companyRepository = new CompanyRepository(knex, 'companies')
-
   try {
+    const COMPANY_ID = parseInt(req.params.company_id)
+    const companyRepository = new CompanyRepository(knex, 'companies')
+
     {
       const company = await companyRepository.exist(COMPANY_ID)
       if (!company) return

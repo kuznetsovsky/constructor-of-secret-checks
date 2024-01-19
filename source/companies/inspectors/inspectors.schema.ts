@@ -5,7 +5,8 @@ import { InspectorStatus } from '../../consts'
 import type {
   ChangeCompanyInspectorStatus,
   UpdateCompanyInspector,
-  CreateCompanyInspector
+  CreateCompanyInspector,
+  InspectorsParams
 } from './inspectors.interface'
 
 export const createCompanyInspectorSchema: JSONSchemaType<CreateCompanyInspector> = {
@@ -152,6 +153,19 @@ export const updateCompanyInspectorStatusSchema: JSONSchemaType<ChangeCompanyIns
         InspectorStatus.Approved,
         InspectorStatus.Deviation
       ]
+    }
+  }
+}
+
+export const inspectorsParamsSchema: JSONSchemaType<InspectorsParams> = {
+  type: 'object',
+  additionalProperties: true,
+  required: ['inspector_id'],
+  properties: {
+    inspector_id: {
+      type: 'string',
+      transform: ['trim'],
+      pattern: '^\\d+$'
     }
   }
 }

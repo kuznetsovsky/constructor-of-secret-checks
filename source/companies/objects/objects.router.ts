@@ -2,9 +2,10 @@ import express from 'express'
 
 import * as objectsController from './objects.controller'
 import { isCompanyAdminOrManager } from '../../common/helpers/is-company-admin-or-manager.helper'
-import { companyObjectValidator } from './objects.validator'
+import { companyObjectValidator, objectParamsValidator } from './objects.validator'
 import { validateBody } from '../../common/helpers/validate-body.helper'
 import { validateQueries } from '../../common/helpers/validate-queries/validate-queries.helper'
+import { validateParams } from '../../common/helpers/validate-params.helper'
 
 export const router = express.Router({ mergeParams: true })
 
@@ -25,12 +26,14 @@ router.get(
 router.get(
   '/objects/:object_id',
   isCompanyAdminOrManager,
+  validateParams(objectParamsValidator),
   objectsController.getObject
 )
 
 router.put(
   '/objects/:object_id',
   isCompanyAdminOrManager,
+  validateParams(objectParamsValidator),
   validateBody(companyObjectValidator),
   objectsController.updateObject
 )
@@ -38,5 +41,6 @@ router.put(
 router.delete(
   '/objects/:object_id',
   isCompanyAdminOrManager,
+  validateParams(objectParamsValidator),
   objectsController.deleteObject
 )

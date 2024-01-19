@@ -1,5 +1,5 @@
 import { type JSONSchemaType } from 'ajv'
-import { type UpdateCompany } from './companies.interface'
+import { type UpdateCompany, type CompaniesParams } from './companies.interface'
 
 export const updateCompanySchema: JSONSchemaType<UpdateCompany> = {
   type: 'object',
@@ -39,6 +39,19 @@ export const updateCompanySchema: JSONSchemaType<UpdateCompany> = {
     number_of_checks: {
       type: 'number',
       minimum: 0
+    }
+  }
+}
+
+export const companiesParamsSchema: JSONSchemaType<CompaniesParams> = {
+  type: 'object',
+  additionalProperties: true,
+  required: ['company_id'],
+  properties: {
+    company_id: {
+      type: 'string',
+      transform: ['trim'],
+      pattern: '^\\d+$'
     }
   }
 }

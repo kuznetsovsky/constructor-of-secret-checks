@@ -1,10 +1,4 @@
-import { type BaseQueryString } from '../../common/interfaces/query-string.interface'
 import { type InspectorStatus } from '../../consts'
-
-export interface QueryString extends BaseQueryString {
-  city: string
-  surname: string
-}
 
 interface CompanyInspector {
   email: string
@@ -30,4 +24,8 @@ export interface UpdateCompanyInspector extends CompanyInspector {
 
 export interface ChangeCompanyInspectorStatus {
   status: InspectorStatus
+}
+
+export interface InspectorsParams {
+  inspector_id: string
 }

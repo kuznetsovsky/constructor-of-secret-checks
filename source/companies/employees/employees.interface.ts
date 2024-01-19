@@ -8,3 +8,7 @@ export interface CreateEmployee {
 export interface UpdateEmployee extends Omit<CreateEmployee, 'email'> {
   phone_number: string
 }
+
+export interface EmployeeParams {
+  employee_id: string
+}

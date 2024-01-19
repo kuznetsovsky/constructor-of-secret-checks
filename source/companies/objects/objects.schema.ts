@@ -1,5 +1,5 @@
 import { type JSONSchemaType } from 'ajv'
-import { type CompanyObject } from './objects.interface'
+import { type ObjectsParams, type CompanyObject } from './objects.interface'
 import { EntryTypes } from '../../consts'
 
 export const companyObjectSchema: JSONSchemaType<CompanyObject> = {
@@ -39,6 +39,19 @@ export const companyObjectSchema: JSONSchemaType<CompanyObject> = {
     city_id: {
       type: 'number',
       minimum: 1
+    }
+  }
+}
+
+export const objectsParamsSchema: JSONSchemaType<ObjectsParams> = {
+  type: 'object',
+  additionalProperties: true,
+  required: ['object_id'],
+  properties: {
+    object_id: {
+      type: 'string',
+      transform: ['trim'],
+      pattern: '^\\d+$'
     }
   }
 }

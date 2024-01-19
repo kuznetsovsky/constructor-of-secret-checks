@@ -1,5 +1,5 @@
 import { type JSONSchemaType } from 'ajv'
-import { type UpdateEmployee, type CreateEmployee } from './employees.interface'
+import { type UpdateEmployee, type CreateEmployee, type EmployeeParams } from './employees.interface'
 
 export const createCompanyEmployeeSchema: JSONSchemaType<CreateEmployee> = {
   type: 'object',
@@ -65,6 +65,19 @@ export const updateCompanyEmployeeSchema: JSONSchemaType<UpdateEmployee> = {
     phone_number: {
       type: 'string',
       maxLength: 16
+    }
+  }
+}
+
+export const employeeParamsSchema: JSONSchemaType<EmployeeParams> = {
+  type: 'object',
+  additionalProperties: true,
+  required: ['employee_id'],
+  properties: {
+    employee_id: {
+      type: 'string',
+      transform: ['trim'],
+      pattern: '^\\d+$'
     }
   }
 }

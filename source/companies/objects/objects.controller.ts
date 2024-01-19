@@ -12,20 +12,11 @@ export async function createObject (
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const COMPANY_ID = parseInt(req.params.company_id)
-
-  if (Number.isNaN(COMPANY_ID) || COMPANY_ID < 1) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ error: 'Invalid request id parameter.' })
-
-    return
-  }
-
-  const cityRepository = new CityRepository(knex, 'cities')
-  const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
-
   try {
+    const COMPANY_ID = parseInt(req.params.company_id)
+    const cityRepository = new CityRepository(knex, 'cities')
+    const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
+
     {
       const object = await companyObjectsRepository.findOne({ name: req.body.name })
 
@@ -64,17 +55,8 @@ export async function getObjects (
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const COMPANY_ID = parseInt(req.params.company_id)
-
-  if (Number.isNaN(COMPANY_ID) || COMPANY_ID < 1) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ error: 'Invalid request id parameter.' })
-
-    return
-  }
-
   try {
+    const COMPANY_ID = parseInt(req.params.company_id)
     const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
     const objects = await companyObjectsRepository.findByPage(COMPANY_ID, req.query)
 
@@ -91,20 +73,10 @@ export async function getObject (
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const COMPANY_ID = parseInt(req.params.company_id)
-  const OBJECT_ID = parseInt(req.params.object_id)
-
-  if (Number.isNaN(COMPANY_ID) || Number.isNaN(OBJECT_ID) || COMPANY_ID < 1 || OBJECT_ID < 1) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ error: 'Invalid request parameters.' })
-
-    return
-  }
-
-  const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
-
   try {
+    const COMPANY_ID = parseInt(req.params.company_id)
+    const OBJECT_ID = parseInt(req.params.object_id)
+    const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
     const object = await companyObjectsRepository.findByID(COMPANY_ID, OBJECT_ID)
 
     if (object == null) {
@@ -128,21 +100,13 @@ export async function updateObject (
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const COMPANY_ID = parseInt(req.params.company_id)
-  const OBJECT_ID = parseInt(req.params.object_id)
-
-  if (Number.isNaN(COMPANY_ID) || Number.isNaN(OBJECT_ID) || COMPANY_ID < 1 || OBJECT_ID < 1) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ error: 'Invalid request parameters.' })
-
-    return
-  }
-
-  const cityRepository = new CityRepository(knex, 'cities')
-  const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
-
   try {
+    const COMPANY_ID = parseInt(req.params.company_id)
+    const OBJECT_ID = parseInt(req.params.object_id)
+
+    const cityRepository = new CityRepository(knex, 'cities')
+    const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
+
     {
       const object = await companyObjectsRepository.findOne({
         company_id: COMPANY_ID,
@@ -196,20 +160,11 @@ export async function deleteObject (
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const COMPANY_ID = parseInt(req.params.company_id)
-  const OBJECT_ID = parseInt(req.params.object_id)
-
-  if (Number.isNaN(COMPANY_ID) || Number.isNaN(OBJECT_ID) || COMPANY_ID < 1 || OBJECT_ID < 1) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ error: 'Invalid request parameters.' })
-
-    return
-  }
-
-  const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
-
   try {
+    const COMPANY_ID = parseInt(req.params.company_id)
+    const OBJECT_ID = parseInt(req.params.object_id)
+    const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
+
     const object = await companyObjectsRepository.findOne({
       company_id: COMPANY_ID,
       id: OBJECT_ID

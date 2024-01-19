@@ -11,3 +11,7 @@ export const UserRoles = [
 export interface UsersQueryString extends BaseQueryString {
   role: 'all' | Roles
 }
+
+export interface UsersParams {
+  user_id: string
+}

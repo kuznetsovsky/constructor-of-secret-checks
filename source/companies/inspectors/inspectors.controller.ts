@@ -26,21 +26,12 @@ export async function createNewCompanyInspector (
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const COMPANY_ID = parseInt(req.params.company_id)
-
-  if (Number.isNaN(COMPANY_ID) || COMPANY_ID < 1) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ error: 'Invalid request parameter.' })
-
-    return
-  }
-
-  const cityRepository = new CityRepository(knex, 'cities')
-  const accountRepository = new AccountRepository(knex, 'accounts')
-  const companyInspectorRepository = new CompanyInspectorRepository(knex, 'company_inspectors')
-
   try {
+    const COMPANY_ID = parseInt(req.params.company_id)
+    const cityRepository = new CityRepository(knex, 'cities')
+    const accountRepository = new AccountRepository(knex, 'accounts')
+    const companyInspectorRepository = new CompanyInspectorRepository(knex, 'company_inspectors')
+
     const city = await cityRepository.exist(req.body.city_id)
 
     if (!city) {
@@ -117,20 +108,11 @@ export async function getCompanyInspectors (
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const COMPANY_ID = parseInt(req.params.company_id)
-
-  if (Number.isNaN(COMPANY_ID) || COMPANY_ID < 1) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ error: 'Invalid request parameter.' })
-
-    return
-  }
-
-  const cityRepository = new CityRepository(knex, 'cities')
-  const companyInspectorRepository = new CompanyInspectorRepository(knex, 'company_inspectors')
-
   try {
+    const COMPANY_ID = parseInt(req.params.company_id)
+    const cityRepository = new CityRepository(knex, 'cities')
+    const companyInspectorRepository = new CompanyInspectorRepository(knex, 'company_inspectors')
+
     let cityId: number | undefined
 
     if (req.query.city != null) {
@@ -167,20 +149,11 @@ export async function getCompanyInspector (
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const COMPANY_ID = parseInt(req.params.company_id)
-  const INSPECTOR_ID = parseInt(req.params.inspector_id)
-
-  if (Number.isNaN(COMPANY_ID) || Number.isNaN(INSPECTOR_ID) || COMPANY_ID < 1 || INSPECTOR_ID < 1) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ error: 'Invalid request parameter.' })
-
-    return
-  }
-
-  const companyInspectorRepository = new CompanyInspectorRepository(knex, 'company_inspectors')
-
   try {
+    const COMPANY_ID = parseInt(req.params.company_id)
+    const INSPECTOR_ID = parseInt(req.params.inspector_id)
+    const companyInspectorRepository = new CompanyInspectorRepository(knex, 'company_inspectors')
+
     const inspector = await companyInspectorRepository.findCompanyInspectorByID(
       COMPANY_ID,
       INSPECTOR_ID
@@ -207,22 +180,13 @@ export async function updateCompanyInspector (
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const COMPANY_ID = parseInt(req.params.company_id)
-  const INSPECTOR_ID = parseInt(req.params.inspector_id)
-
-  if (Number.isNaN(COMPANY_ID) || Number.isNaN(INSPECTOR_ID) || COMPANY_ID < 1 || INSPECTOR_ID < 1) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ error: 'Invalid request parameter.' })
-
-    return
-  }
-
-  const cityRepository = new CityRepository(knex, 'cities')
-  const phoneRepository = new PhoneRepository(knex, 'phone_numbers')
-  const companyInspectorRepository = new CompanyInspectorRepository(knex, 'company_inspectors')
-
   try {
+    const COMPANY_ID = parseInt(req.params.company_id)
+    const INSPECTOR_ID = parseInt(req.params.inspector_id)
+    const cityRepository = new CityRepository(knex, 'cities')
+    const phoneRepository = new PhoneRepository(knex, 'phone_numbers')
+    const companyInspectorRepository = new CompanyInspectorRepository(knex, 'company_inspectors')
+
     const inspector = await companyInspectorRepository.findOne({
       company_id: COMPANY_ID,
       id: INSPECTOR_ID
@@ -271,20 +235,11 @@ export async function updateCompanyInspectorStatus (
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const COMPANY_ID = parseInt(req.params.company_id)
-  const INSPECTOR_ID = parseInt(req.params.inspector_id)
-
-  if (Number.isNaN(COMPANY_ID) || Number.isNaN(INSPECTOR_ID) || COMPANY_ID < 1 || INSPECTOR_ID < 1) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ error: 'Invalid request parameter.' })
-
-    return
-  }
-
-  const companyInspectorRepository = new CompanyInspectorRepository(knex, 'company_inspectors')
-
   try {
+    const COMPANY_ID = parseInt(req.params.company_id)
+    const INSPECTOR_ID = parseInt(req.params.inspector_id)
+    const companyInspectorRepository = new CompanyInspectorRepository(knex, 'company_inspectors')
+
     const inspector = await companyInspectorRepository.findOne({
       company_id: COMPANY_ID,
       id: INSPECTOR_ID
@@ -319,20 +274,11 @@ export async function deleteCompanyInspector (
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const COMPANY_ID = parseInt(req.params.company_id)
-  const INSPECTOR_ID = parseInt(req.params.inspector_id)
-
-  if (Number.isNaN(COMPANY_ID) || Number.isNaN(INSPECTOR_ID) || COMPANY_ID < 1 || INSPECTOR_ID < 1) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ error: 'Invalid request parameter.' })
-
-    return
-  }
-
-  const companyInspectorRepository = new CompanyInspectorRepository(knex, 'company_inspectors')
-
   try {
+    const COMPANY_ID = parseInt(req.params.company_id)
+    const INSPECTOR_ID = parseInt(req.params.inspector_id)
+    const companyInspectorRepository = new CompanyInspectorRepository(knex, 'company_inspectors')
+
     const inspector = await companyInspectorRepository.findCompanyInspectorByID(
       COMPANY_ID,
       INSPECTOR_ID
@@ -359,20 +305,9 @@ export async function getCompanyInspectorByEmail (
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const COMPANY_ID = parseInt(req.params.company_id)
-  const EMAIL = req.params.email
-
-  if (Number.isNaN(COMPANY_ID) || COMPANY_ID < 1) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ error: 'Invalid request parameter.' })
-
-    return
-  }
-
-  const accountRepository = new AccountRepository(knex, 'accounts')
-
   try {
+    const EMAIL = req.params.email
+    const accountRepository = new AccountRepository(knex, 'accounts')
     const inspector = await accountRepository.exist({ email: EMAIL })
 
     if (inspector) {
@@ -394,22 +329,13 @@ export async function createCompanyInspectorByEmail (
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const COMPANY_ID = parseInt(req.params.company_id)
-  const EMAIL = req.params.email
-
-  if (Number.isNaN(COMPANY_ID) || COMPANY_ID < 1) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ error: 'Invalid request parameter.' })
-
-    return
-  }
-
-  const companyInspectorRepository = new CompanyInspectorRepository(knex, 'company_inspectors')
-  const inspectorRepository = new InspectorRepository(knex, 'inspectors')
-  const accountRepository = new AccountRepository(knex, 'accounts')
-
   try {
+    const COMPANY_ID = parseInt(req.params.company_id)
+    const EMAIL = req.params.email
+    const companyInspectorRepository = new CompanyInspectorRepository(knex, 'company_inspectors')
+    const inspectorRepository = new InspectorRepository(knex, 'inspectors')
+    const accountRepository = new AccountRepository(knex, 'accounts')
+
     const account = await accountRepository.findOne({ email: EMAIL })
 
     if (account != null) {

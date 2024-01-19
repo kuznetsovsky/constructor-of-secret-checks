@@ -7,3 +7,7 @@ export interface CompanyObject {
   street: string
   house_number: string
 }
+
+export interface ObjectsParams {
+  object_id: string
+}
