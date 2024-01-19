@@ -1,7 +1,7 @@
 import express from 'express'
 
 import * as employeesController from './employees.controller'
-import { isCompanyAdminOrManager } from '../../common/helpers/is-company-admin-or-manager.helper'
+import * as permission from '../../common/helpers/permission.helper'
 import { validateBody } from '../../common/helpers/validate-body.helper'
 import { createCompanyEmployeeValidator, employeeParamsValidator, updateCompanyEmployeeValidator } from './employees.validator'
 import { validateQueries } from '../../common/helpers/validate-queries/validate-queries.helper'
@@ -11,28 +11,28 @@ export const router = express.Router({ mergeParams: true })
 
 router.post(
   '/employees',
-  isCompanyAdminOrManager,
+  permission.onlyCompanyAdminOrManager,
   validateBody(createCompanyEmployeeValidator),
   employeesController.createCompanyEmployee
 )
 
 router.get(
   '/employees',
-  isCompanyAdminOrManager,
+  permission.onlyCompanyAdminOrManager,
   validateQueries(),
   employeesController.getCompanyEmployees
 )
 
 router.get(
   '/employees/:employee_id',
-  isCompanyAdminOrManager,
+  permission.onlyCompanyAdminOrManager,
   validateParams(employeeParamsValidator),
   employeesController.getCompanyEmployee
 )
 
 router.put(
   '/employees/:employee_id',
-  isCompanyAdminOrManager,
+  permission.onlyCompanyAdminOrManager,
   validateParams(employeeParamsValidator),
   validateBody(updateCompanyEmployeeValidator),
   employeesController.updateCompanyEmployee
@@ -40,7 +40,7 @@ router.put(
 
 router.delete(
   '/employees/:employee_id',
-  isCompanyAdminOrManager,
+  permission.onlyCompanyAdminOrManager,
   validateParams(employeeParamsValidator),
   employeesController.deleteCompanyEmployee
 )

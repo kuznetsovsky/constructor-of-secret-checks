@@ -1,6 +1,6 @@
 import express from 'express'
 import * as companiesController from './companies.controller'
-import { isCompanyAdmin } from '../common/helpers/is-company-admin.helper'
+import * as permission from '../common/helpers/permission.helper'
 import { companiesParamsValidator, updateCompanyValidator } from './companies.validator'
 import { validateBody } from '../common/helpers/validate-body.helper'
 import { router as questionnaireRouter } from './questionnaire/questionnaire.router'
@@ -26,7 +26,7 @@ router.get(
 
 router.put(
   '/:company_id',
-  isCompanyAdmin,
+  permission.onlyCompanyOwner,
   validateParams(companiesParamsValidator),
   validateBody(updateCompanyValidator),
   companiesController.updateCompanyByID

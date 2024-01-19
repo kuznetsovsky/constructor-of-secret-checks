@@ -1,8 +1,8 @@
 import express from 'express'
 
 import * as inspectorsController from './inspectors.controller'
+import * as permission from '../../common/helpers/permission.helper'
 import { validateBody } from '../../common/helpers/validate-body.helper'
-import { isCompanyAdminOrManager } from '../../common/helpers/is-company-admin-or-manager.helper'
 import { validateQueries } from '../../common/helpers/validate-queries/validate-queries.helper'
 import { validateParams } from '../../common/helpers/validate-params.helper'
 
@@ -17,40 +17,40 @@ export const router = express.Router({ mergeParams: true })
 
 router.post(
   '/inspectors',
-  isCompanyAdminOrManager,
+  permission.onlyCompanyAdminOrManager,
   validateBody(createCompanyInspectorValidator),
   inspectorsController.createNewCompanyInspector
 )
 
 router.post(
   '/inspectors/:email',
-  isCompanyAdminOrManager,
+  permission.onlyCompanyAdminOrManager,
   inspectorsController.createCompanyInspectorByEmail
 )
 
 router.get(
   '/inspectors',
-  isCompanyAdminOrManager,
+  permission.onlyCompanyAdminOrManager,
   validateQueries(),
   inspectorsController.getCompanyInspectors
 )
 
 router.get(
   '/inspectors/:inspector_id(\\d+)',
-  isCompanyAdminOrManager,
+  permission.onlyCompanyAdminOrManager,
   validateParams(inspectorsParamsValidator),
   inspectorsController.getCompanyInspector
 )
 
 router.get(
   '/inspectors/:email',
-  isCompanyAdminOrManager,
+  permission.onlyCompanyAdminOrManager,
   inspectorsController.getCompanyInspectorByEmail
 )
 
 router.put(
   '/inspectors/:inspector_id',
-  isCompanyAdminOrManager,
+  permission.onlyCompanyAdminOrManager,
   validateParams(inspectorsParamsValidator),
   validateBody(updateCompanyInspectorValidator),
   inspectorsController.updateCompanyInspector
@@ -58,7 +58,7 @@ router.put(
 
 router.patch(
   '/inspectors/:inspector_id',
-  isCompanyAdminOrManager,
+  permission.onlyCompanyAdminOrManager,
   validateParams(inspectorsParamsValidator),
   validateBody(updateCompanyInspectorStatusValidator),
   inspectorsController.updateCompanyInspectorStatus
@@ -66,7 +66,7 @@ router.patch(
 
 router.delete(
   '/inspectors/:inspector_id',
-  isCompanyAdminOrManager,
+  permission.onlyCompanyAdminOrManager,
   validateParams(inspectorsParamsValidator),
   inspectorsController.deleteCompanyInspector
 )

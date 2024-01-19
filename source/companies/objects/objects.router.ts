@@ -1,7 +1,7 @@
 import express from 'express'
 
 import * as objectsController from './objects.controller'
-import { isCompanyAdminOrManager } from '../../common/helpers/is-company-admin-or-manager.helper'
+import * as permission from '../../common/helpers/permission.helper'
 import { companyObjectValidator, objectParamsValidator } from './objects.validator'
 import { validateBody } from '../../common/helpers/validate-body.helper'
 import { validateQueries } from '../../common/helpers/validate-queries/validate-queries.helper'
@@ -11,28 +11,28 @@ export const router = express.Router({ mergeParams: true })
 
 router.post(
   '/objects',
-  isCompanyAdminOrManager,
+  permission.onlyCompanyAdminOrManager,
   validateBody(companyObjectValidator),
   objectsController.createObject
 )
 
 router.get(
   '/objects',
-  isCompanyAdminOrManager,
+  permission.onlyCompanyAdminOrManager,
   validateQueries(),
   objectsController.getObjects
 )
 
 router.get(
   '/objects/:object_id',
-  isCompanyAdminOrManager,
+  permission.onlyCompanyAdminOrManager,
   validateParams(objectParamsValidator),
   objectsController.getObject
 )
 
 router.put(
   '/objects/:object_id',
-  isCompanyAdminOrManager,
+  permission.onlyCompanyAdminOrManager,
   validateParams(objectParamsValidator),
   validateBody(companyObjectValidator),
   objectsController.updateObject
@@ -40,7 +40,7 @@ router.put(
 
 router.delete(
   '/objects/:object_id',
-  isCompanyAdminOrManager,
+  permission.onlyCompanyAdminOrManager,
   validateParams(objectParamsValidator),
   objectsController.deleteObject
 )
