@@ -9,6 +9,7 @@ import { router as objectsRouter } from './objects/objects.router'
 import { router as inspectorsRouter } from './inspectors/inspectors.router'
 import { router as employeesRouter } from './employees/employees.router'
 import { router as checkTypesRouter } from './check-types/check-types.router'
+import { router as templatesRouter } from './templates/templates.router'
 import { validateQueries } from '../common/helpers/validate-queries/validate-queries.helper'
 import { validateParams } from '../common/helpers/validate-params.helper'
 
@@ -47,6 +48,13 @@ router.use(
   '/employees',
   permission.onlyUsersWithAdminOrManagerRole,
   employeesRouter
+)
+
+// Templates
+router.use(
+  '/templates',
+  permission.onlyUsersWithAdminOrManagerRole,
+  templatesRouter
 )
 
 // Companies:
