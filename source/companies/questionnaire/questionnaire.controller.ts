@@ -6,16 +6,25 @@ import { type UpdateQuestionnaire } from './questionnaire.interface'
 import { QuestionnaireRepository } from '../../common/repositories/questionnaires.repository'
 import { CompanyRepository } from '../../common/repositories/company.repository'
 
-export async function getQuestionnaire (
-  req: Request<{ company_id: string }>,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
+export async function getQuestionnaire (req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const COMPANY_ID = parseInt(req.params.company_id)
+    const user = req.session.user
+    if (user == null) {
+      const error = new Error('"req.session.user" is missing.')
+      next(error)
+      return
+    }
+
+    const { cid } = user
+    if (cid == null) {
+      const error = new Error('"req.session.user.cid" is missing.')
+      next(error)
+      return
+    }
+
     const questionnaireRepository = new QuestionnaireRepository(knex, 'company_questionnaires')
     const companyRepository = new CompanyRepository(knex, 'companies')
-    const company = await companyRepository.findOne(COMPANY_ID, ['questionnaire_id'])
+    const company = await companyRepository.findOne(cid, ['questionnaire_id'])
 
     if (company == null) {
       res
@@ -44,16 +53,25 @@ export async function getQuestionnaire (
   }
 }
 
-export async function updateQuestionnaire (
-  req: Request<{ company_id: string }, never, UpdateQuestionnaire>,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
+export async function updateQuestionnaire (req: Request<any, any, UpdateQuestionnaire>, res: Response, next: NextFunction): Promise<void> {
   try {
+    const user = req.session.user
+    if (user == null) {
+      const error = new Error('"req.session.user" is missing.')
+      next(error)
+      return
+    }
+
+    const { cid } = user
+    if (cid == null) {
+      const error = new Error('"req.session.user.cid" is missing.')
+      next(error)
+      return
+    }
+
     const questionnaireRepository = new QuestionnaireRepository(knex, 'company_questionnaires')
     const companyRepository = new CompanyRepository(knex, 'companies')
-    const COMPANY_ID = parseInt(req.params.company_id)
-    const company = await companyRepository.findOne(COMPANY_ID, ['questionnaire_id'])
+    const company = await companyRepository.findOne(cid, ['questionnaire_id'])
 
     if (company == null) {
       res

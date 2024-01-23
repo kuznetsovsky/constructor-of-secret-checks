@@ -20,7 +20,7 @@ describe('Company objects endpoints:', () => {
     cookie = ''
   })
 
-  describe('POST: /companies/{company_id}/objects', () => {
+  describe('POST: /companies/objects', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
         .post('/api/v1/companies/1/objects')
@@ -28,17 +28,9 @@ describe('Company objects endpoints:', () => {
       expect(response.statusCode).toBe(401)
     })
 
-    it('should return forbidden status', async () => {
-      const response = await request(app)
-        .post('/api/v1/companies/5/objects')
-        .set('Cookie', cookie)
-
-      expect(response.statusCode).toBe(403)
-    })
-
     it('should return a failed check status (invalid types)', async () => {
       const response = await request(app)
-        .post('/api/v1/companies/2/objects')
+        .post('/api/v1/companies/objects')
         .set('Cookie', cookie)
         .send({
           entry_type: null,
@@ -82,7 +74,7 @@ describe('Company objects endpoints:', () => {
 
     it('should return a failed check status (checking maximum values)', async () => {
       const response = await request(app)
-        .post('/api/v1/companies/2/objects')
+        .post('/api/v1/companies/objects')
         .set('Cookie', cookie)
         .send({
           entry_type: 'manual',
@@ -113,7 +105,7 @@ describe('Company objects endpoints:', () => {
 
     it('should return a failed check status (checking minimum values)', async () => {
       const response = await request(app)
-        .post('/api/v1/companies/2/objects')
+        .post('/api/v1/companies/objects')
         .set('Cookie', cookie)
         .send({
           entry_type: 'manual',
@@ -140,7 +132,7 @@ describe('Company objects endpoints:', () => {
 
     it('should return conflict status', async () => {
       const response = await request(app)
-        .post('/api/v1/companies/2/objects')
+        .post('/api/v1/companies/objects')
         .set('Cookie', cookie)
         .send({
           entry_type: 'public',
@@ -156,7 +148,7 @@ describe('Company objects endpoints:', () => {
 
     it('should return city not found status', async () => {
       const response = await request(app)
-        .post('/api/v1/companies/2/objects')
+        .post('/api/v1/companies/objects')
         .set('Cookie', cookie)
         .send({
           entry_type: 'public',
@@ -179,7 +171,7 @@ describe('Company objects endpoints:', () => {
       }
 
       const response = await request(app)
-        .post('/api/v1/companies/2/objects')
+        .post('/api/v1/companies/objects')
         .set('Cookie', cookie)
         .send({
           ...COMPANY_OBJECT_DATA,
@@ -198,25 +190,17 @@ describe('Company objects endpoints:', () => {
     })
   })
 
-  describe('GET: /companies/{company_id}/objects', () => {
+  describe('GET: /companies/objects', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
-        .get('/api/v1/companies/1/objects')
+        .get('/api/v1/companies/objects')
 
       expect(response.statusCode).toBe(401)
     })
 
-    it('should return forbidden status', async () => {
-      const response = await request(app)
-        .get('/api/v1/companies/5/objects')
-        .set('Cookie', cookie)
-
-      expect(response.statusCode).toBe(403)
-    })
-
     it('should return a list of company objects', async () => {
       const response = await request(app)
-        .get('/api/v1/companies/2/objects')
+        .get('/api/v1/companies/objects')
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(200)
@@ -250,25 +234,17 @@ describe('Company objects endpoints:', () => {
     })
   })
 
-  describe('GET: /companies/{company_id}/objects/{object_id}', () => {
+  describe('GET: /companies/objects/{object_id}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
-        .get('/api/v1/companies/1/objects/1')
+        .get('/api/v1/companies/objects/1')
 
       expect(response.statusCode).toBe(401)
     })
 
-    it('should return forbidden status', async () => {
-      const response = await request(app)
-        .get('/api/v1/companies/5/objects/1')
-        .set('Cookie', cookie)
-
-      expect(response.statusCode).toBe(403)
-    })
-
     it('should return not found status', async () => {
       const response = await request(app)
-        .get('/api/v1/companies/2/objects/2')
+        .get('/api/v1/companies/objects/2')
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(404)
@@ -276,7 +252,7 @@ describe('Company objects endpoints:', () => {
 
     it('should return company object data', async () => {
       const response = await request(app)
-        .get('/api/v1/companies/2/objects/3')
+        .get('/api/v1/companies/objects/3')
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(200)
@@ -294,25 +270,17 @@ describe('Company objects endpoints:', () => {
     })
   })
 
-  describe('PUT: /companies/{company_id}/objects/{object_id}', () => {
+  describe('PUT: /companies/objects/{object_id}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
-        .put('/api/v1/companies/1/objects/1')
+        .put('/api/v1/companies/objects/1')
 
       expect(response.statusCode).toBe(401)
     })
 
-    it('should return forbidden status', async () => {
-      const response = await request(app)
-        .put('/api/v1/companies/5/objects/1')
-        .set('Cookie', cookie)
-
-      expect(response.statusCode).toBe(403)
-    })
-
     it('should return not found status', async () => {
       const response = await request(app)
-        .put('/api/v1/companies/2/objects/2')
+        .put('/api/v1/companies/objects/2')
         .set('Cookie', cookie)
         .send({
           entry_type: 'public',
@@ -327,7 +295,7 @@ describe('Company objects endpoints:', () => {
 
     it('should return a failed check status (invalid types)', async () => {
       const response = await request(app)
-        .put('/api/v1/companies/2/objects/3')
+        .put('/api/v1/companies/objects/3')
         .set('Cookie', cookie)
         .send({
           entry_type: null,
@@ -371,7 +339,7 @@ describe('Company objects endpoints:', () => {
 
     it('should return a failed check status (checking maximum values)', async () => {
       const response = await request(app)
-        .put('/api/v1/companies/2/objects/3')
+        .put('/api/v1/companies/objects/3')
         .set('Cookie', cookie)
         .send({
           entry_type: 'manual',
@@ -402,7 +370,7 @@ describe('Company objects endpoints:', () => {
 
     it('should return a failed check status (checking minimum values)', async () => {
       const response = await request(app)
-        .put('/api/v1/companies/2/objects/3')
+        .put('/api/v1/companies/objects/3')
         .set('Cookie', cookie)
         .send({
           entry_type: 'manual',
@@ -429,7 +397,7 @@ describe('Company objects endpoints:', () => {
 
     it('should return conflict status', async () => {
       const response = await request(app)
-        .put('/api/v1/companies/2/objects/3')
+        .put('/api/v1/companies/objects/3')
         .set('Cookie', cookie)
         .send({
           entry_type: 'public',
@@ -445,7 +413,7 @@ describe('Company objects endpoints:', () => {
 
     it('should return city not found status', async () => {
       const response = await request(app)
-        .put('/api/v1/companies/2/objects/3')
+        .put('/api/v1/companies/objects/3')
         .set('Cookie', cookie)
         .send({
           entry_type: 'public',
@@ -468,7 +436,7 @@ describe('Company objects endpoints:', () => {
       }
 
       const response = await request(app)
-        .put('/api/v1/companies/2/objects/3')
+        .put('/api/v1/companies/objects/3')
         .set('Cookie', cookie)
         .send({
           ...COMPANY_OBJECT_DATA,
@@ -487,25 +455,17 @@ describe('Company objects endpoints:', () => {
     })
   })
 
-  describe('DELETE: /companies/{company_id}/objects/{object_id}', () => {
+  describe('DELETE: /companies/objects/{object_id}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
-        .delete('/api/v1/companies/1/objects/1')
+        .delete('/api/v1/companies/objects/1')
 
       expect(response.statusCode).toBe(401)
     })
 
-    it('should return forbidden status', async () => {
-      const response = await request(app)
-        .delete('/api/v1/companies/5/objects/1')
-        .set('Cookie', cookie)
-
-      expect(response.statusCode).toBe(403)
-    })
-
     it('should return not found status', async () => {
       const response = await request(app)
-        .delete('/api/v1/companies/2/objects/2')
+        .delete('/api/v1/companies/objects/2')
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(404)
@@ -514,7 +474,7 @@ describe('Company objects endpoints:', () => {
     it('should return no content status', async () => {
       {
         const response = await request(app)
-          .delete('/api/v1/companies/2/objects/3')
+          .delete('/api/v1/companies/objects/3')
           .set('Cookie', cookie)
 
         expect(response.statusCode).toBe(204)
@@ -522,7 +482,7 @@ describe('Company objects endpoints:', () => {
 
       {
         const response = await request(app)
-          .get('/api/v1/companies/2/objects/3')
+          .get('/api/v1/companies/objects/3')
           .set('Cookie', cookie)
 
         expect(response.statusCode).toBe(404)

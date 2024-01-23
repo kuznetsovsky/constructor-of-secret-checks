@@ -22,12 +22,25 @@ import type {
 } from './inspectors.interface'
 
 export async function createNewCompanyInspector (
-  req: Request<{ company_id: string }, never, CreateCompanyInspector>,
+  req: Request<any, any, CreateCompanyInspector>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    const COMPANY_ID = parseInt(req.params.company_id)
+    const user = req.session.user
+    if (user == null) {
+      const error = new Error('"req.session.user" is missing.')
+      next(error)
+      return
+    }
+
+    const { cid } = user
+    if (cid == null) {
+      const error = new Error('"req.session.user.cid" is missing.')
+      next(error)
+      return
+    }
+
     const cityRepository = new CityRepository(knex, 'cities')
     const accountRepository = new AccountRepository(knex, 'accounts')
     const companyInspectorRepository = new CompanyInspectorRepository(knex, 'company_inspectors')
@@ -86,17 +99,17 @@ export async function createNewCompanyInspector (
     const id = await companyInspectorRepository.createNewInspector({
       ...req.body,
       password: encryptedPassword,
-      companyId: COMPANY_ID
+      companyId: cid
     })
 
     const createdInspector = await companyInspectorRepository.findCompanyInspectorByID(
-      COMPANY_ID,
+      cid,
       id
     )
 
     res
       .status(StatusCodes.CREATED)
-      .header('Location', `/companies/${COMPANY_ID}/inspectors/${id}`)
+      .header('Location', `/companies/${cid}/inspectors/${id}`)
       .json(createdInspector)
   } catch (error) {
     next(error)
@@ -104,12 +117,25 @@ export async function createNewCompanyInspector (
 }
 
 export async function getCompanyInspectors (
-  req: Request<{ company_id: string }, never, never, BaseQueryString>,
+  req: Request<any, any, any, BaseQueryString>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    const COMPANY_ID = parseInt(req.params.company_id)
+    const user = req.session.user
+    if (user == null) {
+      const error = new Error('"req.session.user" is missing.')
+      next(error)
+      return
+    }
+
+    const { cid } = user
+    if (cid == null) {
+      const error = new Error('"req.session.user.cid" is missing.')
+      next(error)
+      return
+    }
+
     const cityRepository = new CityRepository(knex, 'cities')
     const companyInspectorRepository = new CompanyInspectorRepository(knex, 'company_inspectors')
 
@@ -131,7 +157,7 @@ export async function getCompanyInspectors (
 
     // IMPROVEMENT: сделать единным с quries
     const inspectors = await companyInspectorRepository.findByPage(
-      COMPANY_ID,
+      cid,
       req.query,
       { city: cityId, surname: req.query.surname }
     )
@@ -145,17 +171,30 @@ export async function getCompanyInspectors (
 }
 
 export async function getCompanyInspector (
-  req: Request<{ company_id: string, inspector_id: string }>,
+  req: Request<{ inspector_id: string }>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    const COMPANY_ID = parseInt(req.params.company_id)
+    const user = req.session.user
+    if (user == null) {
+      const error = new Error('"req.session.user" is missing.')
+      next(error)
+      return
+    }
+
+    const { cid } = user
+    if (cid == null) {
+      const error = new Error('"req.session.user.cid" is missing.')
+      next(error)
+      return
+    }
+
     const INSPECTOR_ID = parseInt(req.params.inspector_id)
     const companyInspectorRepository = new CompanyInspectorRepository(knex, 'company_inspectors')
 
     const inspector = await companyInspectorRepository.findCompanyInspectorByID(
-      COMPANY_ID,
+      cid,
       INSPECTOR_ID
     )
 
@@ -176,19 +215,32 @@ export async function getCompanyInspector (
 }
 
 export async function updateCompanyInspector (
-  req: Request<{ company_id: string, inspector_id: string }, never, UpdateCompanyInspector>,
+  req: Request<{ inspector_id: string }, never, UpdateCompanyInspector>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    const COMPANY_ID = parseInt(req.params.company_id)
+    const user = req.session.user
+    if (user == null) {
+      const error = new Error('"req.session.user" is missing.')
+      next(error)
+      return
+    }
+
+    const { cid } = user
+    if (cid == null) {
+      const error = new Error('"req.session.user.cid" is missing.')
+      next(error)
+      return
+    }
+
     const INSPECTOR_ID = parseInt(req.params.inspector_id)
     const cityRepository = new CityRepository(knex, 'cities')
     const phoneRepository = new PhoneRepository(knex, 'phone_numbers')
     const companyInspectorRepository = new CompanyInspectorRepository(knex, 'company_inspectors')
 
     const inspector = await companyInspectorRepository.findOne({
-      company_id: COMPANY_ID,
+      company_id: cid,
       id: INSPECTOR_ID
     })
 
@@ -218,7 +270,7 @@ export async function updateCompanyInspector (
     await companyInspectorRepository.update(INSPECTOR_ID, req.body)
 
     const companyInspector = await companyInspectorRepository.findCompanyInspectorByID(
-      COMPANY_ID,
+      cid,
       INSPECTOR_ID
     )
 
@@ -231,17 +283,30 @@ export async function updateCompanyInspector (
 }
 
 export async function updateCompanyInspectorStatus (
-  req: Request<{ company_id: string, inspector_id: string }, never, ChangeCompanyInspectorStatus>,
+  req: Request<{ inspector_id: string }, never, ChangeCompanyInspectorStatus>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    const COMPANY_ID = parseInt(req.params.company_id)
+    const user = req.session.user
+    if (user == null) {
+      const error = new Error('"req.session.user" is missing.')
+      next(error)
+      return
+    }
+
+    const { cid } = user
+    if (cid == null) {
+      const error = new Error('"req.session.user.cid" is missing.')
+      next(error)
+      return
+    }
+
     const INSPECTOR_ID = parseInt(req.params.inspector_id)
     const companyInspectorRepository = new CompanyInspectorRepository(knex, 'company_inspectors')
 
     const inspector = await companyInspectorRepository.findOne({
-      company_id: COMPANY_ID,
+      company_id: cid,
       id: INSPECTOR_ID
     })
 
@@ -270,17 +335,30 @@ export async function updateCompanyInspectorStatus (
 }
 
 export async function deleteCompanyInspector (
-  req: Request<{ company_id: string, inspector_id: string }>,
+  req: Request<{ inspector_id: string }>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    const COMPANY_ID = parseInt(req.params.company_id)
+    const user = req.session.user
+    if (user == null) {
+      const error = new Error('"req.session.user" is missing.')
+      next(error)
+      return
+    }
+
+    const { cid } = user
+    if (cid == null) {
+      const error = new Error('"req.session.user.cid" is missing.')
+      next(error)
+      return
+    }
+
     const INSPECTOR_ID = parseInt(req.params.inspector_id)
     const companyInspectorRepository = new CompanyInspectorRepository(knex, 'company_inspectors')
 
     const inspector = await companyInspectorRepository.findCompanyInspectorByID(
-      COMPANY_ID,
+      cid,
       INSPECTOR_ID
     )
 
@@ -301,7 +379,7 @@ export async function deleteCompanyInspector (
 }
 
 export async function getCompanyInspectorByEmail (
-  req: Request<{ company_id: string, email: string }>,
+  req: Request<{ email: string }>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
@@ -325,12 +403,25 @@ export async function getCompanyInspectorByEmail (
 }
 
 export async function createCompanyInspectorByEmail (
-  req: Request<{ company_id: string, email: string }>,
+  req: Request<{ email: string }>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    const COMPANY_ID = parseInt(req.params.company_id)
+    const user = req.session.user
+    if (user == null) {
+      const error = new Error('"req.session.user" is missing.')
+      next(error)
+      return
+    }
+
+    const { cid } = user
+    if (cid == null) {
+      const error = new Error('"req.session.user.cid" is missing.')
+      next(error)
+      return
+    }
+
     const EMAIL = req.params.email
     const companyInspectorRepository = new CompanyInspectorRepository(knex, 'company_inspectors')
     const inspectorRepository = new InspectorRepository(knex, 'inspectors')
@@ -359,7 +450,7 @@ export async function createCompanyInspectorByEmail (
 
       await companyInspectorRepository.create({
         account_id: account.id,
-        company_id: COMPANY_ID,
+        company_id: cid,
         city_id: inspector.city_id ?? undefined,
         inspector_id: inspector.id,
         phone_number_id: inspector.phone_number_id ?? undefined,

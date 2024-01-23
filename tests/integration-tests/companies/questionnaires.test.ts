@@ -20,23 +20,15 @@ describe('Company questionnaire endpoints:', () => {
     cookie = ''
   })
 
-  describe('GET: /companies/{company_id}/questionnaire', () => {
+  describe('GET: /companies/questionnaire', () => {
     it('should return the status not authorized', async () => {
-      const response = await request(app).get('/api/v1/companies/1/questionnaire')
+      const response = await request(app).get('/api/v1/companies/questionnaire')
       expect(response.statusCode).toBe(401)
-    })
-
-    it('should return forbidden status', async () => {
-      const response = await request(app)
-        .get('/api/v1/companies/5/questionnaire')
-        .set('Cookie', cookie)
-
-      expect(response.statusCode).toBe(403)
     })
 
     it('should return questionnaire data', async () => {
       const response = await request(app)
-        .get('/api/v1/companies/2/questionnaire')
+        .get('/api/v1/companies/questionnaire')
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(200)
@@ -52,18 +44,10 @@ describe('Company questionnaire endpoints:', () => {
     })
   })
 
-  describe('PUT: /companies/{company_id}/questionnaire', () => {
+  describe('PUT: /companies/questionnaire', () => {
     it('should return the status not authorized', async () => {
-      const response = await request(app).put('/api/v1/companies/1/questionnaire')
+      const response = await request(app).put('/api/v1/companies/questionnaire')
       expect(response.statusCode).toBe(401)
-    })
-
-    it('should return forbidden status', async () => {
-      const response = await request(app)
-        .put('/api/v1/companies/5/questionnaire')
-        .set('Cookie', cookie)
-
-      expect(response.statusCode).toBe(403)
     })
 
     it('should return a data validation error (invalid types)', async () => {
@@ -77,7 +61,7 @@ describe('Company questionnaire endpoints:', () => {
       }
 
       const response = await request(app)
-        .put('/api/v1/companies/2/questionnaire')
+        .put('/api/v1/companies/questionnaire')
         .set('Cookie', cookie)
         .send(QUESTIONNAIRE_DATA)
 
@@ -124,7 +108,7 @@ describe('Company questionnaire endpoints:', () => {
       }
 
       const response = await request(app)
-        .put('/api/v1/companies/2/questionnaire')
+        .put('/api/v1/companies/questionnaire')
         .set('Cookie', cookie)
         .send(QUESTIONNAIRE_DATA)
 
@@ -151,7 +135,7 @@ describe('Company questionnaire endpoints:', () => {
       }
 
       const response = await request(app)
-        .put('/api/v1/companies/2/questionnaire')
+        .put('/api/v1/companies/questionnaire')
         .set('Cookie', cookie)
         .send(QUESTIONNAIRE_DATA)
 

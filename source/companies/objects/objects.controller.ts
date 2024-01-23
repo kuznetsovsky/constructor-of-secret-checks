@@ -8,12 +8,25 @@ import { CityRepository } from '../../common/repositories/city.repository'
 import { type BaseQueryString } from '../../common/helpers/validate-queries/validate-queries.helper'
 
 export async function createObject (
-  req: Request<{ company_id: string }, never, CompanyObject>,
+  req: Request<any, any, CompanyObject>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    const COMPANY_ID = parseInt(req.params.company_id)
+    const user = req.session.user
+    if (user == null) {
+      const error = new Error('"req.session.user" is missing.')
+      next(error)
+      return
+    }
+
+    const { cid } = user
+    if (cid == null) {
+      const error = new Error('"req.session.user.cid" is missing.')
+      next(error)
+      return
+    }
+
     const cityRepository = new CityRepository(knex, 'cities')
     const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
 
@@ -39,8 +52,8 @@ export async function createObject (
       return
     }
 
-    const createdObject = await companyObjectsRepository.create({ ...req.body, company_id: COMPANY_ID })
-    const object = await companyObjectsRepository.findByID(COMPANY_ID, createdObject.id)
+    const createdObject = await companyObjectsRepository.create({ ...req.body, company_id: cid })
+    const object = await companyObjectsRepository.findByID(cid, createdObject.id)
 
     res
       .status(StatusCodes.OK)
@@ -51,14 +64,27 @@ export async function createObject (
 }
 
 export async function getObjects (
-  req: Request<{ company_id: string }, never, never, BaseQueryString>,
+  req: Request<any, any, any, BaseQueryString>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    const COMPANY_ID = parseInt(req.params.company_id)
+    const user = req.session.user
+    if (user == null) {
+      const error = new Error('"req.session.user" is missing.')
+      next(error)
+      return
+    }
+
+    const { cid } = user
+    if (cid == null) {
+      const error = new Error('"req.session.user.cid" is missing.')
+      next(error)
+      return
+    }
+
     const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
-    const objects = await companyObjectsRepository.findByPage(COMPANY_ID, req.query)
+    const objects = await companyObjectsRepository.findByPage(cid, req.query)
 
     res
       .status(StatusCodes.OK)
@@ -69,15 +95,28 @@ export async function getObjects (
 }
 
 export async function getObject (
-  req: Request<{ company_id: string, object_id: string }>,
+  req: Request<{ object_id: string }>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    const COMPANY_ID = parseInt(req.params.company_id)
+    const user = req.session.user
+    if (user == null) {
+      const error = new Error('"req.session.user" is missing.')
+      next(error)
+      return
+    }
+
+    const { cid } = user
+    if (cid == null) {
+      const error = new Error('"req.session.user.cid" is missing.')
+      next(error)
+      return
+    }
+
     const OBJECT_ID = parseInt(req.params.object_id)
     const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
-    const object = await companyObjectsRepository.findByID(COMPANY_ID, OBJECT_ID)
+    const object = await companyObjectsRepository.findByID(cid, OBJECT_ID)
 
     if (object == null) {
       res
@@ -96,20 +135,32 @@ export async function getObject (
 }
 
 export async function updateObject (
-  req: Request<{ company_id: string, object_id: string }, never, CompanyObject>,
+  req: Request<{ object_id: string }, never, CompanyObject>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    const COMPANY_ID = parseInt(req.params.company_id)
-    const OBJECT_ID = parseInt(req.params.object_id)
+    const user = req.session.user
+    if (user == null) {
+      const error = new Error('"req.session.user" is missing.')
+      next(error)
+      return
+    }
 
+    const { cid } = user
+    if (cid == null) {
+      const error = new Error('"req.session.user.cid" is missing.')
+      next(error)
+      return
+    }
+
+    const OBJECT_ID = parseInt(req.params.object_id)
     const cityRepository = new CityRepository(knex, 'cities')
     const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
 
     {
       const object = await companyObjectsRepository.findOne({
-        company_id: COMPANY_ID,
+        company_id: cid,
         id: OBJECT_ID
       })
 
@@ -145,7 +196,7 @@ export async function updateObject (
     }
 
     await companyObjectsRepository.update(OBJECT_ID, req.body)
-    const object = await companyObjectsRepository.findByID(COMPANY_ID, OBJECT_ID)
+    const object = await companyObjectsRepository.findByID(cid, OBJECT_ID)
 
     res
       .status(StatusCodes.OK)
@@ -156,17 +207,30 @@ export async function updateObject (
 }
 
 export async function deleteObject (
-  req: Request<{ company_id: string, object_id: string }>,
+  req: Request<{ object_id: string }>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    const COMPANY_ID = parseInt(req.params.company_id)
+    const user = req.session.user
+    if (user == null) {
+      const error = new Error('"req.session.user" is missing.')
+      next(error)
+      return
+    }
+
+    const { cid } = user
+    if (cid == null) {
+      const error = new Error('"req.session.user.cid" is missing.')
+      next(error)
+      return
+    }
+
     const OBJECT_ID = parseInt(req.params.object_id)
     const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
 
     const object = await companyObjectsRepository.findOne({
-      company_id: COMPANY_ID,
+      company_id: cid,
       id: OBJECT_ID
     })
 

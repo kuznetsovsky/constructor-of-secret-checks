@@ -17,34 +17,35 @@ export const router = express.Router()
 // Check Types
 router.use(
   '/check-types',
+  permission.onlyUsersWithAdminOrManagerRole,
   checkTypesRouter
 )
 
 // Questionnaire
 router.use(
-  '/:company_id',
-  validateParams(companiesParamsValidator),
+  '/questionnaire',
+  permission.onlyUsersWithAdminOrManagerRole,
   questionnaireRouter
 )
 
 // Objects
 router.use(
-  '/:company_id',
-  validateParams(companiesParamsValidator),
+  '/objects',
+  permission.onlyUsersWithAdminOrManagerRole,
   objectsRouter
 )
 
 // Inspectors
 router.use(
-  '/:company_id',
-  validateParams(companiesParamsValidator),
+  '/inspectors',
+  permission.onlyUsersWithAdminOrManagerRole,
   inspectorsRouter
 )
 
 // Employees
 router.use(
-  '/:company_id',
-  validateParams(companiesParamsValidator),
+  '/employees',
+  permission.onlyUsersWithAdminOrManagerRole,
   employeesRouter
 )
 
@@ -64,7 +65,7 @@ router.get(
 
 router.put(
   '/:company_id',
-  permission.onlyCompanyOwner,
+  permission.onlyUsersWithAdminRole,
   validateParams(companiesParamsValidator),
   validateBody(updateCompanyValidator),
   companiesController.updateCompanyByID

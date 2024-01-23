@@ -20,25 +20,17 @@ describe('Company inspectors endpoints:', () => {
     cookie = ''
   })
 
-  describe('POST: /companies/{company_id}/inspectors', () => {
+  describe('POST: /companies/inspectors', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
-        .post('/api/v1/companies/1/inspectors')
+        .post('/api/v1/companies/inspectors')
 
       expect(response.statusCode).toBe(401)
     })
 
-    it('should return forbidden status', async () => {
-      const response = await request(app)
-        .post('/api/v1/companies/5/inspectors')
-        .set('Cookie', cookie)
-
-      expect(response.statusCode).toBe(403)
-    })
-
     it('should return a data validation error (invalid types)', async () => {
       const response = await request(app)
-        .post('/api/v1/companies/2/inspectors')
+        .post('/api/v1/companies/inspectors')
         .set('Cookie', cookie)
         .send({
           email: null,
@@ -93,7 +85,7 @@ describe('Company inspectors endpoints:', () => {
 
     it('should return a failed check status (checking maximum values)', async () => {
       const response = await request(app)
-        .post('/api/v1/companies/2/inspectors')
+        .post('/api/v1/companies/inspectors')
         .set('Cookie', cookie)
         .send({
           email: 'www.thooooooomasssssssss@mail.com',
@@ -140,7 +132,7 @@ describe('Company inspectors endpoints:', () => {
 
     it('should return a failed check status (checking minimum values)', async () => {
       const response = await request(app)
-        .post('/api/v1/companies/2/inspectors')
+        .post('/api/v1/companies/inspectors')
         .set('Cookie', cookie)
         .send({
           email: 'www.thomas@mail.com',
@@ -175,7 +167,7 @@ describe('Company inspectors endpoints:', () => {
 
     it('should return a failed check status (checking format)', async () => {
       const response = await request(app)
-        .post('/api/v1/companies/2/inspectors')
+        .post('/api/v1/companies/inspectors')
         .set('Cookie', cookie)
         .send({
           email: 'www.thomasmail.com',
@@ -218,7 +210,7 @@ describe('Company inspectors endpoints:', () => {
 
     it('should return the status city not found', async () => {
       const response = await request(app)
-        .post('/api/v1/companies/2/inspectors')
+        .post('/api/v1/companies/inspectors')
         .set('Cookie', cookie)
         .send({
           email: 'www.thomas@mail.com',
@@ -237,7 +229,7 @@ describe('Company inspectors endpoints:', () => {
 
     it('should return the status with such an email exists inspector', async () => {
       const response = await request(app)
-        .post('/api/v1/companies/2/inspectors')
+        .post('/api/v1/companies/inspectors')
         .set('Cookie', cookie)
         .send({
           email: 'www.jhon@mail.com',
@@ -256,7 +248,7 @@ describe('Company inspectors endpoints:', () => {
 
     it('should successfully create a company inspector (new inspector)', async () => {
       const response = await request(app)
-        .post('/api/v1/companies/2/inspectors')
+        .post('/api/v1/companies/inspectors')
         .set('Cookie', cookie)
         .send({
           email: 'www.thomas@mail.com',
@@ -293,25 +285,17 @@ describe('Company inspectors endpoints:', () => {
     })
   })
 
-  describe('POST: /companies/{company_id}/inspectors/{email}', () => {
+  describe('POST: /companies/inspectors/{email}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
-        .post('/api/v1/companies/1/inspectors/www.ex@mple.com')
+        .post('/api/v1/companies/inspectors/www.ex@mple.com')
 
       expect(response.statusCode).toBe(401)
     })
 
-    it('should return forbidden status', async () => {
-      const response = await request(app)
-        .post('/api/v1/companies/5/inspectors/www.ex@mple.com')
-        .set('Cookie', cookie)
-
-      expect(response.statusCode).toBe(403)
-    })
-
     it('should return the status "not found"', async () => {
       const response = await request(app)
-        .post('/api/v1/companies/2/inspectors/www.ex@mple.com')
+        .post('/api/v1/companies/inspectors/www.ex@mple.com')
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(404)
@@ -319,7 +303,7 @@ describe('Company inspectors endpoints:', () => {
 
     it('should return cannot be assigned as inspector', async () => {
       const response = await request(app)
-        .post('/api/v1/companies/2/inspectors/www.jane@mail.com')
+        .post('/api/v1/companies/inspectors/www.jane@mail.com')
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(400)
@@ -327,32 +311,24 @@ describe('Company inspectors endpoints:', () => {
 
     it('should return status 200', async () => {
       const response = await request(app)
-        .post('/api/v1/companies/2/inspectors/www.tim@mail.com')
+        .post('/api/v1/companies/inspectors/www.tim@mail.com')
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(200)
     })
   })
 
-  describe('GET: /companies/{company_id}/inspectors', () => {
+  describe('GET: /companies/inspectors', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
-        .get('/api/v1/companies/1/inspectors')
+        .get('/api/v1/companies/inspectors')
 
       expect(response.statusCode).toBe(401)
     })
 
-    it('should return forbidden status', async () => {
-      const response = await request(app)
-        .get('/api/v1/companies/5/inspectors')
-        .set('Cookie', cookie)
-
-      expect(response.statusCode).toBe(403)
-    })
-
     it('should successfully return a list of company inspectors', async () => {
       const response = await request(app)
-        .get('/api/v1/companies/2/inspectors')
+        .get('/api/v1/companies/inspectors')
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(200)
@@ -378,7 +354,7 @@ describe('Company inspectors endpoints:', () => {
 
     it('should return status city is not found', async () => {
       const response = await request(app)
-        .get('/api/v1/companies/2/inspectors?city=Karaganda')
+        .get('/api/v1/companies/inspectors?city=Karaganda')
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(404)
@@ -387,7 +363,7 @@ describe('Company inspectors endpoints:', () => {
 
     it('should return an empty array', async () => {
       const response = await request(app)
-        .get('/api/v1/companies/2/inspectors?city=Sochi')
+        .get('/api/v1/companies/inspectors?city=Sochi')
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(200)
@@ -397,7 +373,7 @@ describe('Company inspectors endpoints:', () => {
 
     it('should return a list of company inspectors whose last names begin with "Fo"', async () => {
       const response = await request(app)
-        .get('/api/v1/companies/2/inspectors?surname=Fo')
+        .get('/api/v1/companies/inspectors?surname=Fo')
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(200)
@@ -490,25 +466,17 @@ describe('Company inspectors endpoints:', () => {
     })
   })
 
-  describe('GET: /companies/{company_id}/inspectors/{inspector_id}', () => {
+  describe('GET: /companies/inspectors/{inspector_id}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
-        .get('/api/v1/companies/1/inspectors/1')
+        .get('/api/v1/companies/inspectors/1')
 
       expect(response.statusCode).toBe(401)
     })
 
-    it('should return forbidden status', async () => {
-      const response = await request(app)
-        .get('/api/v1/companies/5/inspectors/1')
-        .set('Cookie', cookie)
-
-      expect(response.statusCode).toBe(403)
-    })
-
     it('should return the status "not found"', async () => {
       const response = await request(app)
-        .get('/api/v1/companies/2/inspectors/2')
+        .get('/api/v1/companies/inspectors/2')
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(404)
@@ -517,7 +485,7 @@ describe('Company inspectors endpoints:', () => {
 
     it('should return inspector profile by id 1', async () => {
       const response = await request(app)
-        .get('/api/v1/companies/2/inspectors/1')
+        .get('/api/v1/companies/inspectors/1')
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(200)
@@ -543,25 +511,17 @@ describe('Company inspectors endpoints:', () => {
     })
   })
 
-  describe('GET: /companies/{company_id}/inspectors/{email}', () => {
+  describe('GET: /companies/inspectors/{email}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
-        .get('/api/v1/companies/1/inspectors/www.ex@mple.com')
+        .get('/api/v1/companies/inspectors/www.ex@mple.com')
 
       expect(response.statusCode).toBe(401)
     })
 
-    it('should return forbidden status', async () => {
-      const response = await request(app)
-        .get('/api/v1/companies/5/inspectors/www.ex@mple.com')
-        .set('Cookie', cookie)
-
-      expect(response.statusCode).toBe(403)
-    })
-
     it('should return the status "not found"', async () => {
       const response = await request(app)
-        .get('/api/v1/companies/2/inspectors/www.ex@mple.com')
+        .get('/api/v1/companies/inspectors/www.ex@mple.com')
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(404)
@@ -569,32 +529,24 @@ describe('Company inspectors endpoints:', () => {
 
     it('should return status 200', async () => {
       const response = await request(app)
-        .get('/api/v1/companies/2/inspectors/www.jane@mail.com')
+        .get('/api/v1/companies/inspectors/www.jane@mail.com')
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(200)
     })
   })
 
-  describe('PUT: /companies/{company_id}/inspectors/{inspector_id}', () => {
+  describe('PUT: /companies/inspectors/{inspector_id}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
-        .put('/api/v1/companies/1/inspectors/1')
+        .put('/api/v1/companies/inspectors/1')
 
       expect(response.statusCode).toBe(401)
     })
 
-    it('should return forbidden status', async () => {
-      const response = await request(app)
-        .put('/api/v1/companies/5/inspectors/1')
-        .set('Cookie', cookie)
-
-      expect(response.statusCode).toBe(403)
-    })
-
     it('should return a data validation error (invalid types)', async () => {
       const response = await request(app)
-        .put('/api/v1/companies/2/inspectors/1')
+        .put('/api/v1/companies/inspectors/1')
         .set('Cookie', cookie)
         .send({
           email: null,
@@ -654,7 +606,7 @@ describe('Company inspectors endpoints:', () => {
 
     it('should return a failed check status (checking maximum values)', async () => {
       const response = await request(app)
-        .put('/api/v1/companies/2/inspectors/1')
+        .put('/api/v1/companies/inspectors/1')
         .set('Cookie', cookie)
         .send({
           email: 'www.thooooooomasssssssss@mail.com',
@@ -706,7 +658,7 @@ describe('Company inspectors endpoints:', () => {
 
     it('should return a failed check status (checking minimum values)', async () => {
       const response = await request(app)
-        .put('/api/v1/companies/2/inspectors/1')
+        .put('/api/v1/companies/inspectors/1')
         .set('Cookie', cookie)
         .send({
           email: 'www.thomas@mail.com',
@@ -742,7 +694,7 @@ describe('Company inspectors endpoints:', () => {
 
     it('should return a failed check status (checking format)', async () => {
       const response = await request(app)
-        .put('/api/v1/companies/2/inspectors/1')
+        .put('/api/v1/companies/inspectors/1')
         .set('Cookie', cookie)
         .send({
           email: 'www.thomasmail.com',
@@ -786,7 +738,7 @@ describe('Company inspectors endpoints:', () => {
 
     it('should return the status city not found', async () => {
       const response = await request(app)
-        .put('/api/v1/companies/2/inspectors/1')
+        .put('/api/v1/companies/inspectors/1')
         .set('Cookie', cookie)
         .send({
           email: 'www.thomas@mail.com',
@@ -806,7 +758,7 @@ describe('Company inspectors endpoints:', () => {
 
     it('should return the status inspector not found', async () => {
       const response = await request(app)
-        .put('/api/v1/companies/2/inspectors/2')
+        .put('/api/v1/companies/inspectors/2')
         .set('Cookie', cookie)
         .send({
           email: 'www.thomas@mail.com',
@@ -826,7 +778,7 @@ describe('Company inspectors endpoints:', () => {
 
     it('should return successfully updated inspector data', async () => {
       const response = await request(app)
-        .put('/api/v1/companies/2/inspectors/1')
+        .put('/api/v1/companies/inspectors/1')
         .set('Cookie', cookie)
         .send({
           email: 'www.thomas@mail.com',
@@ -863,25 +815,17 @@ describe('Company inspectors endpoints:', () => {
     })
   })
 
-  describe('PATCH: /companies/{company_id}/inspectors/{inspector_id}', () => {
+  describe('PATCH: /companies/inspectors/{inspector_id}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
-        .patch('/api/v1/companies/2/inspectors/1')
+        .patch('/api/v1/companies/inspectors/1')
 
       expect(response.statusCode).toBe(401)
     })
 
-    it('should return forbidden status', async () => {
-      const response = await request(app)
-        .patch('/api/v1/companies/5/inspectors/1')
-        .set('Cookie', cookie)
-
-      expect(response.statusCode).toBe(403)
-    })
-
     it('should return a data validation error', async () => {
       const response = await request(app)
-        .patch('/api/v1/companies/2/inspectors/1')
+        .patch('/api/v1/companies/inspectors/1')
         .set('Cookie', cookie)
         .send({ status: null })
 
@@ -904,7 +848,7 @@ describe('Company inspectors endpoints:', () => {
 
     it('should return the status unmodified', async () => {
       const response = await request(app)
-        .patch('/api/v1/companies/2/inspectors/1')
+        .patch('/api/v1/companies/inspectors/1')
         .set('Cookie', cookie)
         .send({ status: 'verification' })
 
@@ -913,7 +857,7 @@ describe('Company inspectors endpoints:', () => {
 
     it('should return status updated successfully', async () => {
       const response = await request(app)
-        .patch('/api/v1/companies/2/inspectors/1')
+        .patch('/api/v1/companies/inspectors/1')
         .set('Cookie', cookie)
         .send({ status: 'approved' })
 
@@ -922,25 +866,17 @@ describe('Company inspectors endpoints:', () => {
     })
   })
 
-  describe('DELETE: /companies/{company_id}/inspectors/{inspector_id}', () => {
+  describe('DELETE: /companies/inspectors/{inspector_id}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
-        .delete('/api/v1/companies/1/inspectors/1')
+        .delete('/api/v1/companies/inspectors/1')
 
       expect(response.statusCode).toBe(401)
     })
 
-    it('should return forbidden status', async () => {
-      const response = await request(app)
-        .delete('/api/v1/companies/5/inspectors/1')
-        .set('Cookie', cookie)
-
-      expect(response.statusCode).toBe(403)
-    })
-
     it('should return the status "not found"', async () => {
       const response = await request(app)
-        .delete('/api/v1/companies/2/inspectors/2')
+        .delete('/api/v1/companies/inspectors/2')
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(404)
@@ -949,7 +885,7 @@ describe('Company inspectors endpoints:', () => {
 
     it('should successfully remove the inspector', async () => {
       const response = await request(app)
-        .delete('/api/v1/companies/2/inspectors/1')
+        .delete('/api/v1/companies/inspectors/1')
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(204)

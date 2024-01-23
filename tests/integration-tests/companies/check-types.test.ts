@@ -28,14 +28,6 @@ describe('Company check types endpoints:', () => {
       expect(response.statusCode).toBe(401)
     })
 
-    it.skip('should return forbidden status', async () => {
-      const response = await request(app)
-        .post('/api/v1/companies/check-types')
-        .set('Cookie', adminCookie)
-
-      expect(response.statusCode).toBe(403)
-    })
-
     it('should return a failed check status (invalid types)', async () => {
       const response = await request(app)
         .post('/api/v1/companies/check-types')
@@ -122,14 +114,6 @@ describe('Company check types endpoints:', () => {
       expect(response.statusCode).toBe(401)
     })
 
-    it.skip('should return forbidden status', async () => {
-      const response = await request(app)
-        .get('/api/v1/companies/check-types')
-        .set('Cookie', adminCookie)
-
-      expect(response.statusCode).toBe(403)
-    })
-
     it('should return a list of types of checks', async () => {
       const response = await request(app)
         .get('/api/v1/companies/check-types')
@@ -175,14 +159,6 @@ describe('Company check types endpoints:', () => {
       expect(response.statusCode).toBe(401)
     })
 
-    it.skip('should return forbidden status', async () => {
-      const response = await request(app)
-        .get('/api/v1/companies/check-types/1')
-        .set('Cookie', adminCookie)
-
-      expect(response.statusCode).toBe(403)
-    })
-
     it('should return not found status', async () => {
       const response = await request(app)
         .get('/api/v1/companies/check-types/4')
@@ -212,14 +188,6 @@ describe('Company check types endpoints:', () => {
         .put('/api/v1/companies/check-types/3')
 
       expect(response.statusCode).toBe(401)
-    })
-
-    it.skip('should return forbidden status', async () => {
-      const response = await request(app)
-        .put('/api/v1/companies/check-types/3')
-        .set('Cookie', adminCookie)
-
-      expect(response.statusCode).toBe(403)
     })
 
     it('should return a failed check status (invalid types)', async () => {
@@ -305,14 +273,6 @@ describe('Company check types endpoints:', () => {
         .delete('/api/v1/companies/check-types/1')
 
       expect(response.statusCode).toBe(401)
-    })
-
-    it.skip('should return forbidden status', async () => {
-      const response = await request(app)
-        .delete('/api/v1/companies/check-types/1')
-        .set('Cookie', adminCookie)
-
-      expect(response.statusCode).toBe(403)
     })
 
     it('should return not found status', async () => {

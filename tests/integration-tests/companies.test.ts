@@ -138,14 +138,6 @@ describe('Companies endpoints:', () => {
       expect(response.statusCode).toBe(401)
     })
 
-    it('should return forbidden status', async () => {
-      const response = await request(app)
-        .put('/api/v1/companies/2')
-        .set('Cookie', cookie)
-
-      expect(response.statusCode).toBe(403)
-    })
-
     it('should return a data validation error (invalid types)', async () => {
       const response = await request(app)
         .put('/api/v1/companies/1')

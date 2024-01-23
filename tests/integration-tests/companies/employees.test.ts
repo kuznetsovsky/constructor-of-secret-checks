@@ -20,25 +20,17 @@ describe('Company employees endpoints:', () => {
     cookie = ''
   })
 
-  describe('POST: /companies/{company_id}/employees', () => {
+  describe('POST: /companies/employees', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
-        .post('/api/v1/companies/1/employees')
+        .post('/api/v1/companies/employees')
 
       expect(response.statusCode).toBe(401)
     })
 
-    it('should return forbidden status', async () => {
-      const response = await request(app)
-        .post('/api/v1/companies/5/employees')
-        .set('Cookie', cookie)
-
-      expect(response.statusCode).toBe(403)
-    })
-
     it('should return a data validation error (invalid types)', async () => {
       const response = await request(app)
-        .post('/api/v1/companies/2/employees')
+        .post('/api/v1/companies/employees')
         .set('Cookie', cookie)
         .send({
           email: null,
@@ -73,7 +65,7 @@ describe('Company employees endpoints:', () => {
 
     it('should return a failed check status (checking maximum values)', async () => {
       const response = await request(app)
-        .post('/api/v1/companies/2/employees')
+        .post('/api/v1/companies/employees')
         .set('Cookie', cookie)
         .send({
           email: 'www.thooooooomasssssssss@mail.com',
@@ -104,7 +96,7 @@ describe('Company employees endpoints:', () => {
 
     it('should return a failed check status (checking minimum values)', async () => {
       const response = await request(app)
-        .post('/api/v1/companies/2/employees')
+        .post('/api/v1/companies/employees')
         .set('Cookie', cookie)
         .send({
           email: 'www.thomas@mail.com',
@@ -135,7 +127,7 @@ describe('Company employees endpoints:', () => {
 
     it('should return a failed check status (checking format)', async () => {
       const response = await request(app)
-        .post('/api/v1/companies/2/employees')
+        .post('/api/v1/companies/employees')
         .set('Cookie', cookie)
         .send({
           email: 'www.thomasmail.com',
@@ -158,7 +150,7 @@ describe('Company employees endpoints:', () => {
 
     it('should return the status city not found', async () => {
       const response = await request(app)
-        .post('/api/v1/companies/2/employees')
+        .post('/api/v1/companies/employees')
         .set('Cookie', cookie)
         .send({
           email: 'www.thomas@mail.com',
@@ -173,7 +165,7 @@ describe('Company employees endpoints:', () => {
 
     it('should return conflict status', async () => {
       const response = await request(app)
-        .post('/api/v1/companies/2/employees')
+        .post('/api/v1/companies/employees')
         .set('Cookie', cookie)
         .send({
           email: 'www.jhon@mail.com',
@@ -188,7 +180,7 @@ describe('Company employees endpoints:', () => {
 
     it('Should successfully create an new inspector', async () => {
       const response = await request(app)
-        .post('/api/v1/companies/2/employees')
+        .post('/api/v1/companies/employees')
         .set('Cookie', cookie)
         .send({
           email: 'www.smith@mail.com',
@@ -213,25 +205,17 @@ describe('Company employees endpoints:', () => {
     })
   })
 
-  describe('GET: /companies/{company_id}/employees', () => {
+  describe('GET: /companies/employees', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
-        .get('/api/v1/companies/1/employees')
+        .get('/api/v1/companies/employees')
 
       expect(response.statusCode).toBe(401)
     })
 
-    it('should return forbidden status', async () => {
-      const response = await request(app)
-        .get('/api/v1/companies/5/employees')
-        .set('Cookie', cookie)
-
-      expect(response.statusCode).toBe(403)
-    })
-
     it('should return a list of company employees', async () => {
       const response = await request(app)
-        .get('/api/v1/companies/2/employees')
+        .get('/api/v1/companies/employees')
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(200)
@@ -276,25 +260,17 @@ describe('Company employees endpoints:', () => {
     })
   })
 
-  describe('GET: /companies/{company_id}/employees/{employee_id}', () => {
+  describe('GET: /companies/employees/{employee_id}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
-        .get('/api/v1/companies/1/employees/1')
+        .get('/api/v1/companies/employees/1')
 
       expect(response.statusCode).toBe(401)
     })
 
-    it('should return forbidden status', async () => {
-      const response = await request(app)
-        .get('/api/v1/companies/5/employees/1')
-        .set('Cookie', cookie)
-
-      expect(response.statusCode).toBe(403)
-    })
-
     it('should return the status not found', async () => {
       const response = await request(app)
-        .get('/api/v1/companies/2/employees/4')
+        .get('/api/v1/companies/employees/4')
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(404)
@@ -302,7 +278,7 @@ describe('Company employees endpoints:', () => {
 
     it('should return information about a company employee', async () => {
       const response = await request(app)
-        .get('/api/v1/companies/2/employees/1')
+        .get('/api/v1/companies/employees/1')
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(200)
@@ -321,25 +297,17 @@ describe('Company employees endpoints:', () => {
     })
   })
 
-  describe('PUT: /companies/{company_id}/employees/{employee_id}', () => {
+  describe('PUT: /companies/employees/{employee_id}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
-        .put('/api/v1/companies/1/employees/1')
+        .put('/api/v1/companies/employees/1')
 
       expect(response.statusCode).toBe(401)
     })
 
-    it('should return forbidden status', async () => {
-      const response = await request(app)
-        .put('/api/v1/companies/5/employees/1')
-        .set('Cookie', cookie)
-
-      expect(response.statusCode).toBe(403)
-    })
-
     it('should return a data validation error (invalid types)', async () => {
       const response = await request(app)
-        .put('/api/v1/companies/2/employees/1')
+        .put('/api/v1/companies/employees/1')
         .set('Cookie', cookie)
         .send({
           first_name: null,
@@ -374,7 +342,7 @@ describe('Company employees endpoints:', () => {
 
     it('should return a failed check status (checking maximum values)', async () => {
       const response = await request(app)
-        .put('/api/v1/companies/2/employees/1')
+        .put('/api/v1/companies/employees/1')
         .set('Cookie', cookie)
         .send({
           first_name: 'Roooooooooooooman',
@@ -405,7 +373,7 @@ describe('Company employees endpoints:', () => {
 
     it('should return a failed check status (checking minimum values)', async () => {
       const response = await request(app)
-        .put('/api/v1/companies/2/employees/1')
+        .put('/api/v1/companies/employees/1')
         .set('Cookie', cookie)
         .send({
           first_name: 'Th',
@@ -436,7 +404,7 @@ describe('Company employees endpoints:', () => {
 
     it('should return the status city not found', async () => {
       const response = await request(app)
-        .put('/api/v1/companies/2/employees/1')
+        .put('/api/v1/companies/employees/1')
         .set('Cookie', cookie)
         .send({
           first_name: 'Thomas',
@@ -451,7 +419,7 @@ describe('Company employees endpoints:', () => {
 
     it('should return the status employee not found', async () => {
       const response = await request(app)
-        .put('/api/v1/companies/2/employees/4')
+        .put('/api/v1/companies/employees/4')
         .set('Cookie', cookie)
         .send({
           first_name: 'Thomas',
@@ -465,7 +433,7 @@ describe('Company employees endpoints:', () => {
 
     it('should return updated company employee data', async () => {
       const response = await request(app)
-        .put('/api/v1/companies/2/employees/1')
+        .put('/api/v1/companies/employees/1')
         .set('Cookie', cookie)
         .send({
           first_name: 'Thomas',
@@ -491,25 +459,17 @@ describe('Company employees endpoints:', () => {
     })
   })
 
-  describe('DELETE: /companies/{company_id}/employees/{employee_id}', () => {
+  describe('DELETE: /companies/employees/{employee_id}', () => {
     it('should return the status not authorized', async () => {
       const response = await request(app)
-        .delete('/api/v1/companies/1/employees/1')
+        .delete('/api/v1/companies/employees/1')
 
       expect(response.statusCode).toBe(401)
     })
 
-    it('should return forbidden status', async () => {
-      const response = await request(app)
-        .delete('/api/v1/companies/5/employees/1')
-        .set('Cookie', cookie)
-
-      expect(response.statusCode).toBe(403)
-    })
-
     it('should return the status employee not found', async () => {
       const response = await request(app)
-        .delete('/api/v1/companies/2/employees/4')
+        .delete('/api/v1/companies/employees/4')
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(404)
@@ -517,7 +477,7 @@ describe('Company employees endpoints:', () => {
 
     it('should return no content status', async () => {
       const response = await request(app)
-        .delete('/api/v1/companies/2/employees/1')
+        .delete('/api/v1/companies/employees/1')
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(204)

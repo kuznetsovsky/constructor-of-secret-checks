@@ -14,12 +14,25 @@ import { NO_REPLAY_EMAIL } from '../../../config'
 import { type BaseQueryString } from '../../common/helpers/validate-queries/validate-queries.helper'
 
 export async function createCompanyEmployee (
-  req: Request<{ company_id: string }, never, CreateEmployee>,
+  req: Request<any, any, CreateEmployee>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    const COMPANY_ID = parseInt(req.params.company_id)
+    const user = req.session.user
+    if (user == null) {
+      const error = new Error('"req.session.user" is missing.')
+      next(error)
+      return
+    }
+
+    const { cid } = user
+    if (cid == null) {
+      const error = new Error('"req.session.user.cid" is missing.')
+      next(error)
+      return
+    }
+
     const cityRepository = new CityRepository(knex, 'cities')
     const accountRepository = new AccountRepository(knex, 'accounts')
     const companyEmployeeRepository = new CompanyEmployeesRepository(knex, 'company_employees')
@@ -73,7 +86,7 @@ export async function createCompanyEmployee (
     const createdEmployeeId = await companyEmployeeRepository.createEmployee({
       ...req.body,
       password: encryptedPassword,
-      companyId: COMPANY_ID
+      companyId: cid
     })
 
     const employee = await companyEmployeeRepository.findProfile(createdEmployeeId)
@@ -87,14 +100,27 @@ export async function createCompanyEmployee (
 }
 
 export async function getCompanyEmployees (
-  req: Request<{ company_id: string }, any, any, BaseQueryString>,
+  req: Request<any, any, any, BaseQueryString>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    const COMPANY_ID = parseInt(req.params.company_id)
+    const user = req.session.user
+    if (user == null) {
+      const error = new Error('"req.session.user" is missing.')
+      next(error)
+      return
+    }
+
+    const { cid } = user
+    if (cid == null) {
+      const error = new Error('"req.session.user.cid" is missing.')
+      next(error)
+      return
+    }
+
     const companyEmployeeRepository = new CompanyEmployeesRepository(knex, 'company_employees')
-    const employees = await companyEmployeeRepository.findByPage(COMPANY_ID, req.query)
+    const employees = await companyEmployeeRepository.findByPage(cid, req.query)
 
     res
       .status(StatusCodes.OK)
@@ -105,15 +131,28 @@ export async function getCompanyEmployees (
 }
 
 export async function getCompanyEmployee (
-  req: Request<{ company_id: string, employee_id: string }>,
+  req: Request<{ employee_id: string }>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    const COMPANY_ID = parseInt(req.params.company_id)
+    const user = req.session.user
+    if (user == null) {
+      const error = new Error('"req.session.user" is missing.')
+      next(error)
+      return
+    }
+
+    const { cid } = user
+    if (cid == null) {
+      const error = new Error('"req.session.user.cid" is missing.')
+      next(error)
+      return
+    }
+
     const EMPLOYEE_ID = parseInt(req.params.employee_id)
     const companyEmployeeRepository = new CompanyEmployeesRepository(knex, 'company_employees')
-    const employee = await companyEmployeeRepository.findProfile(EMPLOYEE_ID, COMPANY_ID)
+    const employee = await companyEmployeeRepository.findProfile(EMPLOYEE_ID, cid)
 
     if (employee == null) {
       res
@@ -132,12 +171,25 @@ export async function getCompanyEmployee (
 }
 
 export async function updateCompanyEmployee (
-  req: Request<{ company_id: string, employee_id: string }, never, UpdateEmployee>,
+  req: Request<{ employee_id: string }, never, UpdateEmployee>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    const COMPANY_ID = parseInt(req.params.company_id)
+    const user = req.session.user
+    if (user == null) {
+      const error = new Error('"req.session.user" is missing.')
+      next(error)
+      return
+    }
+
+    const { cid } = user
+    if (cid == null) {
+      const error = new Error('"req.session.user.cid" is missing.')
+      next(error)
+      return
+    }
+
     const EMPLOYEE_ID = parseInt(req.params.employee_id)
     const cityRepository = new CityRepository(knex, 'cities')
     const companyEmployeeRepository = new CompanyEmployeesRepository(knex, 'company_employees')
@@ -145,7 +197,7 @@ export async function updateCompanyEmployee (
     {
       const employee = await companyEmployeeRepository.exist({
         id: EMPLOYEE_ID,
-        company_id: COMPANY_ID
+        company_id: cid
       })
 
       if (!employee) {
@@ -167,8 +219,8 @@ export async function updateCompanyEmployee (
       return
     }
 
-    await companyEmployeeRepository.updateEmployee(EMPLOYEE_ID, COMPANY_ID, req.body)
-    const employee = await companyEmployeeRepository.findProfile(EMPLOYEE_ID, COMPANY_ID)
+    await companyEmployeeRepository.updateEmployee(EMPLOYEE_ID, cid, req.body)
+    const employee = await companyEmployeeRepository.findProfile(EMPLOYEE_ID, cid)
 
     res
       .status(StatusCodes.OK)
@@ -179,18 +231,31 @@ export async function updateCompanyEmployee (
 }
 
 export async function deleteCompanyEmployee (
-  req: Request<{ company_id: string, employee_id: string }>,
+  req: Request<{ employee_id: string }>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    const COMPANY_ID = parseInt(req.params.company_id)
+    const user = req.session.user
+    if (user == null) {
+      const error = new Error('"req.session.user" is missing.')
+      next(error)
+      return
+    }
+
+    const { cid } = user
+    if (cid == null) {
+      const error = new Error('"req.session.user.cid" is missing.')
+      next(error)
+      return
+    }
+
     const EMPLOYEE_ID = parseInt(req.params.employee_id)
     const companyEmployeeRepository = new CompanyEmployeesRepository(knex, 'company_employees')
 
     const employee = await companyEmployeeRepository.exist({
       id: EMPLOYEE_ID,
-      company_id: COMPANY_ID
+      company_id: cid
     })
 
     if (!employee) {
