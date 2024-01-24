@@ -4,7 +4,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug",
+      "name": "Debug Code",
       "runtimeArgs": [
         "-r",
         "ts-node/register"
@@ -21,6 +21,31 @@
       "env": {
         "NODE_ENV": "development"
       }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Current Tests",
+      "runtimeArgs": [
+        "--inspect-brk",
+        "${workspaceRoot}/node_modules/.bin/jest",
+        "--runInBand"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "openOnSessionStart",
+      "args": ["${fileBasenameNoExtension}"],
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug All Tests",
+      "runtimeArgs": [
+        "--inspect-brk",
+        "${workspaceRoot}/node_modules/.bin/jest",
+        "--runInBand"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "openOnSessionStart",
     }
   ]
 }
