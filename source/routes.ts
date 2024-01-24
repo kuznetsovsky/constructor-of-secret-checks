@@ -19,6 +19,7 @@ import { router as feedbackRouter } from './feedback/feedback.router'
 import { router as emailVerificationRouter } from './email-verification/email-verification.router'
 import { router as citiesRouter } from './cities/cities.router'
 import { router as companiesRouter } from './companies/companies.router'
+import { router as resetPasswordRouter } from './reset-password/reset-password.router'
 
 export function appRoutes (app: Application): void {
   // Before
@@ -31,6 +32,8 @@ export function appRoutes (app: Application): void {
   // Routes
   app.use(`${VERSION}/auth`, authRouter)
   app.use(`${VERSION}/email-verification`, emailVerificationRouter)
+  app.use(`${VERSION}/reset-password`, resetPasswordRouter)
+
   app.use(`${VERSION}/user`, isAuthorized, userRouter)
   app.use(`${VERSION}/users`, isAuthorized, usersRouter)
   app.use(`${VERSION}/feedback`, isAuthorized, feedbackRouter)
