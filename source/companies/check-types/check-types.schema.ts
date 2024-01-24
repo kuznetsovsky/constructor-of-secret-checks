@@ -16,3 +16,16 @@ export const CompanyCheckTypeSchema: JSONSchemaType<UpdateCheckType> = {
     }
   }
 }
+
+export const checkTypesParamsSchema: JSONSchemaType<{ check_type_id: string }> = {
+  type: 'object',
+  additionalProperties: true,
+  required: ['check_type_id'],
+  properties: {
+    check_type_id: {
+      type: 'string',
+      transform: ['trim'],
+      pattern: '^\\d+$'
+    }
+  }
+}
