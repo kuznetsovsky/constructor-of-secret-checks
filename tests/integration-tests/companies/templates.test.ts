@@ -207,4 +207,36 @@ describe('Company templates endpoints:', () => {
       expect(response.statusCode).toBe(204)
     })
   })
+
+  describe('GET: /companies/templates/{template_id}/preview', () => {
+    it('should return the status not authorized', async () => {
+      const response = await request(app)
+        .get('/api/v1/companies/templates/1/preview')
+
+      expect(response.statusCode).toBe(401)
+    })
+
+    it('should return template id is not found', async () => {
+      const response = await request(app)
+        .get('/api/v1/companies/templates/2/preview')
+        .set('Cookie', adminCookie)
+
+      expect(response.statusCode).toBe(404)
+    })
+
+    it('should successfully return template preview information', async () => {
+      const response = await request(app)
+        .get('/api/v1/companies/templates/1/preview')
+        .set('Cookie', adminCookie)
+
+      expect(response.statusCode).toBe(200)
+      expect(response.body).toEqual({
+        id: 1,
+        logo_url: expect.any(String),
+        task_name: 'Проверка качества обслуживания',
+        instruction: 'Инструкция к выполнению задания',
+        tasks: {}
+      })
+    })
+  })
 })

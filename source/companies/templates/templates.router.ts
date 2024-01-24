@@ -38,3 +38,9 @@ router.delete(
   validateParams(templatesParamsValidator),
   templatesController.deleteCompanyTemplate
 )
+
+router.get(
+  '/:template_id/preview',
+  validateParams(templatesParamsValidator),
+  templatesController.getCompanyTemplatePreview
+)

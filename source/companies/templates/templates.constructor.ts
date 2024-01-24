@@ -254,3 +254,43 @@ export const deleteCompanyTemplate = async (
     next(error)
   }
 }
+
+export const getCompanyTemplatePreview = async (
+  req: Request<{ template_id: string }>,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const user = req.session.user
+    if (user == null) {
+      const error = new Error('"req.session.user" is missing.')
+      next(error)
+      return
+    }
+
+    const { cid } = user
+    if (cid == null) {
+      const error = new Error('"req.session.user.cid" is missing.')
+      next(error)
+      return
+    }
+
+    const TEMPLATE_ID = parseInt(req.params.template_id)
+    const companyTemplateRepository = new CompanyTemplatesRepository(knex, 'company_templates')
+    const template = await companyTemplateRepository.findPreviewByID(TEMPLATE_ID, cid)
+
+    if (template == null) {
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: 'Template is not found.' })
+
+      return
+    }
+
+    res
+      .status(StatusCodes.OK)
+      .json(template)
+  } catch (error) {
+    next(error)
+  }
+}
