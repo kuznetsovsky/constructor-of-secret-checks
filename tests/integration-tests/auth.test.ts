@@ -255,7 +255,7 @@ describe('Auth endpoints:', () => {
 
         expect(loginResponse.statusCode).toBe(401)
         expect(loginResponse.body).toMatchObject({
-          error: /Authorization attempts exceeded. Repeat after 15 minutes./i
+          message: /Authorization attempts exceeded. Repeat after 15 minutes./i
         })
       }
 

@@ -143,7 +143,7 @@ describe('Company objects endpoints:', () => {
         })
 
       expect(response.statusCode).toBe(409)
-      expect(response.body.error).toMatch(/This name already exists/i)
+      expect(response.body.message).toMatch(/This name already exists/i)
     })
 
     it('should return city not found status', async () => {
@@ -159,7 +159,7 @@ describe('Company objects endpoints:', () => {
         })
 
       expect(response.statusCode).toBe(404)
-      expect(response.body.error).toMatch(/City is not found/i)
+      expect(response.body.message).toMatch(/City is not found/i)
     })
 
     it('should successfully create the company object', async () => {
@@ -408,7 +408,7 @@ describe('Company objects endpoints:', () => {
         })
 
       expect(response.statusCode).toBe(409)
-      expect(response.body.error).toMatch(/This name already exists/i)
+      expect(response.body.message).toMatch(/This name already exists/i)
     })
 
     it('should return city not found status', async () => {
@@ -424,7 +424,7 @@ describe('Company objects endpoints:', () => {
         })
 
       expect(response.statusCode).toBe(404)
-      expect(response.body.error).toMatch(/City is not found/i)
+      expect(response.body.message).toMatch(/City is not found/i)
     })
 
     it('should successfully update the company object data', async () => {

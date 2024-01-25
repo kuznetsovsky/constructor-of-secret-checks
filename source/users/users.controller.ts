@@ -50,9 +50,7 @@ export async function getAccountByID (
     if (profile == null) {
       res
         .status(StatusCodes.NOT_FOUND)
-        .json({
-          error: `Account with ID ${USER_ID} not found`
-        })
+        .json({ message: 'Account is not found.' })
 
       return
     }

@@ -96,7 +96,7 @@ describe('Feedback endpoints:', () => {
 
     expect(resendingFeedbackResponse.statusCode).toBe(400)
     expect(resendingFeedbackResponse.body).toMatchObject({
-      error: /You have already sent your message. You will be able to send a new message only after an hour./i
+      message: /You have already sent your message. You will be able to send a new message only after an hour./i
     })
 
     // RESENDING A FEEDBACK AFTER DELETION

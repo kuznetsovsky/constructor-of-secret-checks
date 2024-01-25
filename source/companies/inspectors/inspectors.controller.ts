@@ -50,7 +50,7 @@ export async function createNewCompanyInspector (
     if (!city) {
       res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: 'City is not found' })
+        .json({ message: 'City is not found.' })
 
       return
     }
@@ -61,8 +61,8 @@ export async function createNewCompanyInspector (
       res
         .status(StatusCodes.CONFLICT)
         .json({
-          error: 'An inspector with the same email already exists',
-          error_description: 'For existing inspectors, use the POST: /companies/{companyId}/inspectors/{email} route'
+          message: 'An inspector with the same email already exists.',
+          error_description: 'For existing inspectors, use the POST: /companies/{companyId}/inspectors/{email} route.'
         })
 
       return
@@ -90,7 +90,7 @@ export async function createNewCompanyInspector (
     if (!isSuccessSendingMail) {
       res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ error: 'Failed to send email.' })
+        .json({ message: 'Failed to send email.' })
 
       return
     }
@@ -147,7 +147,7 @@ export async function getCompanyInspectors (
       if (city == null) {
         res
           .status(StatusCodes.NOT_FOUND)
-          .json({ error: 'City is not found' })
+          .json({ message: 'City is not found.' })
 
         return
       }
@@ -201,7 +201,7 @@ export async function getCompanyInspector (
     if (inspector == null) {
       res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: 'Inspector is not found' })
+        .json({ message: 'Inspector is not found.' })
 
       return
     }
@@ -247,7 +247,7 @@ export async function updateCompanyInspector (
     if (inspector == null) {
       res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: 'Inspector is not found.' })
+        .json({ message: 'Inspector is not found.' })
 
       return
     }
@@ -257,7 +257,7 @@ export async function updateCompanyInspector (
     if (!city) {
       res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: 'City is not found' })
+        .json({ message: 'City is not found.' })
 
       return
     }
@@ -313,7 +313,7 @@ export async function updateCompanyInspectorStatus (
     if (inspector == null) {
       res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: 'Inspector is not found.' })
+        .json({ message: 'Inspector is not found.' })
 
       return
     }
@@ -328,7 +328,7 @@ export async function updateCompanyInspectorStatus (
 
     res
       .status(StatusCodes.OK)
-      .json({ message: 'Status updated successfully' })
+      .json({ message: 'Status updated successfully.' })
   } catch (error) {
     next(error)
   }
@@ -365,7 +365,7 @@ export async function deleteCompanyInspector (
     if (inspector == null) {
       res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: 'Inspector is not found.' })
+        .json({ message: 'Inspector is not found.' })
 
       return
     }
@@ -433,7 +433,7 @@ export async function createCompanyInspectorByEmail (
       if (account.role !== Roles.Inspector) {
         res
           .status(StatusCodes.BAD_REQUEST)
-          .json({ error: 'This user cannot be designated as an inspector.' })
+          .json({ message: 'This user cannot be designated as an inspector.' })
 
         return
       }
@@ -443,7 +443,7 @@ export async function createCompanyInspectorByEmail (
       if (inspector == null) {
         res
           .status(StatusCodes.NOT_FOUND)
-          .json({ error: 'Inspector is not found.' })
+          .json({ message: 'Inspector is not found.' })
 
         return
       }
@@ -468,7 +468,7 @@ export async function createCompanyInspectorByEmail (
     } else {
       res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: 'Inspector is not found.' })
+        .json({ message: 'Inspector is not found.' })
     }
   } catch (error) {
     next(error)

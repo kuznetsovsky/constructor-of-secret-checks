@@ -160,7 +160,7 @@ describe('Company employees endpoints:', () => {
         })
 
       expect(response.statusCode).toBe(404)
-      expect(response.body.error).toMatch(/City is not found/i)
+      expect(response.body.message).toMatch(/City is not found/i)
     })
 
     it('should return conflict status', async () => {
@@ -175,7 +175,7 @@ describe('Company employees endpoints:', () => {
         })
 
       expect(response.statusCode).toBe(409)
-      expect(response.body.error).toMatch(/This user already exists/i)
+      expect(response.body.message).toMatch(/This user already exists/i)
     })
 
     it('Should successfully create an new inspector', async () => {
@@ -414,7 +414,7 @@ describe('Company employees endpoints:', () => {
         })
 
       expect(response.statusCode).toBe(404)
-      expect(response.body.error).toMatch(/City is not found/i)
+      expect(response.body.message).toMatch(/City is not found/i)
     })
 
     it('should return the status employee not found', async () => {

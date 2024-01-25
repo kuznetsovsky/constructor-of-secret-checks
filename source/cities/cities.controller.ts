@@ -33,7 +33,7 @@ export async function getCityByID (
     if (city == null) {
       res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: 'City is not found' })
+        .json({ message: 'City is not found.' })
 
       return
     }

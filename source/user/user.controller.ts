@@ -26,9 +26,7 @@ export async function getProfile (
   if (id == null) {
     res
       .status(StatusCodes.NOT_FOUND)
-      .json({
-        error: 'User ID is not found'
-      })
+      .json({ message: 'User ID is not found.' })
 
     return
   }
@@ -59,9 +57,7 @@ export async function updateProfile (
   if (id == null || role == null) {
     res
       .status(StatusCodes.BAD_REQUEST)
-      .json({
-        error: 'role or id account is invalid'
-      })
+      .json({ message: 'Role or id account is invalid.' })
 
     return
   }
@@ -72,7 +68,7 @@ export async function updateProfile (
         res
           .status(StatusCodes.UNPROCESSABLE_ENTITY)
           .json({
-            message: 'Validation failed',
+            message: 'Validation failed.',
             errors: adminProfileValidator.errors
           })
 
@@ -92,7 +88,7 @@ export async function updateProfile (
         res
           .status(StatusCodes.UNPROCESSABLE_ENTITY)
           .json({
-            message: 'Validation failed',
+            message: 'Validation failed.',
             errors: inspectorProfileValidator.errors
           })
 
@@ -104,7 +100,7 @@ export async function updateProfile (
       if (city == null) {
         res
           .status(StatusCodes.BAD_REQUEST)
-          .json({ error: `City with ID ${req.body.city_id} not found` })
+          .json({ message: 'City is not found.' })
 
         return
       }
@@ -143,7 +139,7 @@ export async function changePassword (
   if (newPassword !== confirmationNewPassword) {
     res
       .status(StatusCodes.BAD_REQUEST)
-      .json({ error: 'The new password and the confirmation password do not match.' })
+      .json({ message: 'The new password and the confirmation password do not match.' })
 
     return
   }
@@ -161,7 +157,7 @@ export async function changePassword (
 
   if (!passwordsMatch) {
     res.status(StatusCodes.BAD_REQUEST)
-      .json({ error: 'The old password does not match the current one.' })
+      .json({ message: 'The old password does not match the current one.' })
 
     return
   }

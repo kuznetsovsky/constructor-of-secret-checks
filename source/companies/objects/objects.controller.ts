@@ -36,7 +36,7 @@ export async function createObject (
       if (object !== undefined) {
         res
           .status(StatusCodes.CONFLICT)
-          .json({ error: 'This name already exists' })
+          .json({ message: 'This name already exists.' })
 
         return
       }
@@ -47,7 +47,7 @@ export async function createObject (
     if (!city) {
       res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: 'City is not found.' })
+        .json({ message: 'City is not found.' })
 
       return
     }
@@ -121,7 +121,7 @@ export async function getObject (
     if (object == null) {
       res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: 'Object is not found.' })
+        .json({ message: 'Object is not found.' })
 
       return
     }
@@ -167,7 +167,7 @@ export async function updateObject (
       if (object == null) {
         res
           .status(StatusCodes.NOT_FOUND)
-          .json({ error: 'Object is not found.' })
+          .json({ message: 'Object is not found.' })
 
         return
       }
@@ -179,7 +179,7 @@ export async function updateObject (
       if (object !== undefined) {
         res
           .status(StatusCodes.CONFLICT)
-          .json({ error: 'This name already exists' })
+          .json({ message: 'This name already exists' })
 
         return
       }
@@ -190,7 +190,7 @@ export async function updateObject (
     if (!city) {
       res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: 'City is not found.' })
+        .json({ message: 'City is not found.' })
 
       return
     }
@@ -237,7 +237,7 @@ export async function deleteObject (
     if (object == null) {
       res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: 'Object is not found.' })
+        .json({ message: 'Object is not found.' })
 
       return
     }

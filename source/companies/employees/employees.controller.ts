@@ -41,7 +41,7 @@ export async function createCompanyEmployee (
     if (!city) {
       res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: 'City is not found.' })
+        .json({ message: 'City is not found.' })
 
       return
     }
@@ -51,7 +51,7 @@ export async function createCompanyEmployee (
     if (account) {
       res
         .status(StatusCodes.CONFLICT)
-        .json({ error: 'This user already exists.' })
+        .json({ message: 'This user already exists.' })
 
       return
     }
@@ -77,7 +77,7 @@ export async function createCompanyEmployee (
     if (!isSuccessSendingMail) {
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: 'Failed to send email.' })
+        .json({ message: 'Failed to send email.' })
 
       return
     }
@@ -157,7 +157,7 @@ export async function getCompanyEmployee (
     if (employee == null) {
       res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: 'Employee is not found.' })
+        .json({ message: 'Employee is not found.' })
 
       return
     }
@@ -203,7 +203,7 @@ export async function updateCompanyEmployee (
       if (!employee) {
         res
           .status(StatusCodes.NOT_FOUND)
-          .json({ error: 'Employee is not found.' })
+          .json({ message: 'Employee is not found.' })
 
         return
       }
@@ -214,7 +214,7 @@ export async function updateCompanyEmployee (
     if (!city) {
       res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: 'City is not found.' })
+        .json({ message: 'City is not found.' })
 
       return
     }
@@ -261,7 +261,7 @@ export async function deleteCompanyEmployee (
     if (!employee) {
       res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: 'Employee is not found.' })
+        .json({ message: 'Employee is not found.' })
 
       return
     }
@@ -275,7 +275,7 @@ export async function deleteCompanyEmployee (
     } else {
       res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ error: 'Failed to delete account.' })
+        .json({ message: 'Failed to delete account.' })
     }
   } catch (error) {
     next(error)

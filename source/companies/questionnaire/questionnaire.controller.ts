@@ -29,7 +29,7 @@ export async function getQuestionnaire (req: Request, res: Response, next: NextF
     if (company == null) {
       res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: 'Company is not found' })
+        .json({ message: 'Company is not found' })
 
       return
     }
@@ -39,7 +39,7 @@ export async function getQuestionnaire (req: Request, res: Response, next: NextF
     if (questionnaire == null) {
       res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: 'Questionnaire is not found' })
+        .json({ message: 'Questionnaire is not found.' })
 
       return
     }
@@ -76,7 +76,7 @@ export async function updateQuestionnaire (req: Request<any, any, UpdateQuestion
     if (company == null) {
       res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: 'Company is not found' })
+        .json({ message: 'Company is not found.' })
 
       return
     }
@@ -87,7 +87,7 @@ export async function updateQuestionnaire (req: Request<any, any, UpdateQuestion
     if (questionnaire == null) {
       res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: 'Questionnaire is not found' })
+        .json({ message: 'Questionnaire is not found.' })
 
       return
     }

@@ -61,7 +61,7 @@ describe('Email verification endpoints:', () => {
       })
 
     expect(response.statusCode).toBe(400)
-    expect(response.body.error).toMatch(/Invalid activation code or activation time has expired/i)
+    expect(response.body.message).toMatch(/Invalid activation code or activation time has expired/i)
   })
 
   it('email activation should be limited after 3 failed attempts', async () => {
@@ -78,7 +78,7 @@ describe('Email verification endpoints:', () => {
         })
 
       expect(response.statusCode).toBe(400)
-      expect(response.body.error).toMatch(/Invalid activation code or activation time has expired/i)
+      expect(response.body.message).toMatch(/Invalid activation code or activation time has expired/i)
     }
 
     const response = await request(app)
@@ -89,6 +89,6 @@ describe('Email verification endpoints:', () => {
       })
 
     expect(response.statusCode).toBe(400)
-    expect(response.body.error).toMatch(/Account activation attempts exceeded. Please try again in 15 minutes/i)
+    expect(response.body.message).toMatch(/Account activation attempts exceeded. Please try again in 15 minutes/i)
   })
 })

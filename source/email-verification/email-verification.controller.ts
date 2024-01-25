@@ -29,7 +29,7 @@ export async function verify (
       if (activationAttempts != null && parseInt(activationAttempts) >= 3) {
         res
           .status(StatusCodes.BAD_REQUEST)
-          .json({ error: 'Account activation attempts exceeded. Please try again in 15 minutes.' })
+          .json({ message: 'Account activation attempts exceeded. Please try again in 15 minutes.' })
 
         return
       }
@@ -43,7 +43,7 @@ export async function verify (
     if (code == null || code !== verificationCode) {
       res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ error: 'Invalid activation code or activation time has expired.' })
+        .json({ message: 'Invalid activation code or activation time has expired.' })
 
       return
     }
@@ -53,7 +53,7 @@ export async function verify (
     if (account == null) {
       res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: 'Account is not found' })
+        .json({ message: 'Account is not found.' })
 
       return
     }

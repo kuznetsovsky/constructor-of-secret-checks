@@ -224,7 +224,7 @@ describe('Company inspectors endpoints:', () => {
         })
 
       expect(response.statusCode).toBe(404)
-      expect(response.body.error).toMatch(/City is not found/i)
+      expect(response.body.message).toMatch(/City is not found/i)
     })
 
     it('should return the status with such an email exists inspector', async () => {
@@ -243,7 +243,7 @@ describe('Company inspectors endpoints:', () => {
         })
 
       expect(response.statusCode).toBe(409)
-      expect(response.body.error).toMatch(/An inspector with the same email already exists/i)
+      expect(response.body.message).toMatch(/An inspector with the same email already exists/i)
     })
 
     it('should successfully create a company inspector (new inspector)', async () => {
@@ -358,7 +358,7 @@ describe('Company inspectors endpoints:', () => {
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(404)
-      expect(response.body.error).toMatch(/City is not found/i)
+      expect(response.body.message).toMatch(/City is not found/i)
     })
 
     it('should return an empty array', async () => {
@@ -480,7 +480,7 @@ describe('Company inspectors endpoints:', () => {
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(404)
-      expect(response.body.error).toMatch(/Inspector is not found/i)
+      expect(response.body.message).toMatch(/Inspector is not found/i)
     })
 
     it('should return inspector profile by id 1', async () => {
@@ -753,7 +753,7 @@ describe('Company inspectors endpoints:', () => {
         })
 
       expect(response.statusCode).toBe(404)
-      expect(response.body.error).toMatch(/City is not found/i)
+      expect(response.body.message).toMatch(/City is not found/i)
     })
 
     it('should return the status inspector not found', async () => {
@@ -773,7 +773,7 @@ describe('Company inspectors endpoints:', () => {
         })
 
       expect(response.statusCode).toBe(404)
-      expect(response.body.error).toMatch(/Inspector is not found/i)
+      expect(response.body.message).toMatch(/Inspector is not found/i)
     })
 
     it('should return successfully updated inspector data', async () => {
@@ -880,7 +880,7 @@ describe('Company inspectors endpoints:', () => {
         .set('Cookie', cookie)
 
       expect(response.statusCode).toBe(404)
-      expect(response.body.error).toMatch(/Inspector is not found/i)
+      expect(response.body.message).toMatch(/Inspector is not found/i)
     })
 
     it('should successfully remove the inspector', async () => {

@@ -412,7 +412,7 @@ describe('Users endpoints:', () => {
 
       expect(response.statusCode).toBe(404)
       expect(response.body).toMatchObject({
-        error: 'Account with ID 100 not found'
+        message: 'Account is not found.'
       })
     })
 

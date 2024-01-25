@@ -47,7 +47,7 @@ export async function sendFeedback (
       res
         .status(StatusCodes.BAD_REQUEST)
         .json({
-          error: 'You have already sent your message. You will be able to send a new message only after an hour.'
+          message: 'You have already sent your message. You will be able to send a new message only after an hour.'
         })
 
       return
@@ -68,9 +68,7 @@ export async function sendFeedback (
     } else {
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({
-          error: 'Failed to send message'
-        })
+        .json({ message: 'Failed to send message.' })
     }
   } catch (error) {
     next(error)

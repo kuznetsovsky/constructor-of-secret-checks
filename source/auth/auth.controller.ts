@@ -187,7 +187,7 @@ export async function signIn (
       res
         .status(StatusCodes.UNAUTHORIZED)
         .json({
-          error: 'Authorization attempts exceeded. Repeat after 15 minutes.'
+          message: 'Authorization attempts exceeded. Repeat after 15 minutes.'
         })
 
       return

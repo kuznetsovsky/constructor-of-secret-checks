@@ -36,7 +36,7 @@ export async function getCompanyByID (
     if (company == null) {
       res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: 'Company is not found' })
+        .json({ message: 'Company is not found.' })
 
       return
     }

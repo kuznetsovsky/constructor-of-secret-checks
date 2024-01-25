@@ -42,7 +42,7 @@ export function validateQueries (sortings: string[] = ['id']) {
       res
         .status(StatusCodes.BAD_REQUEST)
         .json({
-          error: 'Invalid "sort" query string.',
+          message: 'Invalid "sort" query string.',
           available_values: sortings
         })
 

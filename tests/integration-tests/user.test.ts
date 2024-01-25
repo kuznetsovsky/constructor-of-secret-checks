@@ -508,7 +508,7 @@ describe('User endpoints:', () => {
 
       expect(response.status).toEqual(400)
       expect(response.headers['content-type']).toMatch(/json/)
-      expect(response.body.error).toMatch(/The new password and the confirmation password do not match/i)
+      expect(response.body.message).toMatch(/The new password and the confirmation password do not match/i)
     })
 
     it('should return the message old password does not match the current one', async () => {
@@ -539,7 +539,7 @@ describe('User endpoints:', () => {
 
       expect(response.status).toEqual(400)
       expect(response.headers['content-type']).toMatch(/json/)
-      expect(response.body.error).toMatch(/The old password does not match the current one/i)
+      expect(response.body.message).toMatch(/The old password does not match the current one/i)
     })
 
     it('should successfully update the password to a new one', async () => {
