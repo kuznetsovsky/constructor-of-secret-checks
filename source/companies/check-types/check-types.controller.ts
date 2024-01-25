@@ -86,9 +86,17 @@ export const getCheckTypes = async (
     const checkTypeRepository = new CheckTypeRepository(knex, 'check_types')
     const types = await checkTypeRepository.findByPage(req.query, cid)
 
+    if (types == null) {
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: 'List is empty or wrong page.' })
+
+      return
+    }
+
     res
       .status(StatusCodes.OK)
-      .json({ types })
+      .json(types)
   } catch (error) {
     next(error)
   }

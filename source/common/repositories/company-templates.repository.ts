@@ -2,6 +2,7 @@ import { BaseRepository } from './base.repository'
 import { type Tasks } from '../../companies/templates/templates.interface'
 import { type BaseQueryString } from '../helpers/validate-queries/validate-queries.helper'
 import { paginate } from '../helpers/paginate.helper'
+import { type EntityPaginateInterface, createPaginationResult } from '../helpers/create-pagination-result.helper'
 
 export interface CompanyTemplates {
   id: number
@@ -26,9 +27,13 @@ interface CompanyTemplate {
   tasks: Tasks[]
 }
 
+export interface TemplatesByPage extends EntityPaginateInterface {
+  templates: CompanyTemplateList[]
+}
+
 export class CompanyTemplatesRepository extends BaseRepository<CompanyTemplates> {
-  async findByPage (queries: BaseQueryString, companyId?: number): Promise<CompanyTemplateList[] | []> {
-    const { limit, offset } = paginate(parseInt(queries.page), parseInt(queries.per_page))
+  async findByPage (queries: BaseQueryString, companyId?: number): Promise<TemplatesByPage | null> {
+    const { limit, offset, page } = paginate(parseInt(queries.page), parseInt(queries.per_page))
 
     const query = this.knex('company_templates as t')
       .leftJoin('check_types as c', 't.check_type_id', 'c.id')
@@ -47,7 +52,15 @@ export class CompanyTemplatesRepository extends BaseRepository<CompanyTemplates>
       .limit(limit)
       .orderBy(queries.sort, queries.direction)
 
-    return templates
+    const { templatesCount } = await this.qb.count('id as templatesCount').first()
+    const count = parseInt(templatesCount as string)
+    const info = createPaginationResult(count, { limit, page })
+
+    if (info == null) {
+      return null
+    } else {
+      return Object.assign({}, { templates }, info)
+    }
   }
 
   async findByID (templateId: number, companyId?: number): Promise<CompanyTemplate | undefined> {

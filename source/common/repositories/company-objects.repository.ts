@@ -3,6 +3,7 @@ import { paginate } from '../helpers/paginate.helper'
 import { type EntryTypes } from '../../consts'
 import { type City } from './city.repository'
 import { type BaseQueryString } from '../helpers/validate-queries/validate-queries.helper'
+import { type EntityPaginateInterface, createPaginationResult } from '../helpers/create-pagination-result.helper'
 
 export interface CompanyObjects {
   id: number
@@ -23,12 +24,16 @@ interface CompanyObjectsData {
   house_number: string
 }
 
+export interface ObjectsByPage extends EntityPaginateInterface {
+  objects: CompanyObjectsData[]
+}
+
 export class CompanyObjectsRepository extends BaseRepository<CompanyObjects> {
   async findByPage (
     companyId: number,
     queries: BaseQueryString
-  ): Promise<CompanyObjectsData[] | []> {
-    const { limit, offset } = paginate(parseInt(queries.page), parseInt(queries.per_page))
+  ): Promise<ObjectsByPage | null> {
+    const { limit, offset, page } = paginate(parseInt(queries.page), parseInt(queries.per_page))
 
     const objects = await this.knex('company_objects as o')
       .leftJoin('cities as c', 'c.id', 'o.city_id')
@@ -45,7 +50,15 @@ export class CompanyObjectsRepository extends BaseRepository<CompanyObjects> {
       .limit(limit)
       .orderBy(`o.${queries.sort}`, queries.direction)
 
-    return objects
+    const { objectsCount } = await this.qb.count('id as objectsCount').first()
+    const count = parseInt(objectsCount as string)
+    const info = createPaginationResult(count, { limit, page })
+
+    if (info == null) {
+      return null
+    } else {
+      return Object.assign({}, { objects }, info)
+    }
   }
 
   async findByID (companyId: number, objectId: number): Promise<CompanyObjectsData | undefined> {

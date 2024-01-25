@@ -2,6 +2,7 @@ import { BaseRepository } from './base.repository'
 import { paginate } from '../helpers/paginate.helper'
 import { type UsersQueryString } from '../../users/users.interface'
 import { type Roles } from '../../consts'
+import { type EntityPaginateInterface, createPaginationResult } from '../helpers/create-pagination-result.helper'
 
 export interface Account {
   id: number
@@ -13,9 +14,13 @@ export interface Account {
   last_visit: string
 }
 
+export interface AccountsByPage extends EntityPaginateInterface {
+  users: Array<Omit<Account, 'password'>>
+}
+
 export class AccountRepository extends BaseRepository<Account> {
-  async findByPage (queries: UsersQueryString): Promise<Omit<Account, 'password'> | undefined> {
-    const { limit, offset } = paginate(parseInt(queries.page), parseInt(queries.per_page))
+  async findByPage (queries: UsersQueryString): Promise<AccountsByPage | null> {
+    const { limit, offset, page } = paginate(parseInt(queries.page), parseInt(queries.per_page))
 
     const query = this.qb
       .select(
@@ -27,16 +32,31 @@ export class AccountRepository extends BaseRepository<Account> {
         'last_visit'
       )
 
+    const accountsCountQuery = this.qb.count('id as accountsCount')
+
     if (queries.role !== 'all') {
       void query.where('role', queries.role)
+      void accountsCountQuery.where('role', queries.role)
     }
 
-    const accounts = await query
+    const users = await query
       .offset(offset)
       .limit(limit)
       .orderBy(queries.sort, queries.direction)
 
-    return accounts
+    if (users == null) {
+      return null
+    }
+
+    const { accountsCount } = await accountsCountQuery.first()
+    const count = parseInt(accountsCount as string)
+    const info = createPaginationResult(count, { limit, page })
+
+    if (info == null) {
+      return null
+    } else {
+      return Object.assign({}, { users }, info)
+    }
   }
 
   async findVerifiedAccountByEmail (email: string): Promise<Account | undefined> {

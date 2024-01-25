@@ -2,6 +2,7 @@ import { Roles } from '../../consts'
 import { BaseRepository } from './base.repository'
 import { paginate } from '../helpers/paginate.helper'
 import { type BaseQueryString } from '../helpers/validate-queries/validate-queries.helper'
+import { type EntityPaginateInterface, createPaginationResult } from '../helpers/create-pagination-result.helper'
 
 interface CompanyEmployee {
   id: number
@@ -43,9 +44,13 @@ interface EmployeeProfile {
   updated_at: string
 }
 
+export interface EmployeesByPage extends EntityPaginateInterface {
+  employees: EmployeeProfile[]
+}
+
 export class CompanyEmployeesRepository extends BaseRepository<CompanyEmployee> {
-  async findByPage (companyId: number, queries: BaseQueryString): Promise<EmployeeProfile[] | []> {
-    const { limit, offset } = paginate(parseInt(queries.page), parseInt(queries.per_page))
+  async findByPage (companyId: number, queries: BaseQueryString): Promise< EmployeesByPage | null> {
+    const { limit, offset, page } = paginate(parseInt(queries.page), parseInt(queries.per_page))
 
     const employees = await this.knex('company_employees as e')
       .leftJoin('accounts as a', 'e.account_id', 'a.id')
@@ -68,7 +73,15 @@ export class CompanyEmployeesRepository extends BaseRepository<CompanyEmployee> 
       .limit(limit)
       .orderBy(`e.${queries.sort}`, queries.direction)
 
-    return employees
+    const { employeesCount } = await this.qb.count('id as employeesCount').first()
+    const count = parseInt(employeesCount as string)
+    const info = createPaginationResult(count, { limit, page })
+
+    if (info == null) {
+      return null
+    } else {
+      return Object.assign({}, { employees }, info)
+    }
   }
 
   async createEmployee (data: CreateEmployee): Promise<number> {

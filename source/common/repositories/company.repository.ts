@@ -1,6 +1,7 @@
 import { BaseRepository } from './base.repository'
 import { paginate } from '../helpers/paginate.helper'
 import { type BaseQueryString } from '../helpers/validate-queries/validate-queries.helper'
+import { createPaginationResult } from '../helpers/create-pagination-result.helper'
 
 export interface Company {
   id: number
@@ -34,9 +35,13 @@ interface CompanyProfile extends CompanyListProfile {
   administrator: Administrator
 }
 
+interface CompaniesByPage {
+  companies: CompanyListProfile[]
+}
+
 export class CompanyRepository extends BaseRepository<Company> {
-  async findByPage (queries: BaseQueryString): Promise<CompanyListProfile[] | []> {
-    const { limit, offset } = paginate(parseInt(queries.page), parseInt(queries.per_page))
+  async findByPage (queries: BaseQueryString): Promise<CompaniesByPage | null> {
+    const { limit, offset, page } = paginate(parseInt(queries.page), parseInt(queries.per_page))
 
     const companies = await this.qb
       .select([
@@ -50,7 +55,15 @@ export class CompanyRepository extends BaseRepository<Company> {
       .limit(limit)
       .orderBy(queries.sort, queries.direction)
 
-    return companies
+    const { companiesCount } = await this.qb.count('id as companiesCount').first()
+    const count = parseInt(companiesCount as string)
+    const info = createPaginationResult(count, { limit, page })
+
+    if (info == null) {
+      return null
+    } else {
+      return Object.assign({}, { companies }, info)
+    }
   }
 
   async createAdministrator (name: string, email: string, password: string): Promise<number> {

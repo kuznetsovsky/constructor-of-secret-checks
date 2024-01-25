@@ -5,6 +5,7 @@ import {
 interface Paginate {
   limit: number
   offset: number
+  page: number
 }
 
 export function paginate (page: number, perPage: number): Paginate {
@@ -23,5 +24,5 @@ export function paginate (page: number, perPage: number): Paginate {
   const limit = perPage
   const offset = (page - 1) * perPage
 
-  return { limit, offset }
+  return { limit, offset, page }
 }

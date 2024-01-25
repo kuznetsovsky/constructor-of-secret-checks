@@ -1,6 +1,7 @@
+import { paginate } from '../helpers/paginate.helper'
 import { BaseRepository } from './base.repository'
 import { type BaseQueryString } from '../helpers/validate-queries/validate-queries.helper'
-import { paginate } from '../helpers/paginate.helper'
+import { createPaginationResult, type EntityPaginateInterface } from '../helpers/create-pagination-result.helper'
 
 export interface CompanyChecksTypes {
   id: number
@@ -17,9 +18,13 @@ interface CompanyCheckType {
   updated_at: string
 }
 
+interface CheckTypesByPage extends EntityPaginateInterface {
+  types: CompanyCheckType[]
+}
+
 export class CheckTypeRepository extends BaseRepository<CompanyChecksTypes> {
-  async findByPage (queries: BaseQueryString, companyId?: number): Promise<CompanyCheckType[] | []> {
-    const { limit, offset } = paginate(parseInt(queries.page), parseInt(queries.per_page))
+  async findByPage (queries: BaseQueryString, companyId?: number): Promise<CheckTypesByPage | null> {
+    const { limit, offset, page } = paginate(parseInt(queries.page), parseInt(queries.per_page))
 
     const query = this.qb
       .select([
@@ -38,6 +43,14 @@ export class CheckTypeRepository extends BaseRepository<CompanyChecksTypes> {
       .limit(limit)
       .orderBy(queries.sort, queries.direction)
 
-    return types
+    const { typesCount } = await this.qb.count('id as typesCount').first()
+    const count = parseInt(typesCount as string)
+    const info = createPaginationResult(count, { limit, page })
+
+    if (info == null) {
+      return null
+    } else {
+      return Object.assign({}, { types }, info)
+    }
   }
 }

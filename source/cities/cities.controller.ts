@@ -14,7 +14,15 @@ export async function getCities (
     const cityRepository = new CityRepository(knex, 'cities')
     const cities = await cityRepository.findByPage(req.query)
 
-    res.status(StatusCodes.OK).json({ cities })
+    if (cities == null) {
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: 'List is empty or wrong page.' })
+
+      return
+    }
+
+    res.status(StatusCodes.OK).json(cities)
   } catch (error) {
     next(error)
   }

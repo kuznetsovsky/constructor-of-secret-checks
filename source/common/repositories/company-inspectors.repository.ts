@@ -1,5 +1,6 @@
 import { type CreateCompanyInspector } from '../../companies/inspectors/inspectors.interface'
 import { Roles, InspectorStatus } from '../../consts'
+import { createPaginationResult, type EntityPaginateInterface } from '../helpers/create-pagination-result.helper'
 import { paginate } from '../helpers/paginate.helper'
 import { type BaseQueryString } from '../helpers/validate-queries/validate-queries.helper'
 import { BaseRepository } from './base.repository'
@@ -59,13 +60,17 @@ interface QueryData {
   surname: string | undefined
 }
 
+export interface InspectorsByPage extends EntityPaginateInterface {
+  inspectors: CompanyInspectorList[]
+}
+
 export class CompanyInspectorRepository extends BaseRepository<CompanyInspector> {
   async findByPage (
     companyId: number,
     queries: BaseQueryString,
     queryData: QueryData
-  ): Promise<CompanyInspectorList[] | []> {
-    const { limit, offset } = paginate(parseInt(queries.page), parseInt(queries.per_page))
+  ): Promise<InspectorsByPage | null> {
+    const { limit, offset, page } = paginate(parseInt(queries.page), parseInt(queries.per_page))
 
     const query = this.knex('company_inspectors as i')
       .leftJoin('cities as c', 'i.city_id', 'c.id')
@@ -83,12 +88,16 @@ export class CompanyInspectorRepository extends BaseRepository<CompanyInspector>
         this.knex.raw('to_json(c.*) as city')
       ])
 
+    const countQuery = this.qb.count('id as inspectorsCount')
+
     if (queryData.city != null) {
       void query.andWhere('city_id', queryData.city)
+      void countQuery.andWhere('city_id', queryData.city)
     }
 
     if (queryData.surname != null) {
       void query.andWhereILike('last_name', `%${queryData.surname}%`)
+      void countQuery.andWhereILike('last_name', `%${queryData.surname}%`)
     }
 
     const inspectors = await query
@@ -96,7 +105,15 @@ export class CompanyInspectorRepository extends BaseRepository<CompanyInspector>
       .limit(limit)
       .orderBy(queries.sort, queries.direction)
 
-    return inspectors
+    const { citiesCount } = await this.qb.count('id as citiesCount').first()
+    const count = parseInt(citiesCount as string)
+    const info = createPaginationResult(count, { limit, page })
+
+    if (info == null) {
+      return null
+    } else {
+      return Object.assign({}, { inspectors }, info)
+    }
   }
 
   async findCompanyInspectorByID (companyId: number, inspectorId: number): Promise<CompanyInspectorProfile | undefined> {

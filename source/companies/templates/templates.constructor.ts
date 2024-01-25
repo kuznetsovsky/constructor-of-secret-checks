@@ -92,9 +92,17 @@ export const getCompanyTemplates = async (
     const companyTemplateRepository = new CompanyTemplatesRepository(knex, 'company_templates')
     const templates = await companyTemplateRepository.findByPage(req.query, cid)
 
+    if (templates == null) {
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: 'List is empty or wrong page.' })
+
+      return
+    }
+
     res
       .status(StatusCodes.OK)
-      .json({ templates })
+      .json(templates)
   } catch (error) {
     next(error)
   }

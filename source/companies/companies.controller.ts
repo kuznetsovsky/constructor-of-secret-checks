@@ -15,9 +15,17 @@ export async function getCompanies (
     const companyRepository = new CompanyRepository(knex, 'companies')
     const companies = await companyRepository.findByPage(req.query)
 
+    if (companies == null) {
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: 'List is empty or wrong page.' })
+
+      return
+    }
+
     res
       .status(StatusCodes.OK)
-      .json({ companies })
+      .json(companies)
   } catch (error) {
     next(error)
   }

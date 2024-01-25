@@ -30,9 +30,17 @@ export async function getAccounts (
       role
     })
 
+    if (users == null) {
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: 'List is empty or wrong page.' })
+
+      return
+    }
+
     res
       .status(StatusCodes.OK)
-      .json({ users })
+      .json(users)
   } catch (error) {
     next(error)
   }

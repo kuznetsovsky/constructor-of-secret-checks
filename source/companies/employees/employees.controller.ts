@@ -122,9 +122,17 @@ export async function getCompanyEmployees (
     const companyEmployeeRepository = new CompanyEmployeesRepository(knex, 'company_employees')
     const employees = await companyEmployeeRepository.findByPage(cid, req.query)
 
+    if (employees == null) {
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: 'List is empty or wrong page.' })
+
+      return
+    }
+
     res
       .status(StatusCodes.OK)
-      .json({ employees })
+      .json(employees)
   } catch (error) {
     next(error)
   }

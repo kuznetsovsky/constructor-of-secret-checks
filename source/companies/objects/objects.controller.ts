@@ -86,9 +86,17 @@ export async function getObjects (
     const companyObjectsRepository = new CompanyObjectsRepository(knex, 'company_objects')
     const objects = await companyObjectsRepository.findByPage(cid, req.query)
 
+    if (objects == null) {
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: 'List is empty or wrong page.' })
+
+      return
+    }
+
     res
       .status(StatusCodes.OK)
-      .json({ objects })
+      .json(objects)
   } catch (error) {
     next(error)
   }
