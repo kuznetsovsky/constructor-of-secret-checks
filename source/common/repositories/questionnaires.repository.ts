@@ -3,6 +3,7 @@ import { BaseRepository } from './base.repository'
 export interface Questionnaire {
   id: number
   link: string
+  token: string
   description: string
   is_required_city: boolean
   is_required_address: boolean

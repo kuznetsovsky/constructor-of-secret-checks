@@ -1,7 +1,11 @@
+import { randomBytes } from 'node:crypto'
+
 import { BaseRepository } from './base.repository'
 import { paginate } from '../helpers/paginate.helper'
 import { type BaseQueryString } from '../helpers/validate-queries/validate-queries.helper'
 import { createPaginationResult } from '../helpers/create-pagination-result.helper'
+import { createQuestionnaireUrl } from '../helpers/links.helper'
+import { type Questionnaire } from './questionnaires.repository'
 
 export interface Company {
   id: number
@@ -80,13 +84,13 @@ export class CompanyRepository extends BaseRepository<Company> {
       const questionnaire = await this.knex('company_questionnaires')
         .insert({
           description: '',
-          // TODO: create link company questionnaires link generator
-          link: '/TODO/'
+          link: '',
+          token: ''
         })
         .returning('id')
         .transacting(trx)
 
-      const company = await this.knex('companies')
+      const company = await this.knex<Company>('companies')
         .insert({
           questionnaire_id: questionnaire[0].id,
           name
@@ -99,6 +103,12 @@ export class CompanyRepository extends BaseRepository<Company> {
           account_id: account[0].id,
           company_id: company[0].id
         })
+        .transacting(trx)
+
+      const token = randomBytes(24).toString('base64')
+      const link = createQuestionnaireUrl(company[0].id, token)
+      await this.knex<Questionnaire>('company_questionnaires')
+        .update({ link, token })
         .transacting(trx)
 
       return account[0].id

@@ -7,6 +7,7 @@ export async function up (knex: Knex): Promise<void> {
     .createTable(TABLE_NAME, (t) => {
       t.increments()
       t.string('link').notNullable()
+      t.string('token').notNullable()
       t.string('description').notNullable()
       t.boolean('is_required_city').defaultTo(true)
       t.boolean('is_required_address').defaultTo(true)

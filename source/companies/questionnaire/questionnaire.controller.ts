@@ -44,7 +44,6 @@ export async function getQuestionnaire (req: Request, res: Response, next: NextF
       return
     }
 
-    delete (questionnaire as any).link
     res
       .status(StatusCodes.OK)
       .json(questionnaire)
@@ -92,7 +91,6 @@ export async function updateQuestionnaire (req: Request<any, any, UpdateQuestion
       return
     }
 
-    delete (questionnaire as any).link
     res
       .status(StatusCodes.OK)
       .json(questionnaire)
