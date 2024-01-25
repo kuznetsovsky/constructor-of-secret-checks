@@ -1,8 +1,9 @@
 import { StatusCodes } from 'http-status-codes'
 
+import { knex, redis } from '../connection'
 import { type EmailVerify } from './email-verification.interface'
 import { AccountRepository } from '../common/repositories/account.repository'
-import { knex, redis } from '../connection'
+import { EXPIRES_IN_FIFTEEN_MINUTES } from '../../config'
 
 import type {
   Request,
@@ -34,7 +35,7 @@ export async function verify (
       }
 
       await redis.incr(key)
-      await redis.expire(key, 60 * 15) // 15 minute
+      await redis.expire(key, EXPIRES_IN_FIFTEEN_MINUTES)
     }
 
     const code = await redis.get(`email_verification:${email}`)

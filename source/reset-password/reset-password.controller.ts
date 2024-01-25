@@ -6,7 +6,7 @@ import { type ResetPassword, type ResetEmail } from './reset-password.interface'
 import { AccountRepository } from '../common/repositories/account.repository'
 import { sendEmailResetPassword } from './reset-password.helper'
 import { encryptPassword } from '../auth/auth.helper'
-import { EXPIRE_THROUGH_FIFTEEN_MINUTES } from '../../config'
+import { EXPIRES_IN_FIFTEEN_MINUTES } from '../../config'
 
 export const email = async (
   req: Request<any, any, ResetEmail>,
@@ -57,7 +57,7 @@ export const password = async (
     const userId = await redis.get(`recovery:${token}`)
     if (userId == null) {
       await redis.incr(`attempts_to_reset_password:${req.ip}`)
-      await redis.expire(attemptKey, EXPIRE_THROUGH_FIFTEEN_MINUTES)
+      await redis.expire(attemptKey, EXPIRES_IN_FIFTEEN_MINUTES)
 
       res.status(StatusCodes.BAD_REQUEST)
         .json({ message: 'Invalid recovery token.' })

@@ -2,7 +2,7 @@ import { StatusCodes } from 'http-status-codes'
 import sanitizer from 'sanitize-html'
 
 import { knex, redis } from '../connection'
-import { FEEDBACK_EMAIL } from '../../config'
+import { EXPIRES_IN_HOUR, FEEDBACK_EMAIL } from '../../config'
 import { type Feedback } from './feedback.interface'
 import { sendMail } from '../common/libs/nodemailer.lib'
 import { AccountRepository } from '../common/repositories/account.repository'
@@ -54,7 +54,7 @@ export async function sendFeedback (
     }
 
     await redis.incr(key)
-    await redis.expire(key, 60 * 60) // 1 hour
+    await redis.expire(key, EXPIRES_IN_HOUR)
 
     // =-=-=-=-=-=-=
 

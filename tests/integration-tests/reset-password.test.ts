@@ -1,6 +1,7 @@
 import request from 'supertest'
 import { app } from '../../source/app'
 import { redis } from '../../source/connection'
+import { EXPIRES_IN_HOUR } from '../../config'
 
 describe('Reset password endpoints:', () => {
   const RESET_URL = '/api/v1/reset-password'
@@ -67,7 +68,7 @@ describe('Reset password endpoints:', () => {
     it('should return no content status', async () => {
       const userId = 1
       const token = 'USER_TOKEN'
-      await redis.set(`recovery:${token}`, userId, 'EX', 60 * 60)
+      await redis.set(`recovery:${token}`, userId, 'EX', EXPIRES_IN_HOUR)
 
       const response = await request(app)
         .put(RESET_URL)

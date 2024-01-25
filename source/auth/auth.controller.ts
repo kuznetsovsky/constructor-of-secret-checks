@@ -17,7 +17,7 @@ import { knex, redis } from '../connection'
 import { AccountRepository } from '../common/repositories/account.repository'
 import { InspectorRepository } from '../common/repositories/inspector.repository'
 import { sendMail } from '../common/libs/nodemailer.lib'
-import { NO_REPLAY_EMAIL } from '../../config'
+import { EXPIRES_IN_FIFTEEN_MINUTES, EXPIRES_IN_HOUR, NO_REPLAY_EMAIL } from '../../config'
 import { renderEjsTemplate } from '../common/libs/ejs.lib'
 
 export async function signUpCompany (
@@ -64,7 +64,7 @@ export async function signUpCompany (
     const BASE_URL = `${req.protocol}://${req.hostname}`
     const link = `${BASE_URL}/email-verification?email=${emailInBase64}&verification_code=${code}`
 
-    await redis.set(`email_verification:${email}`, code, 'EX', 60 * 60) // 1 hour
+    await redis.set(`email_verification:${email}`, code, 'EX', EXPIRES_IN_HOUR)
 
     const templateString = await renderEjsTemplate('email-confirmation', {
       url: link,
@@ -137,7 +137,7 @@ export async function signUpInspector (
     const BASE_URL = `${req.protocol}://${req.hostname}`
     const link = `${BASE_URL}/email-verification?email=${emailInBase64}&verification_code=${code}`
 
-    await redis.set(`email_verification:${email}`, code, 'EX', 60 * 60) // 1 hour
+    await redis.set(`email_verification:${email}`, code, 'EX', EXPIRES_IN_HOUR)
 
     const templateString = await renderEjsTemplate('email-confirmation', {
       url: link,
@@ -182,7 +182,7 @@ export async function signIn (
     const loginAttempts = await redis.get(key)
 
     if (loginAttempts != null && parseInt(loginAttempts) >= 3) {
-      await redis.expire(key, 60 * 15) // 15 minute
+      await redis.expire(key, EXPIRES_IN_FIFTEEN_MINUTES)
 
       res
         .status(StatusCodes.UNAUTHORIZED)

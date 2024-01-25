@@ -49,5 +49,6 @@ export const MAILER_PASS = process.env.MAILER_PASS
 export const NO_REPLAY_EMAIL = 'no-replay@mail.com'
 export const FEEDBACK_EMAIL = process.env.FEEDBACK_EMAIL ?? ''
 
-// Expire times
-export const EXPIRE_THROUGH_FIFTEEN_MINUTES = 60 * 15
+// Expires
+export const EXPIRES_IN_FIFTEEN_MINUTES = 60 * 15
+export const EXPIRES_IN_HOUR = 60 * 60
