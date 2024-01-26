@@ -63,7 +63,29 @@ export async function updateCompanyByID (
   next: NextFunction
 ): Promise<void> {
   try {
+    const user = req.session.user
+    if (user == null) {
+      const error = new Error('"req.session.user" is missing.')
+      next(error)
+      return
+    }
+
+    const { cid } = user
+    if (cid == null) {
+      const error = new Error('"req.session.user.cid" is missing.')
+      next(error)
+      return
+    }
+
     const COMPANY_ID = parseInt(req.params.company_id)
+    if (cid !== COMPANY_ID) {
+      res
+        .status(StatusCodes.FORBIDDEN)
+        .json({ message: 'No access.' })
+
+      return
+    }
+
     const companyRepository = new CompanyRepository(knex, 'companies')
 
     {

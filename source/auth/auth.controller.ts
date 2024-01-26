@@ -82,7 +82,7 @@ export async function signUpCompany (
     if (isSuccessSendingMail) {
       res
         .status(StatusCodes.CREATED)
-        .header('Location', `/api/v1/accounts/${accountId}`)
+        .header('Location', `/api/v1/users/${accountId}`)
         .json({ id: accountId })
     } else {
       const error = new Error('Failed to send email')
@@ -155,7 +155,7 @@ export async function signUpInspector (
     if (isSuccessSendingMail) {
       res
         .status(StatusCodes.CREATED)
-        .header('Location', `/api/v1/accounts/${accountId}`)
+        .header('Location', `/api/v1/users/${accountId}`)
         .json({ id: accountId })
     } else {
       const error = new Error('Failed to send email')

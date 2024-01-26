@@ -46,7 +46,7 @@ router.use(
 // Employees
 router.use(
   '/employees',
-  permission.onlyUsersWithAdminOrManagerRole,
+  permission.onlyUsersWithAdminRole,
   employeesRouter
 )
 
