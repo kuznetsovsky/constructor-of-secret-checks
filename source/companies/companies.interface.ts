@@ -3,7 +3,7 @@ export interface UpdateCompany {
   description: string
   website_link: string
   vk_link: string
-  number_of_checks: number | null
+  number_of_checks: string
 }
 
 export interface CompaniesParams {

@@ -52,3 +52,6 @@ export const FEEDBACK_EMAIL = process.env.FEEDBACK_EMAIL ?? ''
 // Expires
 export const EXPIRES_IN_FIFTEEN_MINUTES = 60 * 15
 export const EXPIRES_IN_HOUR = 60 * 60
+
+// Files
+export const PATH_TO_LOGOS = '/public/uploads/logos'

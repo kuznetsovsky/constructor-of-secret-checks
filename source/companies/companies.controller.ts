@@ -5,6 +5,7 @@ import { knex } from '../connection'
 import { type UpdateCompany } from './companies.interface'
 import { CompanyRepository } from '../common/repositories/company.repository'
 import { type BaseQueryString } from '../common/helpers/validate-queries/validate-queries.helper'
+import { createCompanyLogoImage, removeCompanyLogoImage } from './companies.helper'
 
 export async function getCompanies (
   req: Request<never, never, never, BaseQueryString>,
@@ -89,28 +90,56 @@ export async function updateCompanyByID (
     const companyRepository = new CompanyRepository(knex, 'companies')
 
     {
-      const company = await companyRepository.exist(COMPANY_ID)
-      if (!company) return
-    }
+      let checks: number = parseInt(req.body.number_of_checks)
+      if (Number.isNaN(checks)) {
+        checks = 0
+      }
 
-    await companyRepository.update(COMPANY_ID, {
-      ...req.body,
-      number_of_checks:
-        req.body.number_of_checks === 0
-          ? null
-          : req.body.number_of_checks
-    })
+      const company = await companyRepository.findOne(cid)
+      if (company == null) {
+        res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ message: 'Company is not found.' })
+
+        return
+      }
+
+      const data = {
+        ...req.body,
+        number_of_checks: checks,
+        updated_at: knex.fn.now() as unknown as string
+      }
+
+      if (req.file != null) {
+        const logoname = await createCompanyLogoImage(req.file)
+
+        if (company.logo_link != null) {
+          await removeCompanyLogoImage(company.logo_link)
+        }
+
+        Object.assign(data, { logo_link: logoname })
+      }
+
+      await companyRepository.update(cid, data)
+    }
 
     const company = await companyRepository.findOne(COMPANY_ID, [
       'id',
       'name',
       'description',
       'website_link',
+      'logo_link',
       'vk_link',
       'number_of_checks'
     ])
 
-    if (company == null) return
+    if (company == null) {
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: 'Company is not found.' })
+
+      return
+    }
 
     res
       .status(StatusCodes.OK)

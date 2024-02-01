@@ -14,8 +14,8 @@ export interface Company {
   description: string | null
   website_link: string | null
   vk_link: string | null
-  logo: string | null
-  number_of_checks: number | null
+  logo_link: string | null
+  number_of_checks: number
   created_at: string
   updated_at: string
 }

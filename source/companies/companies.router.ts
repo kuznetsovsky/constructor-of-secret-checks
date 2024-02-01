@@ -12,6 +12,8 @@ import { router as checkTypesRouter } from './check-types/check-types.router'
 import { router as templatesRouter } from './templates/templates.router'
 import { validateQueries } from '../common/helpers/validate-queries/validate-queries.helper'
 import { validateParams } from '../common/helpers/validate-params.helper'
+import { uploadCompanyLogoImage } from '../common/helpers/uploader.helper'
+import { validateCompanyLogo } from './companies.helper'
 
 export const router = express.Router()
 
@@ -75,6 +77,8 @@ router.put(
   '/:company_id',
   permission.onlyUsersWithAdminRole,
   validateParams(companiesParamsValidator),
+  uploadCompanyLogoImage.single('logo'),
+  validateCompanyLogo(),
   validateBody(updateCompanyValidator),
   companiesController.updateCompanyByID
 )

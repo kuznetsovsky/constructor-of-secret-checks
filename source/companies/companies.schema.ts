@@ -37,8 +37,10 @@ export const updateCompanySchema: JSONSchemaType<UpdateCompany> = {
       maxLength: 90
     },
     number_of_checks: {
-      type: 'number',
-      minimum: 0
+      type: 'string',
+      transform: ['trim'],
+      pattern: '^\\d+$',
+      maxLength: 2
     }
   }
 }

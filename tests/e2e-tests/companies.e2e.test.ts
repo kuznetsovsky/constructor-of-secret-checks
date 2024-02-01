@@ -144,7 +144,7 @@ describe('When a client', () => {
             description: 'Simple cafe',
             website_link: 'http://localhost:8080',
             vk_link: 'https://vk.com/bosco_cafe',
-            number_of_checks: 0
+            number_of_checks: '1'
           }
 
           const response = await request(app)
@@ -156,7 +156,8 @@ describe('When a client', () => {
           expect(response.body).toEqual({
             ...payload,
             id: 1,
-            number_of_checks: null
+            logo_link: 'http://localhost:3000/assets/logos/1029384756.png',
+            number_of_checks: 1
           })
         })
 
@@ -166,7 +167,7 @@ describe('When a client', () => {
             description: 'Simple cafe',
             website_link: 'http://localhost:8080',
             vk_link: 'https://vk.com/bosco_cafe',
-            number_of_checks: 0
+            number_of_checks: '1'
           }
 
           const response = await request(app)
