@@ -1,26 +1,20 @@
-import type { Knex } from 'knex'
+import { type Knex } from 'knex'
 
-const TABLE_NAME = 'companies'
+const TABLE_NAME = 'company_logos'
 
 export async function up (knex: Knex): Promise<void> {
   await knex.schema
     .createTable(TABLE_NAME, (t) => {
       t.increments()
-      t.integer('questionnaire_id')
+      t.integer('company_id')
         .unsigned()
         .notNullable()
         .references('id')
-        .inTable('company_questionnaires')
+        .inTable('companies')
         .onDelete('CASCADE')
-      t.string('name', 128)
+      t.text('src')
         .unique()
         .notNullable()
-      t.string('description', 255)
-      t.string('website_link', 255)
-      t.string('vk_link', 255)
-      t.integer('number_of_checks')
-        .unsigned()
-        .defaultTo(0)
       t.timestamps(true, true)
     })
 }

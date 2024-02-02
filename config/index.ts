@@ -55,3 +55,6 @@ export const EXPIRES_IN_HOUR = 60 * 60
 
 // Files
 export const PATH_TO_LOGOS = '/public/uploads/logos'
+
+// Mime Types
+export const MEDIA_TYPE_MULTIPART_FORM_DATA = 'multipart/form-data'

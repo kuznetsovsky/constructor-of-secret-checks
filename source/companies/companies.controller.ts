@@ -5,7 +5,6 @@ import { knex } from '../connection'
 import { type UpdateCompany } from './companies.interface'
 import { CompanyRepository } from '../common/repositories/company.repository'
 import { type BaseQueryString } from '../common/helpers/validate-queries/validate-queries.helper'
-import { createCompanyLogoImage, removeCompanyLogoImage } from './companies.helper'
 
 export async function getCompanies (
   req: Request<never, never, never, BaseQueryString>,
@@ -90,11 +89,6 @@ export async function updateCompanyByID (
     const companyRepository = new CompanyRepository(knex, 'companies')
 
     {
-      let checks: number = parseInt(req.body.number_of_checks)
-      if (Number.isNaN(checks)) {
-        checks = 0
-      }
-
       const company = await companyRepository.findOne(cid)
       if (company == null) {
         res
@@ -104,23 +98,10 @@ export async function updateCompanyByID (
         return
       }
 
-      const data = {
+      await companyRepository.update(cid, {
         ...req.body,
-        number_of_checks: checks,
         updated_at: knex.fn.now() as unknown as string
-      }
-
-      if (req.file != null) {
-        const logoname = await createCompanyLogoImage(req.file)
-
-        if (company.logo_link != null) {
-          await removeCompanyLogoImage(company.logo_link)
-        }
-
-        Object.assign(data, { logo_link: logoname })
-      }
-
-      await companyRepository.update(cid, data)
+      })
     }
 
     const company = await companyRepository.findOne(COMPANY_ID, [
@@ -128,7 +109,6 @@ export async function updateCompanyByID (
       'name',
       'description',
       'website_link',
-      'logo_link',
       'vk_link',
       'number_of_checks'
     ])

@@ -85,6 +85,7 @@ export class CompanyTemplatesRepository extends BaseRepository<CompanyTemplates>
   async findPreviewByID (templateId: number, companyId: number): Promise<CompanyTemplate | undefined> {
     const template = await this.knex('company_templates as t')
       .leftJoin('companies as c', 't.company_id', 'c.id')
+      .leftJoin('company_logos as l', 'c.id', 'l.id')
       .where('t.id', templateId)
       .andWhere('t.company_id', companyId)
       .select([
@@ -92,7 +93,7 @@ export class CompanyTemplatesRepository extends BaseRepository<CompanyTemplates>
         't.task_name',
         't.instruction',
         't.tasks',
-        'c.logo_link as logo_url'
+        'l.src as logo_url'
       ])
       .first()
 

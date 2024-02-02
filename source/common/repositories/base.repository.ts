@@ -13,6 +13,7 @@ type Table =
   | 'company_employees'
   | 'check_types'
   | 'company_templates'
+  | 'company_logos'
 
 interface Command<T> {
   create: (data: Partial<T>) => Promise<T>

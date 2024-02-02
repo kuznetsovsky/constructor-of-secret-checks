@@ -2,18 +2,19 @@ import express from 'express'
 
 import * as companiesController from './companies.controller'
 import * as permission from '../common/helpers/permission.helper'
+
 import { companiesParamsValidator, updateCompanyValidator } from './companies.validator'
 import { validateBody } from '../common/helpers/validate-body.helper'
+import { validateQueries } from '../common/helpers/validate-queries/validate-queries.helper'
+import { validateParams } from '../common/helpers/validate-params.helper'
+
 import { router as questionnaireRouter } from './questionnaire/questionnaire.router'
 import { router as objectsRouter } from './objects/objects.router'
 import { router as inspectorsRouter } from './inspectors/inspectors.router'
 import { router as employeesRouter } from './employees/employees.router'
 import { router as checkTypesRouter } from './check-types/check-types.router'
 import { router as templatesRouter } from './templates/templates.router'
-import { validateQueries } from '../common/helpers/validate-queries/validate-queries.helper'
-import { validateParams } from '../common/helpers/validate-params.helper'
-import { uploadCompanyLogoImage } from '../common/helpers/uploader.helper'
-import { validateCompanyLogo } from './companies.helper'
+import { router as logoRouter } from './logo/logo.router'
 
 export const router = express.Router()
 
@@ -59,6 +60,13 @@ router.use(
   templatesRouter
 )
 
+// Logo
+router.use(
+  '/logo',
+  permission.onlyUsersWithAdminRole,
+  logoRouter
+)
+
 // Companies:
 
 router.get(
@@ -77,8 +85,6 @@ router.put(
   '/:company_id',
   permission.onlyUsersWithAdminRole,
   validateParams(companiesParamsValidator),
-  uploadCompanyLogoImage.single('logo'),
-  validateCompanyLogo(),
   validateBody(updateCompanyValidator),
   companiesController.updateCompanyByID
 )

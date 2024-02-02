@@ -7,8 +7,7 @@ export async function seed (knex: Knex): Promise<void> {
       {
         questionnaire_id: 1,
         name: 'Модный кабачок',
-        description: 'Сеть ресторанов',
-        logo_link: 'http://localhost:3000/assets/logos/1029384756.png'
+        description: 'Сеть ресторанов'
       },
       {
         questionnaire_id: 2,
