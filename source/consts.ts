@@ -14,3 +14,11 @@ export const enum InspectorStatus {
   Approved = 'approved',
   Deviation = 'deviation'
 }
+
+export const enum ObjectCheckStatus {
+  Appointed = 'appointed',
+  Checking = 'checking',
+  Revision = 'revision',
+  Fulfilled = 'fulfilled',
+  Refusal = 'refusal'
+}

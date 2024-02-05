@@ -15,7 +15,6 @@ export async function up (knex: Knex): Promise<void> {
         .onUpdate('CASCADE')
       t.string('name', 32)
       t.timestamps(true, true)
-      t.unique(['company_id', 'name'], { useConstraint: true })
     })
 }
 
