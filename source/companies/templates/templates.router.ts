@@ -1,6 +1,6 @@
 import express from 'express'
 
-import * as templatesController from './templates.constructor'
+import * as templatesController from './templates.controller'
 import { validateBody } from '../../common/helpers/validate-body.helper'
 import { companyTemplatesValidator, templatesParamsValidator, updateTemplateValidator } from './templates.validator'
 import { validateQueries } from '../../common/helpers/validate-queries/validate-queries.helper'

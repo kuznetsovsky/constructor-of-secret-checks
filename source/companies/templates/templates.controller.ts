@@ -1,8 +1,9 @@
 import type { Request, Response, NextFunction } from 'express'
 import { StatusCodes } from 'http-status-codes'
+
+import { knex } from '../../connection'
 import { type UpdateTemplate, type Template } from './templates.interface'
 import { CompanyTemplatesRepository } from '../../common/repositories/company-templates.repository'
-import { knex } from '../../connection'
 import { CheckTypeRepository } from '../../common/repositories/company-check-types.repository'
 import { type BaseQueryString } from '../../common/helpers/validate-queries/validate-queries.helper'
 
