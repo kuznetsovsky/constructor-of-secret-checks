@@ -4,7 +4,7 @@ import { StatusCodes } from 'http-status-codes'
 import { knex } from '../../../connection'
 import { InspectorStatus, ObjectCheckStatus } from '../../../consts'
 import { objectFilter } from '../../../common/helpers/object-filter.helper'
-import type { CreateCompanyObjectCheck, UpdateCompanyObjectCheck } from './checks.interface'
+import type { CheckStatus, CreateCompanyObjectCheck, UpdateCompanyObjectCheck } from './checks.interface'
 import { CheckTypeRepository } from '../../../common/repositories/company-check-types.repository'
 import { CompanyTemplatesRepository } from '../../../common/repositories/company-templates.repository'
 import { CompanyInspectorRepository } from '../../../common/repositories/company-inspectors.repository'
@@ -403,6 +403,67 @@ export async function removeCompanyObjectCheck (
     }
 
     res.status(StatusCodes.NO_CONTENT).end()
+  } catch (error) {
+    next(error)
+  }
+}
+
+export async function updateCompanyObjectCheckStatus (
+  req: Request<{ object_id: string, check_id: string }, any, CheckStatus>,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const user = req.session.user
+    if (user == null) {
+      const error = new Error('"req.session.user" is missing.')
+      next(error)
+      return
+    }
+
+    const { cid } = user
+    if (cid == null) {
+      const error = new Error('"req.session.user.cid" is missing.')
+      next(error)
+      return
+    }
+
+    const OBJECT_ID = parseInt(req.params.object_id)
+    const CHECK_ID = parseInt(req.params.check_id)
+
+    const companyObjectCheckRepository = new CompanyObjectCheckRepository(knex, 'object_checks')
+    const check = await companyObjectCheckRepository.findOne({
+      id: CHECK_ID,
+      object_id: OBJECT_ID,
+      company_id: cid
+    })
+
+    if (check == null) {
+      res.status(StatusCodes.NOT_FOUND)
+        .json({ message: 'Check is not found.' })
+
+      return
+    }
+
+    if (!(check.status === ObjectCheckStatus.Checking || check.status === ObjectCheckStatus.Refusal)) {
+      res.status(StatusCodes.BAD_REQUEST)
+        .json({ message: 'You cannot change the data, please wait until the report is ready.' })
+
+      return
+    }
+
+    const data = {
+      status: req.body.status,
+      updated_at: knex.fn.now() as unknown as string
+    }
+
+    if (req.body.status === ObjectCheckStatus.Revision) {
+      Object.assign(data, { comments: req.body.comment })
+    }
+
+    await companyObjectCheckRepository.update(CHECK_ID, data)
+
+    res.status(StatusCodes.OK).end()
   } catch (error) {
     next(error)
   }

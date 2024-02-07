@@ -1,5 +1,13 @@
 import { type JSONSchemaType } from 'ajv'
-import { type CreateCompanyObjectCheck, type ChecksParams, type UpdateCompanyObjectCheck } from './checks.interface'
+
+import { ObjectCheckStatus } from '../../../consts'
+
+import type {
+  CreateCompanyObjectCheck,
+  ChecksParams,
+  UpdateCompanyObjectCheck,
+  CheckStatus
+} from './checks.interface'
 
 export const createCompanyObjectCheckSchema: JSONSchemaType<CreateCompanyObjectCheck> = {
   type: 'object',
@@ -52,6 +60,41 @@ export const updateCompanyObjectCheckSchema: JSONSchemaType<UpdateCompanyObjectC
       nullable: true
     }
   }
+}
+
+export const checksStatusSchema: JSONSchemaType<CheckStatus> = {
+  oneOf: [
+    {
+      type: 'object',
+      required: ['comment', 'status'],
+      properties: {
+        status: {
+          type: 'string',
+          const: ObjectCheckStatus.Revision
+        },
+        comment: {
+          type: 'string',
+          transform: ['trim'],
+          maxLength: 128
+        }
+      }
+    },
+    {
+      type: 'object',
+      required: ['status'],
+      properties: {
+        status: {
+          type: 'string',
+          enum: [
+            ObjectCheckStatus.Appointed,
+            ObjectCheckStatus.Checking,
+            ObjectCheckStatus.Fulfilled,
+            ObjectCheckStatus.Refusal
+          ]
+        }
+      }
+    }
+  ]
 }
 
 export const checksParamsSchema: JSONSchemaType<ChecksParams> = {

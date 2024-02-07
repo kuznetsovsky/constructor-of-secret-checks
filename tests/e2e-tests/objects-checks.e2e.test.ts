@@ -1,6 +1,7 @@
 import request from 'supertest'
 import { app } from '../../source/app'
 import { createData } from '../../knex/seeds/14_object_checks'
+import { ObjectCheckStatus } from '../../source/consts'
 
 describe('When a client sends request to', () => {
   const LOGIN_URL = '/api/v1/auth/sign-in'
@@ -375,7 +376,7 @@ describe('When a client sends request to', () => {
               }),
               expect.objectContaining({
                 id: 1,
-                status: 'appointed',
+                status: 'checking',
                 task_name: 'Проверка качества обслуживания',
                 type_name: 'Доставка',
                 date_of_inspection: expect.any(String),
@@ -432,7 +433,7 @@ describe('When a client sends request to', () => {
               }),
               expect.objectContaining({
                 id: 1,
-                status: 'appointed',
+                status: 'checking',
                 task_name: 'Проверка качества обслуживания',
                 type_name: 'Доставка',
                 date_of_inspection: expect.any(String),
@@ -512,6 +513,7 @@ describe('When a client sends request to', () => {
             link_url: '/company-check?check_code=RbBBrCDUXPCG1S4wxggO1w',
             date_of_inspection: expect.any(String),
             type_name: 'Доставка',
+            comments: null,
             object: {
               id: 1,
               name: 'Bosco Cafe',
@@ -578,6 +580,7 @@ describe('When a client sends request to', () => {
             link_url: '/company-check?check_code=RbBBrCDUXPCG1S4wxggO1w',
             date_of_inspection: expect.any(String),
             type_name: 'Доставка',
+            comments: null,
             object: {
               id: 1,
               name: 'Bosco Cafe',
@@ -727,6 +730,7 @@ describe('When a client sends request to', () => {
             link_url: '/company-check?check_code=FYqfjFrO7B68nEnFo6N9oQ',
             date_of_inspection: expect.any(String),
             type_name: 'Зал',
+            comments: null,
             object: {
               id: 1,
               name: 'Bosco Cafe',
@@ -855,6 +859,7 @@ describe('When a client sends request to', () => {
             link_url: '/company-check?check_code=FYqfjFrO7B68nEnFo6N9oQ',
             date_of_inspection: expect.any(String),
             type_name: 'Зал',
+            comments: null,
             object: {
               id: 1,
               name: 'Bosco Cafe',
@@ -988,6 +993,151 @@ describe('When a client sends request to', () => {
         it('should return status forbidden', async () => {
           const response = await request(app)
             .delete(`${OBJECT_URL}/1/${CHECKS_URL}/1`)
+            .set('Cookie', inspectorCookie)
+
+          expect(response.statusCode).toBe(403)
+        })
+      })
+    })
+  })
+
+  describe(`PUT: ${OBJECT_URL}/{object_id}/${CHECKS_URL}/{check_id}/status`, () => {
+    describe('without authorization', () => {
+      it('should return the status not authorized', async () => {
+        const response = await request(app)
+          .put(`${OBJECT_URL}/1/${CHECKS_URL}/1/status`)
+
+        expect(response.statusCode).toBe(401)
+      })
+    })
+
+    describe('with authorization', () => {
+      describe('and with administrator role', () => {
+        it('should return validation failed status', async () => {
+          const response = await request(app)
+            .put(`${OBJECT_URL}/NaN/${CHECKS_URL}/2/status`)
+            .set('Cookie', adminCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/,
+            errors: expect.any(Array)
+          })
+        })
+
+        it('should return validation failed status', async () => {
+          const response = await request(app)
+            .put(`${OBJECT_URL}/1/${CHECKS_URL}/NaN/status`)
+            .set('Cookie', adminCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/,
+            errors: expect.any(Array)
+          })
+        })
+
+        it('should return validation failed status', async () => {
+          const response = await request(app)
+            .put(`${OBJECT_URL}/1/${CHECKS_URL}/1/status`)
+            .set('Cookie', adminCookie)
+
+          expect(response.statusCode).toBe(422)
+          expect(response.body).toMatchObject({
+            type: 'body',
+            message: /Validation failed/,
+            errors: expect.any(Array)
+          })
+        })
+
+        it('should return bad request status', async () => {
+          const response = await request(app)
+            .put(`${OBJECT_URL}/1/${CHECKS_URL}/2/status`)
+            .set('Cookie', adminCookie)
+            .send({ status: ObjectCheckStatus.Checking })
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body.message)
+            .toMatch(/You cannot change the data, please wait until the report is ready/)
+        })
+
+        it('should successfully update the status of the check', async () => {
+          const response = await request(app)
+            .put(`${OBJECT_URL}/1/${CHECKS_URL}/1/status`)
+            .set('Cookie', adminCookie)
+            .send({ status: ObjectCheckStatus.Checking })
+
+          expect(response.statusCode).toBe(200)
+        })
+      })
+
+      describe('and with manager role', () => {
+        it('should return validation failed status', async () => {
+          const response = await request(app)
+            .put(`${OBJECT_URL}/NaN/${CHECKS_URL}/2/status`)
+            .set('Cookie', managerCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/,
+            errors: expect.any(Array)
+          })
+        })
+
+        it('should return validation failed status', async () => {
+          const response = await request(app)
+            .put(`${OBJECT_URL}/1/${CHECKS_URL}/NaN/status`)
+            .set('Cookie', managerCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/,
+            errors: expect.any(Array)
+          })
+        })
+
+        it('should return validation failed status', async () => {
+          const response = await request(app)
+            .put(`${OBJECT_URL}/1/${CHECKS_URL}/1/status`)
+            .set('Cookie', managerCookie)
+
+          expect(response.statusCode).toBe(422)
+          expect(response.body).toMatchObject({
+            type: 'body',
+            message: /Validation failed/,
+            errors: expect.any(Array)
+          })
+        })
+
+        it('should return bad request status', async () => {
+          const response = await request(app)
+            .put(`${OBJECT_URL}/1/${CHECKS_URL}/2/status`)
+            .set('Cookie', managerCookie)
+            .send({ status: ObjectCheckStatus.Checking })
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body.message)
+            .toMatch(/You cannot change the data, please wait until the report is ready/)
+        })
+
+        it('should successfully update the status of the check', async () => {
+          const response = await request(app)
+            .put(`${OBJECT_URL}/1/${CHECKS_URL}/1/status`)
+            .set('Cookie', managerCookie)
+            .send({ status: ObjectCheckStatus.Checking })
+
+          expect(response.statusCode).toBe(200)
+        })
+      })
+
+      describe('and with inspector role', () => {
+        it('should return status forbidden', async () => {
+          const response = await request(app)
+            .put(`${OBJECT_URL}/1/${CHECKS_URL}/1/status`)
             .set('Cookie', inspectorCookie)
 
           expect(response.statusCode).toBe(403)

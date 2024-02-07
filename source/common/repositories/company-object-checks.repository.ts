@@ -61,6 +61,7 @@ interface CheckByID {
   link_url: string
   date_of_inspection: string
   type_name: string
+  comments: string | null
   object: ObjectInterface
   inspector: Inspector
 }
@@ -118,6 +119,7 @@ export class CompanyObjectCheckRepository extends BaseRepository<CompanyObjectCh
         'c.id',
         'c.link_url',
         'c.date_of_inspection',
+        'c.comments',
         'ct.name as type_name',
         this.knex.raw(`
           json_build_object(

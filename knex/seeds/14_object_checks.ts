@@ -1,4 +1,5 @@
 import { type Knex } from 'knex'
+import { ObjectCheckStatus } from '../../source/consts'
 
 export const createData = (days: number): string => {
   const time = new Date()
@@ -16,6 +17,7 @@ export async function seed (knex: Knex): Promise<void> {
         object_id: 1,
         check_type_id: 4,
         inspector_id: null,
+        status: ObjectCheckStatus.Checking,
         link_url: '/company-check?check_code=FYqfjFrO7B68nEnFo6N9oQ',
         date_of_inspection: createData(2)
       },

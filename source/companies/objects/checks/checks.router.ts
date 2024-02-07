@@ -8,6 +8,7 @@ import { validateParams } from '../../../common/helpers/validate-params.helper'
 import {
   checkParamsValidator,
   createCompanyObjectCheckValidator,
+  updateCompanyObjectCheckStatusValidator,
   updateCompanyObjectCheckValidator
 } from './checks.validator'
 
@@ -44,4 +45,9 @@ router.delete(
   checksController.removeCompanyObjectCheck
 )
 
-// TODO: create status PATCH route
+router.put(
+  '/:check_id/status',
+  validateParams(checkParamsValidator),
+  validateBody(updateCompanyObjectCheckStatusValidator),
+  checksController.updateCompanyObjectCheckStatus
+)
