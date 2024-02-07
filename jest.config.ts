@@ -7,7 +7,7 @@ import type { Config } from 'jest'
 
 const jestConfig: Config = {
   preset: 'ts-jest',
-  setupFilesAfterEnv: ['./jest.setup.ts']
+  setupFilesAfterEnv: ['./tests/setup-tests.ts']
 }
 
 export default jestConfig
