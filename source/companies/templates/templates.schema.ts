@@ -247,18 +247,13 @@ export const companyTemplatesSchema: JSONSchemaType<Template> = {
 export const companyUpdateTemplatesSchema: JSONSchemaType<UpdateTemplate> = {
   type: 'object',
   properties: {
-    check_type_id: {
-      type: 'number',
-      minimum: 1
-    },
-    task_name: {
+    name: {
       type: 'string',
       maxLength: 64
     }
   },
   required: [
-    'check_type_id',
-    'task_name'
+    'name'
   ],
   additionalProperties: false
 }

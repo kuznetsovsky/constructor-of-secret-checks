@@ -322,22 +322,7 @@ describe('When a client sends request to', () => {
           const response = await request(app)
             .patch(`${TEMPLATES_URL}/4`)
             .set('Cookie', adminCookie)
-            .send({
-              check_type_id: 1,
-              task_name: 'Проверка внешнего вида сотрудников'
-            })
-
-          expect(response.statusCode).toBe(404)
-        })
-
-        it('should return check type id is not found', async () => {
-          const response = await request(app)
-            .patch(`${TEMPLATES_URL}/2`)
-            .set('Cookie', adminCookie)
-            .send({
-              check_type_id: 100,
-              task_name: 'Проверка внешнего вида сотрудников'
-            })
+            .send({ name: 'Проверка внешнего вида сотрудников' })
 
           expect(response.statusCode).toBe(404)
         })
@@ -354,15 +339,12 @@ describe('When a client sends request to', () => {
           const response = await request(app)
             .patch(`${TEMPLATES_URL}/1`)
             .set('Cookie', adminCookie)
-            .send({
-              check_type_id: 2,
-              task_name: 'Проверка внешнего вида сотрудников'
-            })
+            .send({ name: 'Проверка внешнего вида сотрудников' })
 
           expect(response.statusCode).toBe(200)
           expect(response.body).toEqual({
             id: expect.any(Number),
-            check_type_id: 2,
+            check_type_id: 1,
             task_name: 'Проверка внешнего вида сотрудников',
             instruction: 'Инструкция к выполнению задания',
             tasks: {},
@@ -375,24 +357,9 @@ describe('When a client sends request to', () => {
       describe('and with manager role', () => {
         it('should return template id not found status', async () => {
           const response = await request(app)
-            .patch(`${TEMPLATES_URL}/1`)
+            .patch(`${TEMPLATES_URL}/4`)
             .set('Cookie', adminCookie)
-            .send({
-              check_type_id: 4,
-              task_name: 'Проверка внешнего вида сотрудников'
-            })
-
-          expect(response.statusCode).toBe(404)
-        })
-
-        it('should return check type id is not found', async () => {
-          const response = await request(app)
-            .patch(`${TEMPLATES_URL}/2`)
-            .set('Cookie', managerCookie)
-            .send({
-              check_type_id: 100,
-              task_name: 'Проверка внешнего вида сотрудников'
-            })
+            .send({ name: 'Проверка внешнего вида сотрудников' })
 
           expect(response.statusCode).toBe(404)
         })
@@ -409,10 +376,7 @@ describe('When a client sends request to', () => {
           const response = await request(app)
             .patch(`${TEMPLATES_URL}/2`)
             .set('Cookie', managerCookie)
-            .send({
-              check_type_id: 4,
-              task_name: 'Проверка внешнего вида сотрудников'
-            })
+            .send({ name: 'Проверка внешнего вида сотрудников' })
 
           expect(response.statusCode).toBe(200)
           expect(response.body).toEqual({

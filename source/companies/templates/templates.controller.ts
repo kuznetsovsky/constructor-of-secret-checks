@@ -172,20 +172,6 @@ export const updateCompanyTemplate = async (
 
     const TEMPLATE_ID = parseInt(req.params.template_id)
     const companyTeplatesRepository = new CompanyTemplatesRepository(knex, 'company_templates')
-    const checkTypeRepository = new CheckTypeRepository(knex, 'check_types')
-
-    const checkType = await checkTypeRepository.exist({
-      company_id: cid,
-      id: req.body.check_type_id
-    })
-
-    if (!checkType) {
-      res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: 'Check type is not found.' })
-
-      return
-    }
 
     const templateIsExist = await companyTeplatesRepository.exist({
       company_id: cid,
@@ -200,7 +186,7 @@ export const updateCompanyTemplate = async (
       return
     }
 
-    await companyTeplatesRepository.update(TEMPLATE_ID, req.body)
+    await companyTeplatesRepository.update(TEMPLATE_ID, { task_name: req.body.name })
     const template = await companyTeplatesRepository.findOne(TEMPLATE_ID, [
       'id',
       'check_type_id',

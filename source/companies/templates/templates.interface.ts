@@ -79,6 +79,5 @@ export interface Template {
 }
 
 export interface UpdateTemplate {
-  check_type_id: number
-  task_name: string
+  name: string
 }
