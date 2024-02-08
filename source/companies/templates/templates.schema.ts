@@ -1,71 +1,39 @@
 import { type JSONSchemaType } from 'ajv'
-import { type Template, SubtaskTypes, type UpdateTemplate } from './templates.interface'
 
-export const companyTemplatesSchema: JSONSchemaType<Template> = {
+import {
+  SubtaskTypes,
+  type Template,
+  type UpdateTemplate
+} from './templates.interface'
+
+export const createCompanyTemplateSchema: JSONSchemaType<Template> = {
   type: 'object',
   properties: {
     check_type_id: {
-      type: 'number',
-      minimum: 1
+      type: 'number'
     },
     task_name: {
-      type: 'string',
-      maxLength: 64
+      type: 'string'
     },
     tasks: {
       type: 'array',
       items: {
+        // =-=-=-=-=-=-=-=-=
+        // TASKS
+        // =-=-=-=-=-=-=-=-=
         type: 'object',
         properties: {
           category_name: {
-            type: 'string',
-            maxLength: 128
+            type: 'string'
           },
           subtasks: {
             type: 'array',
             items: {
-              anyOf: [
-                {
-                  type: 'object',
-                  properties: {
-                    type: {
-                      type: 'string',
-                      const: SubtaskTypes.OneAnswerOption
-                    },
-                    name: {
-                      type: 'string'
-                    },
-                    description: {
-                      type: 'string'
-                    },
-                    questions: {
-                      type: 'array',
-                      items: {
-                        type: 'object',
-                        properties: {
-                          name: {
-                            type: 'string'
-                          },
-                          points: {
-                            type: 'number'
-                          }
-                        },
-                        required: [
-                          'name',
-                          'points'
-                        ],
-                        additionalProperties: false
-                      }
-                    }
-                  },
-                  required: [
-                    'type',
-                    'name',
-                    'description',
-                    'questions'
-                  ],
-                  additionalProperties: false
-                },
+              // =-=-=-=-=-=-=-=-=
+              // SUBTASKS
+              // =-=-=-=-=-=-=-=-=
+              oneOf: [
+                // ===== TEXT FIELD =====
                 {
                   type: 'object',
                   properties: {
@@ -73,10 +41,10 @@ export const companyTemplatesSchema: JSONSchemaType<Template> = {
                       type: 'string',
                       const: SubtaskTypes.TextField
                     },
-                    name: {
+                    title: {
                       type: 'string'
                     },
-                    description: {
+                    subtitle: {
                       type: 'string'
                     },
                     points: {
@@ -85,12 +53,13 @@ export const companyTemplatesSchema: JSONSchemaType<Template> = {
                   },
                   required: [
                     'type',
-                    'name',
-                    'description',
+                    'title',
+                    'subtitle',
                     'points'
                   ],
                   additionalProperties: false
                 },
+                // ===== MULTIPLE ANSWER OPTIONS =====
                 {
                   type: 'object',
                   properties: {
@@ -98,10 +67,10 @@ export const companyTemplatesSchema: JSONSchemaType<Template> = {
                       type: 'string',
                       const: SubtaskTypes.MultipleAnswerOptions
                     },
-                    name: {
+                    title: {
                       type: 'string'
                     },
-                    description: {
+                    subtitle: {
                       type: 'string'
                     },
                     questions: {
@@ -109,7 +78,7 @@ export const companyTemplatesSchema: JSONSchemaType<Template> = {
                       items: {
                         type: 'object',
                         properties: {
-                          name: {
+                          answer: {
                             type: 'string'
                           },
                           points: {
@@ -117,7 +86,7 @@ export const companyTemplatesSchema: JSONSchemaType<Template> = {
                           }
                         },
                         required: [
-                          'name',
+                          'answer',
                           'points'
                         ],
                         additionalProperties: false
@@ -126,12 +95,55 @@ export const companyTemplatesSchema: JSONSchemaType<Template> = {
                   },
                   required: [
                     'type',
-                    'name',
-                    'description',
+                    'title',
+                    'subtitle',
                     'questions'
                   ],
                   additionalProperties: false
                 },
+                // ===== ONE ANSWER OPTION =====
+                {
+                  type: 'object',
+                  properties: {
+                    type: {
+                      type: 'string',
+                      const: SubtaskTypes.OneAnswerOption
+                    },
+                    title: {
+                      type: 'string'
+                    },
+                    subtitle: {
+                      type: 'string'
+                    },
+                    questions: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: {
+                          answer: {
+                            type: 'string'
+                          },
+                          points: {
+                            type: 'number'
+                          }
+                        },
+                        required: [
+                          'answer',
+                          'points'
+                        ],
+                        additionalProperties: false
+                      }
+                    }
+                  },
+                  required: [
+                    'type',
+                    'title',
+                    'subtitle',
+                    'questions'
+                  ],
+                  additionalProperties: false
+                },
+                // ===== ATTACHING FILE =====
                 {
                   type: 'object',
                   properties: {
@@ -139,69 +151,10 @@ export const companyTemplatesSchema: JSONSchemaType<Template> = {
                       type: 'string',
                       const: SubtaskTypes.AttachingFile
                     },
-                    name: {
+                    title: {
                       type: 'string'
                     },
-                    description: {
-                      type: 'string'
-                    },
-                    points: {
-                      type: 'number'
-                    }
-                  },
-                  required: [
-                    'type',
-                    'name',
-                    'description',
-                    'points'
-                  ],
-                  additionalProperties: false
-                },
-                {
-                  type: 'object',
-                  properties: {
-                    type_name: {
-                      type: 'string',
-                      const: SubtaskTypes.PhotoWithExample
-                    },
-                    images: {
-                      type: 'array',
-                      items: {
-                        type: 'object',
-                        properties: {
-                          example_image_url: {
-                            type: 'string'
-                          },
-                          points: {
-                            type: 'number'
-                          }
-                        },
-                        required: [
-                          'example_image_url',
-                          'points'
-                        ],
-                        additionalProperties: false
-                      }
-                    }
-                  },
-                  required: [
-                    'type_name',
-                    'images'
-                  ],
-                  additionalProperties: false
-                },
-                {
-                  type: 'object',
-                  properties: {
-                    type: {
-                      type: 'string',
-                      // const: 'one_photo'
-                      const: SubtaskTypes.OnePhoto
-                    },
-                    name: {
-                      type: 'string'
-                    },
-                    description: {
+                    subtitle: {
                       type: 'string'
                     },
                     multiple: {
@@ -213,9 +166,77 @@ export const companyTemplatesSchema: JSONSchemaType<Template> = {
                   },
                   required: [
                     'type',
-                    'name',
-                    'description',
+                    'title',
+                    'subtitle',
                     'multiple',
+                    'points'
+                  ],
+                  additionalProperties: false
+                },
+                // ===== PHOTO WITH EXAMPLE =====
+                {
+                  type: 'object',
+                  properties: {
+                    type: {
+                      type: 'string',
+                      const: SubtaskTypes.PhotoWithExample
+                    },
+                    title: {
+                      type: 'string'
+                    },
+                    photos: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: {
+                          subtitle: {
+                            type: 'string'
+                          },
+                          name: {
+                            type: 'string'
+                          },
+                          points: {
+                            type: 'number'
+                          }
+                        },
+                        required: [
+                          'subtitle',
+                          'name',
+                          'points'
+                        ],
+                        additionalProperties: false
+                      }
+                    }
+                  },
+                  required: [
+                    'type',
+                    'title',
+                    'photos'
+                  ],
+                  additionalProperties: false
+                },
+                // ===== ONE PHOTO =====
+                {
+                  type: 'object',
+                  properties: {
+                    type: {
+                      type: 'string',
+                      const: SubtaskTypes.OnePhoto
+                    },
+                    title: {
+                      type: 'string'
+                    },
+                    subtitle: {
+                      type: 'string'
+                    },
+                    points: {
+                      type: 'number'
+                    }
+                  },
+                  required: [
+                    'type',
+                    'title',
+                    'subtitle',
                     'points'
                   ],
                   additionalProperties: false

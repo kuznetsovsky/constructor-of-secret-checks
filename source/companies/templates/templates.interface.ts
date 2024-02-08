@@ -7,77 +7,79 @@ export const enum SubtaskTypes {
   OnePhoto = 'one_photo'
 }
 
-interface Questions {
-  name: string
-  points: number
-}
+export type Subtask =
+  | OneAnswer
+  | MultipleAnswer
+  | TextAnswer
+  | PhotoAnswer
+  | PhotoAnswerWithExample
+  | AttachAnswer
 
-interface OneAnswerOptionTask {
-  type: SubtaskTypes.OneAnswerOption
-  name: string
-  description: string
-  questions: Questions[]
-}
-
-interface TextFieldTask {
-  type: SubtaskTypes.TextField
-  name: string
-  description: string
-  points: number
-}
-
-interface MultipleAnswerOptionsTask {
-  type: SubtaskTypes.MultipleAnswerOptions
-  name: string
-  description: string
-  questions: Questions[]
-}
-
-interface AttachingFileTask {
-  type: SubtaskTypes.AttachingFile
-  name: string
-  description: string
-  points: number
-}
-
-interface Images {
-  example_image_url: string
-  points: number
-}
-
-interface PhotoWithExampleTask {
-  type_name: SubtaskTypes.PhotoWithExample
-  images: Images[]
-}
-
-interface OnePhotoTask {
-  type: SubtaskTypes.OnePhoto
-  name: string
-  description: string
-  multiple: boolean
-  points: number
-}
-
-export type Subtasks =
-  | OneAnswerOptionTask
-  | TextFieldTask
-  | MultipleAnswerOptionsTask
-  | AttachingFileTask
-  | PhotoWithExampleTask
-  | OnePhotoTask
-
-export interface Tasks {
+export interface Task {
   category_name: string
-  subtasks: Subtasks[]
+  subtasks: Subtask[]
 }
 
 export interface Template {
   check_type_id: number
   task_name: string
-  tasks: Tasks[]
+  tasks: Task[]
   instruction: string
 }
 
 export interface UpdateTemplate {
   name: string
+}
+
+interface Question {
+  answer: string
+  points: number
+}
+
+export interface OneAnswer {
+  type: SubtaskTypes.OneAnswerOption
+  title: string
+  subtitle: string
+  questions: Question[]
+}
+
+export interface MultipleAnswer {
+  type: SubtaskTypes.MultipleAnswerOptions
+  title: string
+  subtitle: string
+  questions: Question[]
+}
+
+export interface TextAnswer {
+  type: SubtaskTypes.TextField
+  title: string
+  subtitle: string
+  points: number
+}
+
+interface PhotoAnswer {
+  type: SubtaskTypes.OnePhoto
+  title: string
+  subtitle: string
+  points: number
+}
+
+interface Photo {
+  subtitle: string
+  name: string
+  points: number
+}
+
+interface PhotoAnswerWithExample {
+  type: SubtaskTypes.PhotoWithExample
+  title: string
+  photos: Photo[]
+}
+
+interface AttachAnswer {
+  type: SubtaskTypes.AttachingFile
+  title: string
+  subtitle: string
+  multiple: boolean
+  points: number
 }

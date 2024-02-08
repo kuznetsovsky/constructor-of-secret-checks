@@ -1,5 +1,4 @@
 import { BaseRepository } from './base.repository'
-import { type Tasks } from '../../companies/templates/templates.interface'
 import { type BaseQueryString } from '../helpers/validate-queries/validate-queries.helper'
 import { paginate } from '../helpers/paginate.helper'
 import { type EntityPaginateInterface, createPaginationResult } from '../helpers/create-pagination-result.helper'
@@ -10,7 +9,7 @@ export interface CompanyTemplates {
   check_type_id: number
   task_name: string
   instruction: string
-  tasks: Tasks[]
+  tasks: unknown // TODO: fix me
   created_at: string
   updated_at: string
 }
@@ -24,7 +23,7 @@ interface CompanyTemplateList {
 interface CompanyTemplate {
   id: number
   instrction: string
-  tasks: Tasks[]
+  tasks: unknown // TODO: fix me
 }
 
 export interface TemplatesByPage extends EntityPaginateInterface {

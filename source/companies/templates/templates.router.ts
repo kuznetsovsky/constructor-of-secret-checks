@@ -2,9 +2,14 @@ import express from 'express'
 
 import * as templatesController from './templates.controller'
 import { validateBody } from '../../common/helpers/validate-body.helper'
-import { companyTemplatesValidator, templatesParamsValidator, updateTemplateValidator } from './templates.validator'
 import { validateQueries } from '../../common/helpers/validate-queries/validate-queries.helper'
 import { validateParams } from '../../common/helpers/validate-params.helper'
+
+import {
+  companyTemplatesValidator,
+  templatesParamsValidator,
+  updateTemplateValidator
+} from './templates.validator'
 
 export const router = express.Router()
 
