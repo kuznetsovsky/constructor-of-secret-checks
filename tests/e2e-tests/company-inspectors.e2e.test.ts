@@ -652,6 +652,19 @@ describe('When a client sends request to', () => {
 
     describe('with authorization', () => {
       describe('and with administrator role', () => {
+        it('should return the status bad request', async () => {
+          const response = await request(app)
+            .put(`${INSPECTORS_URL}/NaN`)
+            .set('Cookie', adminCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/i,
+            errors: expect.any(Array)
+          })
+        })
+
         it('should return validation failed status', async () => {
           const response = await request(app)
             .put(`${INSPECTORS_URL}/1`)
@@ -741,6 +754,19 @@ describe('When a client sends request to', () => {
       })
 
       describe('and with manager role', () => {
+        it('should return the status bad request', async () => {
+          const response = await request(app)
+            .put(`${INSPECTORS_URL}/NaN`)
+            .set('Cookie', managerCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/i,
+            errors: expect.any(Array)
+          })
+        })
+
         it('should return validation failed status', async () => {
           const response = await request(app)
             .put(`${INSPECTORS_URL}/1`)
@@ -851,6 +877,19 @@ describe('When a client sends request to', () => {
 
     describe('with authorization', () => {
       describe('and with administrator role', () => {
+        it('should return the status bad request', async () => {
+          const response = await request(app)
+            .patch(`${INSPECTORS_URL}/NaN`)
+            .set('Cookie', adminCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/i,
+            errors: expect.any(Array)
+          })
+        })
+
         it('should return validation failed status', async () => {
           const response = await request(app)
             .patch(`${INSPECTORS_URL}/1`)
@@ -881,6 +920,19 @@ describe('When a client sends request to', () => {
       })
 
       describe('and with manager role', () => {
+        it('should return the status bad request', async () => {
+          const response = await request(app)
+            .patch(`${INSPECTORS_URL}/NaN`)
+            .set('Cookie', managerCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/i,
+            errors: expect.any(Array)
+          })
+        })
+
         it('should return validation failed status', async () => {
           const response = await request(app)
             .patch(`${INSPECTORS_URL}/1`)
@@ -932,6 +984,19 @@ describe('When a client sends request to', () => {
 
     describe('with authorization', () => {
       describe('and with administrator role', () => {
+        it('should return the status bad request', async () => {
+          const response = await request(app)
+            .delete(`${INSPECTORS_URL}/NaN`)
+            .set('Cookie', adminCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/i,
+            errors: expect.any(Array)
+          })
+        })
+
         it('should return the status "not found"', async () => {
           const response = await request(app)
             .delete(`${INSPECTORS_URL}/2`)
@@ -951,6 +1016,19 @@ describe('When a client sends request to', () => {
       })
 
       describe('and with manager role', () => {
+        it('should return the status bad request', async () => {
+          const response = await request(app)
+            .delete(`${INSPECTORS_URL}/NaN`)
+            .set('Cookie', managerCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/i,
+            errors: expect.any(Array)
+          })
+        })
+
         it('should return the status "not found"', async () => {
           const response = await request(app)
             .delete(`${INSPECTORS_URL}/2`)

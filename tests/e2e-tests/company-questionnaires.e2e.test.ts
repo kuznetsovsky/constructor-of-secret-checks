@@ -14,7 +14,7 @@ describe('When a client', () => {
       })
     })
 
-    describe(`PUT: ${QUESTIONNAIRE_URL}/{company_id}`, () => {
+    describe(`PUT: ${QUESTIONNAIRE_URL}`, () => {
       it('should return the status not authorized', async () => {
         const response = await request(app).put(QUESTIONNAIRE_URL)
         expect(response.statusCode).toBe(401)

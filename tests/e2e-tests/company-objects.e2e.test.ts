@@ -307,6 +307,19 @@ describe('When a client', () => {
 
     describe(`GET: ${OBJECTS_URL}/{object_id}`, () => {
       describe('with administrator role', () => {
+        it('should return the status bad request', async () => {
+          const response = await request(app)
+            .get(`${OBJECTS_URL}/NaN`)
+            .set('Cookie', adminCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/i,
+            errors: expect.any(Array)
+          })
+        })
+
         it('should return not found status', async () => {
           const response = await request(app)
             .get(`${OBJECTS_URL}/2`)
@@ -336,6 +349,19 @@ describe('When a client', () => {
       })
 
       describe('with manager role', () => {
+        it('should return the status bad request', async () => {
+          const response = await request(app)
+            .get(`${OBJECTS_URL}/NaN`)
+            .set('Cookie', managerCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/i,
+            errors: expect.any(Array)
+          })
+        })
+
         it('should return not found status', async () => {
           const response = await request(app)
             .get(`${OBJECTS_URL}/2`)
@@ -377,6 +403,19 @@ describe('When a client', () => {
 
     describe(`PUT: ${OBJECTS_URL}/{object_id}`, () => {
       describe('when administrator role', () => {
+        it('should return the status bad request', async () => {
+          const response = await request(app)
+            .put(`${OBJECTS_URL}/NaN`)
+            .set('Cookie', adminCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/i,
+            errors: expect.any(Array)
+          })
+        })
+
         it('should return not found status', async () => {
           const response = await request(app)
             .put(`${OBJECTS_URL}/2`)
@@ -453,6 +492,19 @@ describe('When a client', () => {
       })
 
       describe('when manager role', () => {
+        it('should return the status bad request', async () => {
+          const response = await request(app)
+            .put(`${OBJECTS_URL}/NaN`)
+            .set('Cookie', managerCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/i,
+            errors: expect.any(Array)
+          })
+        })
+
         it('should return not found status', async () => {
           const response = await request(app)
             .put(`${OBJECTS_URL}/2`)
@@ -541,6 +593,19 @@ describe('When a client', () => {
 
     describe(`DELETE: ${OBJECTS_URL}/{object_id}`, () => {
       describe('with administrator role', () => {
+        it('should return the status bad request', async () => {
+          const response = await request(app)
+            .delete(`${OBJECTS_URL}/NaN`)
+            .set('Cookie', adminCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/i,
+            errors: expect.any(Array)
+          })
+        })
+
         it('should return not found status', async () => {
           const response = await request(app)
             .delete(`${OBJECTS_URL}/2`)
@@ -569,6 +634,19 @@ describe('When a client', () => {
       })
 
       describe('with manager role', () => {
+        it('should return the status bad request', async () => {
+          const response = await request(app)
+            .get(`${OBJECTS_URL}/NaN`)
+            .set('Cookie', managerCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/i,
+            errors: expect.any(Array)
+          })
+        })
+
         it('should return not found status', async () => {
           const response = await request(app)
             .delete(`${OBJECTS_URL}/2`)

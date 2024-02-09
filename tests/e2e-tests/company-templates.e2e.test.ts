@@ -235,6 +235,19 @@ describe('When a client sends request to', () => {
 
     describe('with authorization', () => {
       describe('and with administrator role', () => {
+        it('should return the status bad request', async () => {
+          const response = await request(app)
+            .get(`${TEMPLATES_URL}/NaN`)
+            .set('Cookie', adminCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/i,
+            errors: expect.any(Array)
+          })
+        })
+
         it('should return the status not authorized', async () => {
           const response = await request(app)
             .get(`${TEMPLATES_URL}/1`)
@@ -266,6 +279,19 @@ describe('When a client sends request to', () => {
       })
 
       describe('and with manager role', () => {
+        it('should return the status bad request', async () => {
+          const response = await request(app)
+            .get(`${TEMPLATES_URL}/NaN`)
+            .set('Cookie', managerCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/i,
+            errors: expect.any(Array)
+          })
+        })
+
         it('should return the status not authorized', async () => {
           const response = await request(app)
             .get(`${TEMPLATES_URL}/1`)
@@ -318,6 +344,19 @@ describe('When a client sends request to', () => {
 
     describe('with authorization', () => {
       describe('and with administrator role', () => {
+        it('should return the status bad request', async () => {
+          const response = await request(app)
+            .patch(`${TEMPLATES_URL}/NaN`)
+            .set('Cookie', adminCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/i,
+            errors: expect.any(Array)
+          })
+        })
+
         it('should return template id not found status', async () => {
           const response = await request(app)
             .patch(`${TEMPLATES_URL}/4`)
@@ -355,6 +394,19 @@ describe('When a client sends request to', () => {
       })
 
       describe('and with manager role', () => {
+        it('should return the status bad request', async () => {
+          const response = await request(app)
+            .patch(`${TEMPLATES_URL}/NaN`)
+            .set('Cookie', managerCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/i,
+            errors: expect.any(Array)
+          })
+        })
+
         it('should return template id not found status', async () => {
           const response = await request(app)
             .patch(`${TEMPLATES_URL}/4`)
@@ -413,6 +465,19 @@ describe('When a client sends request to', () => {
 
     describe('with authorization', () => {
       describe('and with administrator role', () => {
+        it('should return the status bad request', async () => {
+          const response = await request(app)
+            .delete(`${TEMPLATES_URL}/NaN`)
+            .set('Cookie', adminCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/i,
+            errors: expect.any(Array)
+          })
+        })
+
         it('should return template id not found status', async () => {
           const response = await request(app)
             .delete(`${TEMPLATES_URL}/2`)
@@ -431,6 +496,19 @@ describe('When a client sends request to', () => {
       })
 
       describe('and with manager role', () => {
+        it('should return the status bad request', async () => {
+          const response = await request(app)
+            .delete(`${TEMPLATES_URL}/NaN`)
+            .set('Cookie', managerCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/i,
+            errors: expect.any(Array)
+          })
+        })
+
         it('should return template id not found status', async () => {
           const response = await request(app)
             .delete(`${TEMPLATES_URL}/1`)
@@ -470,6 +548,19 @@ describe('When a client sends request to', () => {
 
     describe('with authorization', () => {
       describe('and with administrator role', () => {
+        it('should return the status bad request', async () => {
+          const response = await request(app)
+            .get(`${TEMPLATES_URL}/NaN/preview`)
+            .set('Cookie', adminCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/i,
+            errors: expect.any(Array)
+          })
+        })
+
         it('should return template id is not found', async () => {
           const response = await request(app)
             .get(`${TEMPLATES_URL}/2/preview`)
@@ -495,6 +586,19 @@ describe('When a client sends request to', () => {
       })
 
       describe('and with manager role', () => {
+        it('should return the status bad request', async () => {
+          const response = await request(app)
+            .get(`${TEMPLATES_URL}/NaN/preview`)
+            .set('Cookie', managerCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/i,
+            errors: expect.any(Array)
+          })
+        })
+
         it('should return template id is not found', async () => {
           const response = await request(app)
             .get(`${TEMPLATES_URL}/1/preview`)

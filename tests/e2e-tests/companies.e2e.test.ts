@@ -106,6 +106,19 @@ describe('When a client', () => {
     })
 
     describe(`GET: ${COMPANIES_URL}/{company_id}`, () => {
+      it('should return the status bad request', async () => {
+        const response = await request(app)
+          .get(`${COMPANIES_URL}/NaN`)
+          .set('Cookie', inspectorCookie)
+
+        expect(response.statusCode).toBe(400)
+        expect(response.body).toMatchObject({
+          type: 'params',
+          message: /Validation failed/i,
+          errors: expect.any(Array)
+        })
+      })
+
       it('should return the status not found', async () => {
         const response = await request(app)
           .get(`${COMPANIES_URL}/100`)
@@ -138,6 +151,19 @@ describe('When a client', () => {
 
     describe(`PUT: ${COMPANIES_URL}/{company_id}`, () => {
       describe('with administrator role', () => {
+        it('should return the status bad request', async () => {
+          const response = await request(app)
+            .put(`${COMPANIES_URL}/NaN`)
+            .set('Cookie', adminCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/i,
+            errors: expect.any(Array)
+          })
+        })
+
         it('should successfully update company profile', async () => {
           const payload = {
             name: 'Bosco Cafe',

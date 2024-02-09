@@ -63,6 +63,19 @@ describe('When a client', () => {
     })
 
     describe(`sends request to GET: ${CITY_URL}/{city_id}`, () => {
+      it('should return the status bad request', async () => {
+        const response = await request(app)
+          .get(`${CITY_URL}/NaN`)
+          .set('Cookie', cookie)
+
+        expect(response.statusCode).toBe(400)
+        expect(response.body).toMatchObject({
+          type: 'params',
+          message: /Validation failed/i,
+          errors: expect.any(Array)
+        })
+      })
+
       it('should return the status not found', async () => {
         const response = await request(app).get(`${CITY_URL}/100`)
           .set('Cookie', cookie)

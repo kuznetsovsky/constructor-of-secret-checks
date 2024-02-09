@@ -245,6 +245,19 @@ describe('When a client sends request to', () => {
 
     describe('with authorization', () => {
       describe('and with administrator role', () => {
+        it('should return the status bad request', async () => {
+          const response = await request(app)
+            .get(`${EMPLOYEES_URL}/NaN`)
+            .set('Cookie', adminCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/i,
+            errors: expect.any(Array)
+          })
+        })
+
         it('should return the status not found', async () => {
           const response = await request(app)
             .get(`${EMPLOYEES_URL}/4`)
@@ -306,6 +319,19 @@ describe('When a client sends request to', () => {
 
     describe('with authorization', () => {
       describe('and with administrator role', () => {
+        it('should return the status bad request', async () => {
+          const response = await request(app)
+            .put(`${EMPLOYEES_URL}/NaN`)
+            .set('Cookie', adminCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/i,
+            errors: expect.any(Array)
+          })
+        })
+
         it('should return validation failed status', async () => {
           const response = await request(app)
             .put(`${EMPLOYEES_URL}/1`)
@@ -402,6 +428,19 @@ describe('When a client sends request to', () => {
 
     describe('with authorization', () => {
       describe('and with administrator role', () => {
+        it('should return the status bad request', async () => {
+          const response = await request(app)
+            .delete(`${EMPLOYEES_URL}/NaN`)
+            .set('Cookie', adminCookie)
+
+          expect(response.statusCode).toBe(400)
+          expect(response.body).toMatchObject({
+            type: 'params',
+            message: /Validation failed/i,
+            errors: expect.any(Array)
+          })
+        })
+
         it('should return the status employee not found', async () => {
           const response = await request(app)
             .delete(`${EMPLOYEES_URL}/4`)

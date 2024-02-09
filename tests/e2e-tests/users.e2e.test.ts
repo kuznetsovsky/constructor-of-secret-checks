@@ -377,6 +377,19 @@ describe('When a client', () => {
         expect(response.statusCode).toBe(404)
       })
 
+      it('should return the status bad request', async () => {
+        const response = await request(app)
+          .get(`${USERS_URL}/NaN`)
+          .set('Cookie', cookie)
+
+        expect(response.statusCode).toBe(400)
+        expect(response.body).toMatchObject({
+          type: 'params',
+          message: /Validation failed/i,
+          errors: expect.any(Array)
+        })
+      })
+
       it('should return inspector profile data', async () => {
         const response = await request(app)
           .get(`${USERS_URL}/1`)
